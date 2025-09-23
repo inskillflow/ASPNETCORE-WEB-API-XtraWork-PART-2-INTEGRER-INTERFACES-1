@@ -1,0 +1,6 @@
+@XtraWork_HostAddress = http://localhost:5280
+
+GET {{XtraWork_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
