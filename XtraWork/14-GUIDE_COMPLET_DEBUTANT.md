@@ -264,8 +264,8 @@ graph LR
     
     E -->|TitleId| T
     
-    style E fill:#FFE082
-    style T fill:#80DEEA
+    style E fill:#FFE082,color:#000,stroke:#333,stroke-width:2px
+    style T fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
 ```
 
 **Explication :**
@@ -530,9 +530,9 @@ graph TD
     Admin --> UpdateE
     Admin --> DeleteE
     
-    style User fill:#FFE082
-    style Manager fill:#80DEEA
-    style Admin fill:#EF5350,color:#fff
+    style User fill:#FFE082,color:#000,stroke:#333,stroke-width:3px
+    style Manager fill:#80DEEA,color:#000,stroke:#333,stroke-width:3px
+    style Admin fill:#EF5350,color:#fff,stroke:#333,stroke-width:3px
 ```
 
 ### Tableau des Permissions
@@ -555,34 +555,44 @@ graph TD
 ### Endpoints Disponibles
 
 ```mermaid
-graph LR
-    API[API XtraWork]
-    Auth[/api/auth/*]
-    Titles[/api/titles/*]
-    Employees[/api/employees/*]
-    Health[/health]
+graph TB
+    API[API XtraWork<br/>https://localhost:7033]
+    
+    subgraph Auth [Authentification - /api/auth]
+        R[POST /register<br/>Inscription]
+        L[POST /login<br/>Connexion]
+        V[POST /validate<br/>Valider Token]
+        M[GET /me<br/>Info User]
+    end
+    
+    subgraph Titles [Gestion Postes - /api/titles]
+        TG[GET /<br/>Lister tous]
+        TGI[GET /:id<br/>Un poste]
+        TP[POST /<br/>Créer]
+        TPU[PUT /:id<br/>Modifier]
+        TD[DELETE /:id<br/>Supprimer]
+    end
+    
+    subgraph Employees [Gestion Employés - /api/employees]
+        EG[GET /<br/>Lister tous]
+        EGI[GET /:id<br/>Un employé]
+        EP[POST /<br/>Créer]
+        EPU[PUT /:id<br/>Modifier]
+        ED[DELETE /:id<br/>Supprimer]
+    end
+    
+    Health[GET /health<br/>Status API]
     
     API --> Auth
     API --> Titles
     API --> Employees
     API --> Health
     
-    Auth --> R[Register]
-    Auth --> L[Login]
-    Auth --> V[Validate]
-    Auth --> M[Me]
-    
-    Titles --> TG[GET All]
-    Titles --> TP[POST Create]
-    Titles --> TPU[PUT Update]
-    Titles --> TD[DELETE]
-    
-    Employees --> EG[GET All]
-    Employees --> EP[POST Create]
-    Employees --> EPU[PUT Update]
-    Employees --> ED[DELETE]
-    
-    style API fill:#4CAF50,color:#fff
+    style API fill:#4CAF50,color:#fff,stroke:#333,stroke-width:3px
+    style Auth fill:#FF9800,color:#fff,stroke:#333,stroke-width:2px
+    style Titles fill:#2196F3,color:#fff,stroke:#333,stroke-width:2px
+    style Employees fill:#9C27B0,color:#fff,stroke:#333,stroke-width:2px
+    style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
 ```
 
 ### 1. Inscription (Register)
@@ -1181,8 +1191,8 @@ graph LR
     Password --> Hash
     Hash --> Hashed
     
-    style Password fill:#FFE082
-    style Hashed fill:#80DEEA
+    style Password fill:#FFE082,color:#000,stroke:#333,stroke-width:2px
+    style Hashed fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
 ```
 
 **Propriétés :**
