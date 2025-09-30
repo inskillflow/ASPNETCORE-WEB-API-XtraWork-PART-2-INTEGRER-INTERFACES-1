@@ -101,19 +101,19 @@ graph TB
     User[RÔLE : USER<br/>Utilisateur Standard]
     
     subgraph Autorise[PEUT FAIRE]
-        A1[Lire tous les Titles]
-        A2[Lire tous les Employees]
-        A3[Créer un Employee]
-        A4[Modifier un Employee]
-        A5[Se connecter]
-        A6[Voir son profil]
+        UA[Lire tous les Titles]
+        UB[Lire tous les Employees]
+        UC[Créer un Employee]
+        UD[Modifier un Employee]
+        UE[Se connecter]
+        UF[Voir son profil]
     end
     
     subgraph Interdit[NE PEUT PAS]
-        D1[Créer un Title]
-        D2[Modifier un Title]
-        D3[Supprimer un Title]
-        D4[Supprimer un Employee]
+        UX[Créer un Title]
+        UY[Modifier un Title]
+        UZ[Supprimer un Title]
+        UW[Supprimer un Employee]
     end
     
     User --> Autorise
@@ -382,19 +382,19 @@ graph TB
     Manager[RÔLE : MANAGER<br/>Gestionnaire]
     
     subgraph Autorise[PEUT FAIRE]
-        A1[Lire tous les Titles]
-        A2[Créer un Title]
-        A3[Modifier un Title]
-        A4[Lire tous les Employees]
-        A5[Créer un Employee]
-        A6[Modifier un Employee]
-        A7[Supprimer un Employee]
-        A8[Se connecter]
-        A9[Voir son profil]
+        MA[Lire tous les Titles]
+        MB[Créer un Title]
+        MC[Modifier un Title]
+        MD[Lire tous les Employees]
+        ME[Créer un Employee]
+        MF[Modifier un Employee]
+        MG[Supprimer un Employee]
+        MH[Se connecter]
+        MI[Voir son profil]
     end
     
     subgraph Interdit[NE PEUT PAS]
-        D1[Supprimer un Title]
+        MX[Supprimer un Title]
     end
     
     Manager --> Autorise
@@ -681,16 +681,16 @@ graph TB
     Admin[RÔLE : ADMIN<br/>Administrateur]
     
     subgraph Autorise[PEUT TOUT FAIRE]
-        A1[Lire tous les Titles]
-        A2[Créer un Title]
-        A3[Modifier un Title]
-        A4[Supprimer un Title]
-        A5[Lire tous les Employees]
-        A6[Créer un Employee]
-        A7[Modifier un Employee]
-        A8[Supprimer un Employee]
-        A9[Se connecter]
-        A10[Voir son profil]
+        AA[Lire tous les Titles]
+        AB[Créer un Title]
+        AC[Modifier un Title]
+        AD[Supprimer un Title]
+        AE[Lire tous les Employees]
+        AF[Créer un Employee]
+        AG[Modifier un Employee]
+        AH[Supprimer un Employee]
+        AI[Se connecter]
+        AJ[Voir son profil]
     end
     
     Admin --> Autorise
@@ -1144,57 +1144,60 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph Légende
-        OK[✅ Autorisé]
-        NOK[❌ Interdit]
+    subgraph Legend[Légende]
+        OK[Autorisé]
+        NOK[Interdit]
     end
     
-    subgraph Titles
-        T1[GET /api/titles]
-        T2[POST /api/titles]
-        T3[PUT /api/titles/:id]
-        T4[DELETE /api/titles/:id]
+    subgraph Titles[Titles]
+        TGet[GET /api/titles]
+        TPost[POST /api/titles]
+        TPut[PUT /api/titles/:id]
+        TDel[DELETE /api/titles/:id]
     end
     
-    subgraph Employees
-        E1[GET /api/employees]
-        E2[POST /api/employees]
-        E3[PUT /api/employees/:id]
-        E4[DELETE /api/employees/:id]
+    subgraph Employees[Employees]
+        EGet[GET /api/employees]
+        EPost[POST /api/employees]
+        EPut[PUT /api/employees/:id]
+        EDel[DELETE /api/employees/:id]
     end
     
-    U[USER] -.->|✅| T1
-    U -.->|❌| T2
-    U -.->|❌| T3
-    U -.->|❌| T4
-    U -.->|✅| E1
-    U -.->|✅| E2
-    U -.->|✅| E3
-    U -.->|❌| E4
+    UserRole[USER] -.->|OUI| TGet
+    UserRole -.->|NON| TPost
+    UserRole -.->|NON| TPut
+    UserRole -.->|NON| TDel
+    UserRole -.->|OUI| EGet
+    UserRole -.->|OUI| EPost
+    UserRole -.->|OUI| EPut
+    UserRole -.->|NON| EDel
     
-    M[MANAGER] -.->|✅| T1
-    M -.->|✅| T2
-    M -.->|✅| T3
-    M -.->|❌| T4
-    M -.->|✅| E1
-    M -.->|✅| E2
-    M -.->|✅| E3
-    M -.->|✅| E4
+    ManagerRole[MANAGER] -.->|OUI| TGet
+    ManagerRole -.->|OUI| TPost
+    ManagerRole -.->|OUI| TPut
+    ManagerRole -.->|NON| TDel
+    ManagerRole -.->|OUI| EGet
+    ManagerRole -.->|OUI| EPost
+    ManagerRole -.->|OUI| EPut
+    ManagerRole -.->|OUI| EDel
     
-    A[ADMIN] -.->|✅| T1
-    A -.->|✅| T2
-    A -.->|✅| T3
-    A -.->|✅| T4
-    A -.->|✅| E1
-    A -.->|✅| E2
-    A -.->|✅| E3
-    A -.->|✅| E4
+    AdminRole[ADMIN] -.->|OUI| TGet
+    AdminRole -.->|OUI| TPost
+    AdminRole -.->|OUI| TPut
+    AdminRole -.->|OUI| TDel
+    AdminRole -.->|OUI| EGet
+    AdminRole -.->|OUI| EPost
+    AdminRole -.->|OUI| EPut
+    AdminRole -.->|OUI| EDel
     
-    style U fill:#FFE082,color:#000,stroke:#333,stroke-width:2px
-    style M fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
-    style A fill:#EF5350,color:#fff,stroke:#333,stroke-width:2px
+    style UserRole fill:#FFE082,color:#000,stroke:#333,stroke-width:2px
+    style ManagerRole fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
+    style AdminRole fill:#EF5350,color:#fff,stroke:#333,stroke-width:2px
     style OK fill:#C8E6C9,color:#000
     style NOK fill:#FFCDD2,color:#000
+    style Legend fill:#f9f9f9,color:#000,stroke:#999,stroke-width:1px
+    style Titles fill:#E3F2FD,color:#000,stroke:#2196F3,stroke-width:2px
+    style Employees fill:#F3E5F5,color:#000,stroke:#9C27B0,stroke-width:2px
 ```
 
 ### Tableau Détaillé
@@ -1226,21 +1229,21 @@ graph TB
 ```mermaid
 graph TB
     subgraph USER [USER - Utilisateur Standard]
-        U1[✅ Lecture Titles/Employees]
-        U2[✅ Créer/Modifier Employee]
-        U3[❌ Gérer Titles]
-        U4[❌ Supprimer Employee]
+        UR[Lecture Titles/Employees]
+        UC[Créer/Modifier Employee]
+        UN[Gérer Titles - NON]
+        UD[Supprimer Employee - NON]
     end
     
     subgraph MANAGER [MANAGER - Gestionnaire]
-        M1[✅ TOUT sur Titles sauf DELETE]
-        M2[✅ TOUT sur Employees]
+        MT[TOUT sur Titles sauf DELETE]
+        ME[TOUT sur Employees]
     end
     
     subgraph ADMIN [ADMIN - Administrateur]
-        A1[✅ TOUS LES DROITS]
-        A2[✅ Supprimer Titles]
-        A3[✅ Contrôle Total]
+        AA[TOUS LES DROITS]
+        AT[Supprimer Titles]
+        AC[Contrôle Total]
     end
     
     style USER fill:#FFE082,color:#000,stroke:#333,stroke-width:3px
