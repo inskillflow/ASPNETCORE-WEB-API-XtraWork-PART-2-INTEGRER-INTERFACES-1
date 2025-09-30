@@ -133,9 +133,75 @@ graph TB
     style User fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
     style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
-
-
 ```
+
+
+ou 
+
+```mermaid
+graph TB
+
+    %% Classe pour rendre des ancres invisibles
+    classDef hidden fill:transparent,stroke:transparent,stroke-width:0px;
+
+    %% Noeud principal
+    User["RÔLE : USER<br/>Utilisateur Standard"]
+
+    %% Groupe AUTORISÉ (vertical)
+    subgraph Autorise["PEUT FAIRE"]
+        direction TB
+        A0[Ancre]
+        UA["Lire tous les Titles"]
+        UB["Lire tous les Employees"]
+        UC["Créer un Employee"]
+        UD["Modifier un Employee"]
+        UE["Se connecter"]
+        UF["Voir son profil"]
+    end
+
+    %% Groupe INTERDIT (vertical)
+    subgraph Interdit["NE PEUT PAS"]
+        direction TB
+        I0[Ancre]
+        UX["Créer un Title"]
+        UY["Modifier un Title"]
+        UZ["Supprimer un Title"]
+        UW["Supprimer un Employee"]
+    end
+
+    %% Forcer l'empilement vertical global : User -> Autorise -> Interdit
+    User --> A0
+    A0 --> I0
+
+    %% Liens sémantiques : autorisé (plein)
+    User --> UA
+    User --> UB
+    User --> UC
+    User --> UD
+    User --> UE
+    User --> UF
+
+    %% Liens sémantiques : interdit (pointillé)
+    User -.-> UX
+    User -.-> UY
+    User -.-> UZ
+    User -.-> UW
+
+    %% Rendre les ancres invisibles
+    class A0,I0 hidden;
+
+    %% Styles
+    style User fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
+    style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
+```
+
+
+
+
+
+
+
 
 ### PARTIE 1 : Créer un Utilisateur USER
 
