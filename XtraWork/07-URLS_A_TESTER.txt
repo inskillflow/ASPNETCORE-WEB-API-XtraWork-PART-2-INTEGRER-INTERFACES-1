@@ -1,0 +1,193 @@
+===============================================
+    URLS A TESTER - API XtraWork
+===============================================
+
+URL DE BASE : https://localhost:7033
+
+
+===============================================
+1. HEALTH CHECK & DOCUMENTATION
+===============================================
+
+Health Check (sans authentification)
+  GET https://localhost:7033/health
+
+Swagger UI (interface web)
+  GET https://localhost:7033/swagger/index.html
+
+
+===============================================
+2. AUTHENTIFICATION
+===============================================
+
+Inscription
+  POST https://localhost:7033/api/auth/register
+  Body: { "username", "email", "password", "firstName", "lastName" }
+
+Connexion
+  POST https://localhost:7033/api/auth/login
+  Body: { "username", "password" }
+
+Valider un token
+  POST https://localhost:7033/api/auth/validate
+  Body: "votre_token_jwt"
+
+Mes informations (avec token)
+  GET https://localhost:7033/api/auth/me
+  Header: Authorization: Bearer <token>
+
+
+===============================================
+3. TITLES (POSTES)
+===============================================
+
+Lister tous les titres
+  GET https://localhost:7033/api/titles
+  Roles: User, Manager, Admin
+
+Obtenir un titre specifique
+  GET https://localhost:7033/api/titles/{id}
+  Roles: User, Manager, Admin
+
+Creer un titre
+  POST https://localhost:7033/api/titles
+  Roles: Manager, Admin
+  Body: { "description": "Nom du poste" }
+
+Modifier un titre
+  PUT https://localhost:7033/api/titles/{id}
+  Roles: Manager, Admin
+  Body: { "description": "Nouveau nom" }
+
+Supprimer un titre
+  DELETE https://localhost:7033/api/titles/{id}
+  Roles: Admin
+
+
+===============================================
+4. EMPLOYEES (EMPLOYES)
+===============================================
+
+Lister tous les employes
+  GET https://localhost:7033/api/employees
+  Roles: User, Manager, Admin
+
+Obtenir un employe specifique
+  GET https://localhost:7033/api/employees/{id}
+  Roles: User, Manager, Admin
+
+Creer un employe
+  POST https://localhost:7033/api/employees
+  Roles: User, Manager, Admin
+  Body: { "firstName", "lastName", "birthDate", "gender", "titleId" }
+
+Modifier un employe
+  PUT https://localhost:7033/api/employees/{id}
+  Roles: User, Manager, Admin
+  Body: { "firstName", "lastName", "birthDate", "gender", "titleId" }
+
+Supprimer un employe
+  DELETE https://localhost:7033/api/employees/{id}
+  Roles: Manager, Admin
+
+
+===============================================
+5. TESTS RAPIDES POWERSHELL
+===============================================
+
+Health Check:
+  Invoke-WebRequest -Uri "https://localhost:7033/health"
+
+Swagger (ouvrir dans le navigateur):
+  Start-Process "https://localhost:7033/swagger/index.html"
+
+Inscription:
+  $body = @{
+    username = "test.user"
+    email = "test@xtrawork.com"
+    password = "Test123!"
+    firstName = "Test"
+    lastName = "User"
+  } | ConvertTo-Json
+  
+  $response = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/register" `
+    -Method Post -ContentType "application/json" -Body $body
+  
+  $token = $response.token
+
+Lister les titres (avec token):
+  $headers = @{ Authorization = "Bearer $token" }
+  Invoke-RestMethod -Uri "https://localhost:7033/api/titles" -Headers $headers
+
+
+===============================================
+6. CODES D'ETAT HTTP
+===============================================
+
+200 OK                  : Requete reussie
+201 Created             : Ressource creee
+204 No Content          : Suppression reussie
+400 Bad Request         : Validation echouee
+401 Unauthorized        : Token manquant ou invalide
+403 Forbidden           : Pas les droits necessaires
+404 Not Found           : Ressource introuvable
+500 Internal Error      : Erreur serveur
+
+
+===============================================
+7. ROLES ET PERMISSIONS
+===============================================
+
+User:
+  - Lire : Titles, Employees
+  - Creer : Employees
+  - Modifier : Employees
+
+Manager:
+  - Lire : Titles, Employees
+  - Creer : Titles, Employees
+  - Modifier : Titles, Employees
+  - Supprimer : Employees
+
+Admin:
+  - TOUS les droits sur TOUT
+
+
+===============================================
+8. FORMAT DES DONNEES
+===============================================
+
+Date de naissance (birthDate):
+  Format: "YYYY-MM-DD"
+  Exemple: "1990-03-15"
+
+Genre (gender):
+  Valeurs: "M" ou "F"
+
+Token JWT:
+  Dans le header: Authorization: Bearer eyJhbGciOiJIUzI1Ni...
+
+
+===============================================
+9. VALIDATION
+===============================================
+
+Title.description:
+  - Minimum 3 caracteres
+  - Maximum 100 caracteres
+
+Employee.firstName/lastName:
+  - Minimum 2 caracteres
+  - Maximum 50 caracteres
+
+Employee.birthDate:
+  - Age minimum: 16 ans
+  - Age maximum: 70 ans
+
+Employee.gender:
+  - Obligatoire: "M" ou "F"
+
+
+===============================================
+FIN DU DOCUMENT
+===============================================

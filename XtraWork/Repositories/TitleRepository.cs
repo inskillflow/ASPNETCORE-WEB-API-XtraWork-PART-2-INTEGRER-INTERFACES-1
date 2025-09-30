@@ -12,35 +12,46 @@ public class TitleRepository
         _context = context;
     }
 
-    public async Task<List<Title>> GetAll()
+    public async Task<List<Title>> GetAllAsync()
     {
-        return await _context.Titles.ToListAsync();
+        return await _context.Titles
+            .OrderBy(t => t.Description)
+            .ToListAsync();
     }
 
-    public async Task<Title> Get(Guid id)
+    public async Task<Title?> GetByIdAsync(Guid id)
     {
-        return await _context.Titles.FindAsync(id);
+        return await _context.Titles
+            .Include(t => t.Employees)
+            .FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public async Task<Title> Create(Title title)
+    public async Task<Title> CreateAsync(Title title)
     {
-        title.Id = Guid.NewGuid();
-        _context.Add(title);
+        _context.Titles.Add(title);
         await _context.SaveChangesAsync();
         return title;
     }
 
-    public async Task<Title> Update(Title title)
+    public async Task<Title> UpdateAsync(Title title)
     {
-        _context.Update(title);
+        _context.Titles.Update(title);
         await _context.SaveChangesAsync();
         return title;
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var title = await _context.Titles.FindAsync(id);
-        _context.Remove(title);
-        await _context.SaveChangesAsync();
+        var title = await GetByIdAsync(id);
+        if (title != null)
+        {
+            _context.Titles.Remove(title);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Titles.AnyAsync(t => t.Id == id);
     }
 }

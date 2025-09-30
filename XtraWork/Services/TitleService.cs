@@ -1,4 +1,5 @@
 ﻿using XtraWork.Entities;
+using XtraWork.Exceptions;
 using XtraWork.Repositories;
 using XtraWork.Requests;
 using XtraWork.Responses;
@@ -14,65 +15,79 @@ public class TitleService
         _titleRepository = titleRepository;
     }
 
-    public async Task<TitleResponse> Get(Guid id)
-    {
-        var title = await _titleRepository.Get(id);
-
-        var response = new TitleResponse
-        {
-            Id = title.Id,
-            Description = title.Description
-        };
-
-        return response;
-    }
-
     public async Task<List<TitleResponse>> GetAll()
     {
-        var titles = await _titleRepository.GetAll();
+        var titles = await _titleRepository.GetAllAsync();
+        return titles.Select(t => new TitleResponse
+        {
+            Id = t.Id,
+            Description = t.Description,
+            CreatedAt = t.CreatedAt
+        }).ToList();
+    }
 
-        var response = titles.Select(title => new TitleResponse
+    public async Task<TitleResponse> Get(Guid id)
+    {
+        var title = await _titleRepository.GetByIdAsync(id);
+        if (title == null)
+        {
+            throw new NotFoundException($"Titre avec l'ID {id} non trouvé");
+        }
+
+        return new TitleResponse
         {
             Id = title.Id,
-            Description = title.Description
-        }).ToList();
-
-        return response;
+            Description = title.Description,
+            CreatedAt = title.CreatedAt
+        };
     }
 
     public async Task<TitleResponse> Create(TitleRequest request)
     {
         var title = new Title
         {
-            Description = request.Description
+            Id = Guid.NewGuid(),
+            Description = request.Description,
+            CreatedAt = DateTime.UtcNow
         };
 
-        await _titleRepository.Create(title);
+        var createdTitle = await _titleRepository.CreateAsync(title);
 
         return new TitleResponse
         {
-            Id = title.Id,
-            Description = title.Description
+            Id = createdTitle.Id,
+            Description = createdTitle.Description,
+            CreatedAt = createdTitle.CreatedAt
         };
     }
 
     public async Task<TitleResponse> Update(Guid id, TitleRequest request)
     {
-        var title = await _titleRepository.Get(id);
+        var title = await _titleRepository.GetByIdAsync(id);
+        if (title == null)
+        {
+            throw new NotFoundException($"Titre avec l'ID {id} non trouvé");
+        }
 
         title.Description = request.Description;
-
-        await _titleRepository.Update(title);
+        var updatedTitle = await _titleRepository.UpdateAsync(title);
 
         return new TitleResponse
         {
-            Id = title.Id,
-            Description = title.Description
+            Id = updatedTitle.Id,
+            Description = updatedTitle.Description,
+            CreatedAt = updatedTitle.CreatedAt
         };
     }
 
     public async Task Delete(Guid id)
     {
-        await _titleRepository.Delete(id);
+        var exists = await _titleRepository.ExistsAsync(id);
+        if (!exists)
+        {
+            throw new NotFoundException($"Titre avec l'ID {id} non trouvé");
+        }
+
+        await _titleRepository.DeleteAsync(id);
     }
 }

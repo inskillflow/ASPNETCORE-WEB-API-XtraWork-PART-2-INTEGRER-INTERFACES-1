@@ -11,51 +11,57 @@ public class EmployeeRepository
     {
         _context = context;
     }
-    public async Task<List<Employee>> GetAll()
+
+    public async Task<List<Employee>> GetAllAsync()
     {
         return await _context.Employees
-            .Include(x => x.Title)
-            .OrderBy(x => x.FirstName)
-            .ThenBy(x => x.LastName)
+            .Include(e => e.Title)
+            .OrderBy(e => e.LastName)
+            .ThenBy(e => e.FirstName)
             .ToListAsync();
     }
 
-    public async Task<Employee> Get(Guid id)
+    public async Task<Employee?> GetByIdAsync(Guid id)
     {
         return await _context.Employees
-            .Include(x => x.Title)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .Include(e => e.Title)
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<List<Employee>> Search(string keyword)
+    public async Task<Employee> CreateAsync(Employee employee)
     {
-        return await _context.Employees
-            .Include(x => x.Title)
-            .Where(x => x.FirstName.Contains(keyword) || x.LastName.Contains(keyword))
-            .OrderBy(x => x.FirstName)
-            .ThenBy(x => x.LastName)
-            .ToListAsync();
-    }
-
-    public async Task<Employee> Create(Employee employee)
-    {
-        employee.Id = Guid.NewGuid();
-        _context.Add(employee);
+        _context.Employees.Add(employee);
         await _context.SaveChangesAsync();
         return employee;
     }
 
-    public async Task<Employee> Update(Employee employee)
+    public async Task<Employee> UpdateAsync(Employee employee)
     {
-        _context.Update(employee);
+        _context.Employees.Update(employee);
         await _context.SaveChangesAsync();
         return employee;
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var employee = await _context.Employees.FindAsync(id);
-        _context.Remove(employee);
-        await _context.SaveChangesAsync();
+        var employee = await GetByIdAsync(id);
+        if (employee != null)
+        {
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await _context.Employees.AnyAsync(e => e.Id == id);
+    }
+
+    public async Task<List<Employee>> GetByTitleIdAsync(Guid titleId)
+    {
+        return await _context.Employees
+            .Include(e => e.Title)
+            .Where(e => e.TitleId == titleId)
+            .ToListAsync();
     }
 }
