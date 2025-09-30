@@ -991,6 +991,109 @@ graph TB
     style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
 ```
 
+**Version Verticale Décomposée (Alternative) :**
+
+```mermaid
+graph TB
+    API["EduTrack API<br/>https://localhost:7033"]
+    
+    API --> Auth
+    API --> Resources
+    API --> Health
+    
+    subgraph Auth["AUTHENTIFICATION"]
+        direction TB
+        A1["POST /api/auth/register<br/>Inscription"]
+        A2["POST /api/auth/login<br/>Connexion"]
+        A3["POST /api/auth/validate<br/>Valider token"]
+        A4["GET /api/auth/me<br/>Profil utilisateur"]
+    end
+    
+    subgraph Resources["RESSOURCES MÉTIER"]
+        direction TB
+        
+        Courses["COURSES"]
+        Instructors["INSTRUCTORS"]
+        Students["STUDENTS"]
+        Enrollments["ENROLLMENTS"]
+    end
+    
+    Courses --> C1["GET / - Liste"]
+    Courses --> C2["GET /:id - Un cours"]
+    Courses --> C3["POST / - Créer"]
+    Courses --> C4["PUT /:id - Modifier"]
+    Courses --> C5["DELETE /:id - Supprimer"]
+    
+    Instructors --> I1["GET / - Liste"]
+    Instructors --> I2["GET /:id - Un formateur"]
+    Instructors --> I3["POST / - Créer"]
+    Instructors --> I4["PUT /:id - Modifier"]
+    Instructors --> I5["DELETE /:id - Supprimer"]
+    
+    Students --> S1["GET / - Liste"]
+    Students --> S2["GET /:id - Un étudiant"]
+    Students --> S3["POST / - Créer"]
+    Students --> S4["PUT /:id - Modifier"]
+    Students --> S5["DELETE /:id - Supprimer"]
+    
+    Enrollments --> E1["GET / - Liste"]
+    Enrollments --> E2["GET /:id - Une inscription"]
+    Enrollments --> E3["POST / - Créer"]
+    Enrollments --> E4["PUT /:id - Modifier/Noter"]
+    Enrollments --> E5["DELETE /:id - Supprimer"]
+    
+    Health["GET /health<br/>Status de l'API"]
+    
+    style API fill:#4CAF50,color:#fff,stroke:#333,stroke-width:4px
+    style Auth fill:#FF9800,color:#fff,stroke:#333,stroke-width:3px
+    style Resources fill:#2196F3,color:#fff,stroke:#333,stroke-width:3px
+    style Courses fill:#80DEEA,color:#000,stroke:#2196F3,stroke-width:2px
+    style Instructors fill:#FFE082,color:#000,stroke:#FFC107,stroke-width:2px
+    style Students fill:#FFCDD2,color:#000,stroke:#9C27B0,stroke-width:2px
+    style Enrollments fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
+```
+
+**Version Compacte par Catégorie (Alternative 2) :**
+
+```mermaid
+graph TB
+    Start["API EduTrack"]
+    
+    Start --> Cat1
+    Start --> Cat2
+    Start --> Cat3
+    
+    subgraph Cat1["AUTHENTIFICATION (4 endpoints)"]
+        direction LR
+        Auth1["Register"]
+        Auth2["Login"]
+        Auth3["Validate"]
+        Auth4["Me"]
+    end
+    
+    subgraph Cat2["GESTION COURS (10 endpoints)"]
+        direction TB
+        G1["Courses: GET/POST/PUT/DELETE"]
+        G2["Instructors: GET/POST/PUT/DELETE"]
+    end
+    
+    subgraph Cat3["GESTION ÉTUDIANTS (10 endpoints)"]
+        direction TB
+        G3["Students: GET/POST/PUT/DELETE"]
+        G4["Enrollments: GET/POST/PUT/DELETE"]
+    end
+    
+    Health["Health Check (1 endpoint)"]
+    Start --> Health
+    
+    style Start fill:#4CAF50,color:#fff,stroke:#333,stroke-width:3px
+    style Cat1 fill:#FF9800,color:#fff,stroke:#333,stroke-width:2px
+    style Cat2 fill:#2196F3,color:#fff,stroke:#333,stroke-width:2px
+    style Cat3 fill:#9C27B0,color:#fff,stroke:#333,stroke-width:2px
+    style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
+```
+
 ### Liste Détaillée des Endpoints
 
 #### Authentification (`/api/auth`)
