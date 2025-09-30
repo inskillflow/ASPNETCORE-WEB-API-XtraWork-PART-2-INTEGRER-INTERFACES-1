@@ -458,30 +458,44 @@ graph LR
 
 ```mermaid
 graph TB
-    Manager[RÔLE : MANAGER<br/>Gestionnaire]
+    Manager["RÔLE : MANAGER<br/>Gestionnaire]
     
-    subgraph Autorise[PEUT FAIRE]
-        MA[Lire tous les Titles]
-        MB[Créer un Title]
-        MC[Modifier un Title]
-        MD[Lire tous les Employees]
-        ME[Créer un Employee]
-        MF[Modifier un Employee]
-        MG[Supprimer un Employee]
-        MH[Se connecter]
-        MI[Voir son profil]
+    subgraph Autorise["PEUT FAIRE"]
+        direction TB
+        MA["Lire tous les Titles"]
+        MB["Créer un Title"]
+        MC["Modifier un Title"]
+        MD["Lire tous les Employees"]
+        ME["Créer un Employee"]
+        MF["Modifier un Employee"]
+        MG["Supprimer un Employee"]
+        MH["Se connecter"]
+        MI["Voir son profil"]
     end
     
-    subgraph Interdit[NE PEUT PAS]
-        MX[Supprimer un Title]
+    subgraph Interdit["NE PEUT PAS"]
+        direction TB
+        MX["Supprimer un Title"]
     end
     
-    Manager --> Autorise
-    Manager -.x Interdit
+    %% Liens autorisés (pleins)
+    Manager --> MA
+    Manager --> MB
+    Manager --> MC
+    Manager --> MD
+    Manager --> ME
+    Manager --> MF
+    Manager --> MG
+    Manager --> MH
+    Manager --> MI
+
+    %% Lien interdit (pointillé)
+    Manager -.-> MX
     
     style Manager fill:#80DEEA,color:#000,stroke:#333,stroke-width:4px
     style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
+
 ```
 
 ### PARTIE 1 : Créer un Utilisateur MANAGER
