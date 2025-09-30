@@ -1,0 +1,105 @@
+========================================
+  INSTRUCTIONS DE DEMARRAGE
+========================================
+
+PROBLEME ACTUEL :
+- La base XtraWork existe mais les tables sont incorrectes
+- Entity Framework doit recréer tout depuis zéro
+
+
+========================================
+SOLUTION EN 1 COMMANDE
+========================================
+
+Ouvrir PowerShell dans le dossier XtraWork, puis :
+
+.\LANCER_API_PROPREMENT.ps1
+
+
+Ce script va :
+1. Arrêter l'API si elle tourne
+2. Supprimer complètement la base XtraWork
+3. Nettoyer les fichiers temporaires
+4. Lancer l'API
+5. Entity Framework créera automatiquement :
+   - La base de données XtraWork
+   - La table Users (avec UNIQUEIDENTIFIER)
+   - La table Titles (avec UNIQUEIDENTIFIER)
+   - La table Employees (avec UNIQUEIDENTIFIER)
+
+
+========================================
+VERIFICATION
+========================================
+
+Une fois l'API démarrée, vous verrez :
+
+[INFO] Now listening on: https://localhost:7033
+[INFO] Now listening on: http://localhost:5280
+[INFO] Application started. Press Ctrl+C to shut down.
+
+Puis ouvrir un NOUVEAU terminal PowerShell et tester :
+
+Invoke-WebRequest -Uri "https://localhost:7033/health"
+
+Résultat attendu : 200 Healthy
+
+
+========================================
+TESTER DANS SWAGGER
+========================================
+
+1. Ouvrir : https://localhost:7033/swagger/index.html
+
+2. Tester POST /api/auth/register avec :
+
+{
+  "username": "marie.user",
+  "email": "marie@xtrawork.com",
+  "password": "Marie123!",
+  "firstName": "Marie",
+  "lastName": "Dupont"
+}
+
+3. Résultat attendu : Code 200 avec un token
+
+
+========================================
+SI CA NE FONCTIONNE PAS
+========================================
+
+Vérifier dans SQL Server Management Studio :
+
+1. Se connecter à : LAPTOP-81IAD844
+
+2. Exécuter :
+
+SELECT name FROM sys.databases WHERE name = 'XtraWork';
+
+Si la base existe :
+
+SELECT TABLE_NAME FROM XtraWork.INFORMATION_SCHEMA.TABLES;
+
+Vous devriez voir :
+- Employees
+- Titles
+- Users
+
+
+========================================
+CONFIGURATION
+========================================
+
+Chaîne de connexion (appsettings.json) :
+
+Server=LAPTOP-81IAD844;Database=XtraWork;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True
+
+Cette configuration :
+- Utilise l'authentification Windows
+- Se connecte à SQL Server sur LAPTOP-81IAD844
+- Utilise la base XtraWork
+
+
+========================================
+FIN
+========================================

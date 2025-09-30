@@ -1,0 +1,425 @@
+========================================
+  TOUTES LES COMMANDES - API XtraWork
+========================================
+
+
+========================================
+1. DEMARRER L'API
+========================================
+
+# Aller dans le dossier
+cd C:\Users\rehou\Downloads\2-SuiviEtudiantsEtape2\SuiviEtudiantsEtape2\XtraWork
+
+# Lancer l'API
+dotnet run
+
+# OU utiliser le script automatique
+.\LANCER_API_PROPREMENT.ps1
+
+
+========================================
+2. ARRETER L'API
+========================================
+
+# Arreter tous les processus dotnet
+Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# OU dans le terminal de l'API : Ctrl+C
+
+
+========================================
+3. VERIFIER LA BASE DE DONNEES
+========================================
+
+# Verifier si la base existe
+sqlcmd -S LAPTOP-81IAD844 -E -Q "SELECT name FROM sys.databases WHERE name = 'XtraWork';"
+
+# Lister les tables
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES;"
+
+# Verifier le type des colonnes Id
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'Id';"
+
+# Voir tous les utilisateurs
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT Username, Email, Role, FirstName, LastName FROM Users;"
+
+# Voir tous les titres
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT Id, Description FROM Titles;"
+
+# Voir tous les employes
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT FirstName, LastName, Gender, TitleId FROM Employees;"
+
+
+========================================
+4. SUPPRIMER LA BASE DE DONNEES
+========================================
+
+# Methode 1 : Simple
+sqlcmd -S LAPTOP-81IAD844 -E -Q "DROP DATABASE IF EXISTS XtraWork;"
+
+# Methode 2 : Forcer (si la base est utilisee)
+sqlcmd -S LAPTOP-81IAD844 -E -Q "ALTER DATABASE XtraWork SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE XtraWork;"
+
+
+========================================
+5. TESTER L'API (Health Check)
+========================================
+
+# Test simple
+Invoke-WebRequest -Uri "https://localhost:7033/health"
+
+# Test avec details
+Invoke-WebRequest -Uri "https://localhost:7033/health" | Select-Object StatusCode, Content
+
+# Test HTTP (port 5280)
+Invoke-WebRequest -Uri "http://localhost:5280/health"
+
+
+========================================
+6. INSCRIPTION D'UN UTILISATEUR
+========================================
+
+# Utilisateur normal (role User)
+$user1Body = @{
+    username = "marie.user"
+    email = "marie@xtrawork.com"
+    password = "Marie123!"
+    firstName = "Marie"
+    lastName = "Dupont"
+} | ConvertTo-Json
+
+$user1Response = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/register" -Method Post -ContentType "application/json" -Body $user1Body
+
+$user1Token = $user1Response.token
+Write-Host "Token: $user1Token"
+
+
+# Utilisateur Manager
+$user2Body = @{
+    username = "jean.manager"
+    email = "jean@xtrawork.com"
+    password = "Jean123!"
+    firstName = "Jean"
+    lastName = "Martin"
+} | ConvertTo-Json
+
+$user2Response = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/register" -Method Post -ContentType "application/json" -Body $user2Body
+
+$user2Token = $user2Response.token
+
+
+# Utilisateur Admin
+$adminBody = @{
+    username = "admin"
+    email = "admin@xtrawork.com"
+    password = "Admin123!"
+    firstName = "Sophie"
+    lastName = "Administrateur"
+} | ConvertTo-Json
+
+$adminResponse = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/register" -Method Post -ContentType "application/json" -Body $adminBody
+
+$adminToken = $adminResponse.token
+
+
+========================================
+7. CHANGER LES ROLES (via SQL)
+========================================
+
+# Changer jean.manager en Manager
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; UPDATE Users SET Role = 'Manager' WHERE Username = 'jean.manager';"
+
+# Changer admin en Admin
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; UPDATE Users SET Role = 'Admin' WHERE Username = 'admin';"
+
+# Verifier les roles
+sqlcmd -S LAPTOP-81IAD844 -E -Q "USE XtraWork; SELECT Username, Role FROM Users;"
+
+
+========================================
+8. CONNEXION (Login)
+========================================
+
+# Connexion avec marie.user
+$loginBody = @{
+    username = "marie.user"
+    password = "Marie123!"
+} | ConvertTo-Json
+
+$loginResponse = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/login" -Method Post -ContentType "application/json" -Body $loginBody
+
+$token = $loginResponse.token
+Write-Host "Token: $token"
+
+
+========================================
+9. TESTER /api/auth/me
+========================================
+
+# Avec le token de l'utilisateur connecte
+$headers = @{ Authorization = "Bearer $token" }
+
+$meResponse = Invoke-RestMethod -Uri "https://localhost:7033/api/auth/me" -Headers $headers
+
+Write-Host "Username: $($meResponse.username)"
+Write-Host "Email: $($meResponse.email)"
+Write-Host "Role: $($meResponse.role)"
+
+
+========================================
+10. CREER UN TITRE (Title)
+========================================
+
+# Avec le token Admin
+$adminHeaders = @{ Authorization = "Bearer $adminToken" }
+
+$titleBody = @{ description = "Developpeur Full Stack" } | ConvertTo-Json
+
+$titleResponse = Invoke-RestMethod -Uri "https://localhost:7033/api/titles" -Method Post -Headers $adminHeaders -ContentType "application/json" -Body $titleBody
+
+$titleId = $titleResponse.id
+Write-Host "Titre cree - ID: $titleId"
+
+
+========================================
+11. LISTER TOUS LES TITRES
+========================================
+
+# Avec n'importe quel token (User, Manager, Admin)
+$headers = @{ Authorization = "Bearer $token" }
+
+$titles = Invoke-RestMethod -Uri "https://localhost:7033/api/titles" -Headers $headers
+
+$titles | Format-Table -Property id, description
+
+
+========================================
+12. CREER UN EMPLOYE (Employee)
+========================================
+
+# Avec le token User (ou Manager/Admin)
+$headers = @{ Authorization = "Bearer $token" }
+
+$employeeBody = @{
+    firstName = "Pierre"
+    lastName = "Durand"
+    birthDate = "1990-03-15"
+    gender = "M"
+    titleId = $titleId
+} | ConvertTo-Json
+
+$employeeResponse = Invoke-RestMethod -Uri "https://localhost:7033/api/employees" -Method Post -Headers $headers -ContentType "application/json" -Body $employeeBody
+
+$employeeId = $employeeResponse.id
+Write-Host "Employe cree - ID: $employeeId"
+
+
+========================================
+13. LISTER TOUS LES EMPLOYES
+========================================
+
+# Avec n'importe quel token
+$headers = @{ Authorization = "Bearer $token" }
+
+$employees = Invoke-RestMethod -Uri "https://localhost:7033/api/employees" -Headers $headers
+
+$employees | Format-Table -Property firstName, lastName, gender, titleDescription
+
+
+========================================
+14. MODIFIER UN EMPLOYE
+========================================
+
+# Avec le token User (ou Manager/Admin)
+$headers = @{ Authorization = "Bearer $token" }
+
+$updateBody = @{
+    firstName = "Pierre"
+    lastName = "Durand-Martin"
+    birthDate = "1990-03-15"
+    gender = "M"
+    titleId = $titleId
+} | ConvertTo-Json
+
+$updatedEmployee = Invoke-RestMethod -Uri "https://localhost:7033/api/employees/$employeeId" -Method Put -Headers $headers -ContentType "application/json" -Body $updateBody
+
+Write-Host "Employe modifie : $($updatedEmployee.firstName) $($updatedEmployee.lastName)"
+
+
+========================================
+15. SUPPRIMER UN EMPLOYE
+========================================
+
+# Avec le token Manager ou Admin (pas User)
+$managerHeaders = @{ Authorization = "Bearer $managerToken" }
+
+Invoke-RestMethod -Uri "https://localhost:7033/api/employees/$employeeId" -Method Delete -Headers $managerHeaders
+
+Write-Host "Employe supprime"
+
+
+========================================
+16. OUVRIR SWAGGER UI
+========================================
+
+# Dans le navigateur
+https://localhost:7033/swagger/index.html
+
+# OU via PowerShell
+Start-Process "https://localhost:7033/swagger/index.html"
+
+
+========================================
+17. NETTOYER LE PROJET
+========================================
+
+# Arreter l'API
+Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# Aller dans le dossier
+cd C:\Users\rehou\Downloads\2-SuiviEtudiantsEtape2\SuiviEtudiantsEtape2\XtraWork
+
+# Supprimer les fichiers temporaires
+Remove-Item -Recurse -Force bin -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force obj -ErrorAction SilentlyContinue
+
+# Supprimer la base de donnees
+sqlcmd -S LAPTOP-81IAD844 -E -Q "DROP DATABASE IF EXISTS XtraWork;"
+
+
+========================================
+18. REDEMARRAGE COMPLET (Fresh Start)
+========================================
+
+# 1. Arreter l'API
+Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Stop-Process -Force
+
+# 2. Supprimer la base
+sqlcmd -S LAPTOP-81IAD844 -E -Q "ALTER DATABASE XtraWork SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE XtraWork;"
+
+# 3. Nettoyer les fichiers
+cd C:\Users\rehou\Downloads\2-SuiviEtudiantsEtape2\SuiviEtudiantsEtape2\XtraWork
+Remove-Item -Recurse -Force bin -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force obj -ErrorAction SilentlyContinue
+
+# 4. Relancer l'API (recreera automatiquement la base)
+dotnet run
+
+
+========================================
+19. DIAGNOSTICS
+========================================
+
+# Verifier si l'API tourne
+Get-Process -Name "dotnet" -ErrorAction SilentlyContinue
+
+# Verifier quel processus utilise le port 7033
+Get-NetTCPConnection -LocalPort 7033 -ErrorAction SilentlyContinue
+
+# Verifier quel processus utilise le port 5280
+Get-NetTCPConnection -LocalPort 5280 -ErrorAction SilentlyContinue
+
+# Voir les logs de l'API
+Get-Content XtraWork/logs/xtrawork-*.txt -Tail 50
+
+
+========================================
+20. TESTS DE VALIDATION
+========================================
+
+# Test : Titre trop court (doit echouer avec 400)
+$invalidTitleBody = @{ description = "D" } | ConvertTo-Json
+
+try {
+    Invoke-RestMethod -Uri "https://localhost:7033/api/titles" -Method Post -Headers $adminHeaders -ContentType "application/json" -Body $invalidTitleBody
+} catch {
+    Write-Host "Validation correcte - Erreur 400"
+}
+
+
+# Test : Employe trop jeune (doit echouer avec 400)
+$invalidEmployeeBody = @{
+    firstName = "Jeune"
+    lastName = "Employe"
+    birthDate = "2015-01-01"
+    gender = "M"
+    titleId = $titleId
+} | ConvertTo-Json
+
+try {
+    Invoke-RestMethod -Uri "https://localhost:7033/api/employees" -Method Post -Headers $headers -ContentType "application/json" -Body $invalidEmployeeBody
+} catch {
+    Write-Host "Validation correcte - Erreur 400"
+}
+
+
+# Test : Sans token (doit echouer avec 401)
+try {
+    Invoke-RestMethod -Uri "https://localhost:7033/api/titles"
+} catch {
+    Write-Host "Correct - Erreur 401 Unauthorized"
+}
+
+
+========================================
+21. SCRIPTS AUTOMATIQUES
+========================================
+
+# Lancer l'API proprement
+.\LANCER_API_PROPREMENT.ps1
+
+# Solution Code First
+.\SOLUTION_CODE_FIRST.ps1
+
+
+========================================
+22. URLS IMPORTANTES
+========================================
+
+Swagger UI:
+https://localhost:7033/swagger/index.html
+
+Health Check:
+https://localhost:7033/health
+
+Auth Register:
+POST https://localhost:7033/api/auth/register
+
+Auth Login:
+POST https://localhost:7033/api/auth/login
+
+Auth Me:
+GET https://localhost:7033/api/auth/me
+
+Titles:
+GET    https://localhost:7033/api/titles
+POST   https://localhost:7033/api/titles
+GET    https://localhost:7033/api/titles/{id}
+PUT    https://localhost:7033/api/titles/{id}
+DELETE https://localhost:7033/api/titles/{id}
+
+Employees:
+GET    https://localhost:7033/api/employees
+POST   https://localhost:7033/api/employees
+GET    https://localhost:7033/api/employees/{id}
+PUT    https://localhost:7033/api/employees/{id}
+DELETE https://localhost:7033/api/employees/{id}
+
+
+========================================
+23. CONFIGURATION
+========================================
+
+Serveur SQL:
+LAPTOP-81IAD844
+
+Base de donnees:
+XtraWork
+
+Chaine de connexion:
+Server=LAPTOP-81IAD844;Database=XtraWork;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True
+
+
+========================================
+FIN DU FICHIER
+========================================
