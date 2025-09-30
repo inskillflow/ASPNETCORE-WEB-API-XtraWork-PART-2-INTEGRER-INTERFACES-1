@@ -2,9 +2,14 @@
 
 API REST ASP.NET Core 8.0 avec authentification JWT, validation FluentValidation, logging Serilog et Health Checks.
 
----
+```json
+ git add -A -- ':!/.vs' ':!**/.vs/**' ':!**/bin/**' ':!**/obj/**'
+ git commit -m "docs: rename & add XtraWork guides; ignore VS/bin/obj"
+ git pull
+ git push
+```
 
-## 📋 Table des matières
+## Table des matières
 
 - [Fonctionnalités](#-fonctionnalités)
 - [Prérequis](#-prérequis)
