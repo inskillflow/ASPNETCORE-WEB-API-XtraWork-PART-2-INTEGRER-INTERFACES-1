@@ -98,30 +98,42 @@ Si c'est la première fois que vous lancez l'API, la base de données est créé
 
 ```mermaid
 graph TB
-    User[RÔLE : USER<br/>Utilisateur Standard]
+    User["RÔLE : USER<br/>Utilisateur Standard"]
     
-    subgraph Autorise[PEUT FAIRE]
-        UA[Lire tous les Titles]
-        UB[Lire tous les Employees]
-        UC[Créer un Employee]
-        UD[Modifier un Employee]
-        UE[Se connecter]
-        UF[Voir son profil]
+    subgraph Autorise["PEUT FAIRE"]
+        UA["Lire tous les Titles"]
+        UB["Lire tous les Employees"]
+        UC["Créer un Employee"]
+        UD["Modifier un Employee"]
+        UE["Se connecter"]
+        UF["Voir son profil"]
     end
     
-    subgraph Interdit[NE PEUT PAS]
-        UX[Créer un Title]
-        UY[Modifier un Title]
-        UZ[Supprimer un Title]
-        UW[Supprimer un Employee]
+    subgraph Interdit["NE PEUT PAS"]
+        UX["Créer un Title"]
+        UY["Modifier un Title"]
+        UZ["Supprimer un Title"]
+        UW["Supprimer un Employee"]
     end
     
-    User --> Autorise
-    User -.x Interdit
+    %% Liens : autorisé (plein)
+    User --> UA
+    User --> UB
+    User --> UC
+    User --> UD
+    User --> UE
+    User --> UF
+
+    %% Liens : interdit (pointillé)
+    User -.-> UX
+    User -.-> UY
+    User -.-> UZ
+    User -.-> UW
     
     style User fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
     style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
+
 ```
 
 ### PARTIE 1 : Créer un Utilisateur USER
