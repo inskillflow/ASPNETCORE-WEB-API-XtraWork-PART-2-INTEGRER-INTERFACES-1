@@ -109,7 +109,7 @@ erDiagram
 ### Relations
 
 ```mermaid
-graph TB
+graph LR
     Course["Course<br/>Cours"]
     Instructor["Instructor<br/>Formateur"]
     Student["Student<br/>Étudiant"]
@@ -123,6 +123,42 @@ graph TB
     style Instructor fill:#FFE082,color:#000,stroke:#333,stroke-width:2px
     style Enrollment fill:#C8E6C9,color:#000,stroke:#333,stroke-width:2px
     style Student fill:#FFCDD2,color:#000,stroke:#333,stroke-width:2px
+```
+
+**Version Verticale (Alternative) :**
+
+```mermaid
+graph TB
+    Instructor["INSTRUCTOR<br/>Formateur<br/>(Marie Curie)"]
+    Course1["COURSE<br/>Physique Quantique<br/>InstructorId: xyz"]
+    Course2["COURSE<br/>Chimie Avancée<br/>InstructorId: xyz"]
+    
+    Student1["STUDENT<br/>Alice Martin"]
+    Student2["STUDENT<br/>Pierre Durand"]
+    
+    Enroll1["ENROLLMENT<br/>CourseId: abc<br/>StudentId: 123<br/>Grade: 85"]
+    Enroll2["ENROLLMENT<br/>CourseId: abc<br/>StudentId: 456<br/>Grade: 92"]
+    Enroll3["ENROLLMENT<br/>CourseId: def<br/>StudentId: 123<br/>Status: Active"]
+    
+    Instructor -->|enseigne| Course1
+    Instructor -->|enseigne| Course2
+    
+    Course1 -->|a| Enroll1
+    Course1 -->|a| Enroll2
+    Course2 -->|a| Enroll3
+    
+    Student1 -->|s'inscrit| Enroll1
+    Student2 -->|s'inscrit| Enroll2
+    Student1 -->|s'inscrit| Enroll3
+    
+    style Instructor fill:#FFE082,color:#000,stroke:#333,stroke-width:3px
+    style Course1 fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
+    style Course2 fill:#80DEEA,color:#000,stroke:#333,stroke-width:2px
+    style Student1 fill:#FFCDD2,color:#000,stroke:#333,stroke-width:2px
+    style Student2 fill:#FFCDD2,color:#000,stroke:#333,stroke-width:2px
+    style Enroll1 fill:#C8E6C9,color:#000,stroke:#333,stroke-width:2px
+    style Enroll2 fill:#C8E6C9,color:#000,stroke:#333,stroke-width:2px
+    style Enroll3 fill:#C8E6C9,color:#000,stroke:#333,stroke-width:2px
 ```
 
 **Relations :**
@@ -301,6 +337,43 @@ graph TB
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
 ```
 
+**Version Simplifiée (Alternative) :**
+
+```mermaid
+graph TB
+    Student["STUDENT<br/>Étudiant"]
+    
+    Student --> Lecture
+    Student --> Creer
+    Student -.-> Interdit
+    
+    subgraph Lecture["PEUT LIRE"]
+        direction LR
+        L1["Courses"]
+        L2["Instructors"]
+        L3["Students"]
+        L4["Ses Enrollments"]
+    end
+    
+    subgraph Creer["PEUT CRÉER"]
+        direction LR
+        C1["Student<br/>(son profil)"]
+        C2["Enrollment<br/>(s'inscrire)"]
+    end
+    
+    subgraph Interdit["NE PEUT PAS"]
+        direction LR
+        I1["Gérer Courses"]
+        I2["Gérer Instructors"]
+        I3["Modifier/Supprimer"]
+    end
+    
+    style Student fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
+    style Lecture fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Creer fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
+```
+
 ### Tableau des Permissions - STUDENT
 
 | Endpoint | Méthode | Autorisé | Code Attendu |
@@ -390,6 +463,46 @@ graph TB
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
 ```
 
+**Version Simplifiée (Alternative) :**
+
+```mermaid
+graph TB
+    Instructor["INSTRUCTOR<br/>Formateur"]
+    
+    Instructor --> Lecture
+    Instructor --> Gestion
+    Instructor -.-> Interdit
+    
+    subgraph Lecture["LECTURE (GET)"]
+        direction LR
+        L1["Courses"]
+        L2["Instructors"]
+        L3["Students"]
+        L4["Enrollments"]
+    end
+    
+    subgraph Gestion["GESTION (POST/PUT)"]
+        direction TB
+        G1["Créer/Modifier Course"]
+        G2["Créer Student"]
+        G3["Créer Enrollment"]
+        G4["Modifier Enrollment<br/>(attribuer notes)"]
+    end
+    
+    subgraph Interdit["INTERDIT (403)"]
+        direction LR
+        I1["Supprimer Course"]
+        I2["Gérer Instructors"]
+        I3["Modifier/Supprimer Student"]
+        I4["Supprimer Enrollment"]
+    end
+    
+    style Instructor fill:#80DEEA,color:#000,stroke:#333,stroke-width:4px
+    style Lecture fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Gestion fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
+```
+
 ### Tableau des Permissions - INSTRUCTOR
 
 | Endpoint | Méthode | Autorisé | Code Attendu |
@@ -457,6 +570,56 @@ graph TB
     
     style Admin fill:#EF5350,color:#fff,stroke:#333,stroke-width:4px
     style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+```
+
+**Version Décomposée par Entité (Alternative) :**
+
+```mermaid
+graph LR
+    Admin["ADMIN"]
+    
+    Admin --> Courses
+    Admin --> Instructors
+    Admin --> Students
+    Admin --> Enrollments
+    
+    subgraph Courses["COURSES"]
+        direction TB
+        C1["GET Liste"]
+        C2["POST Créer"]
+        C3["PUT Modifier"]
+        C4["DELETE Supprimer"]
+    end
+    
+    subgraph Instructors["INSTRUCTORS"]
+        direction TB
+        I1["GET Liste"]
+        I2["POST Créer"]
+        I3["PUT Modifier"]
+        I4["DELETE Supprimer"]
+    end
+    
+    subgraph Students["STUDENTS"]
+        direction TB
+        S1["GET Liste"]
+        S2["POST Créer"]
+        S3["PUT Modifier"]
+        S4["DELETE Supprimer"]
+    end
+    
+    subgraph Enrollments["ENROLLMENTS"]
+        direction TB
+        E1["GET Liste"]
+        E2["POST Créer"]
+        E3["PUT Modifier"]
+        E4["DELETE Supprimer"]
+    end
+    
+    style Admin fill:#EF5350,color:#fff,stroke:#333,stroke-width:4px
+    style Courses fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style Instructors fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style Students fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style Enrollments fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
 ```
 
 ### Tableau des Permissions - ADMIN
@@ -560,6 +723,64 @@ graph TB
     style Instructors fill:#FFF9C4,color:#000,stroke:#FFC107,stroke-width:2px
     style Students fill:#F3E5F5,color:#000,stroke:#9C27B0,stroke-width:2px
     style Enrollments fill:#E8F5E9,color:#000,stroke:#4CAF50,stroke-width:2px
+```
+
+**Version Décomposée par Rôle (Alternative) :**
+
+**STUDENT - Ce qu'il peut faire :**
+
+```mermaid
+graph LR
+    Student["STUDENT"]
+    
+    Student -->|OUI| CGet["GET Courses"]
+    Student -->|OUI| IGet["GET Instructors"]
+    Student -->|OUI| StGet["GET Students"]
+    Student -->|OUI| StPost["POST Student"]
+    Student -->|OUI| EGet["GET Enrollments"]
+    Student -->|OUI| EPost["POST Enrollment"]
+    
+    style Student fill:#FFE082,color:#000,stroke:#333,stroke-width:3px
+    style CGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style IGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style StGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style StPost fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EPost fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+```
+
+**INSTRUCTOR - Ce qu'il peut faire EN PLUS :**
+
+```mermaid
+graph LR
+    Instructor["INSTRUCTOR"]
+    
+    Instructor -->|OUI| CPost["POST Course<br/>Créer"]
+    Instructor -->|OUI| CPut["PUT Course<br/>Modifier"]
+    Instructor -->|OUI| EPut["PUT Enrollment<br/>Attribuer note"]
+    
+    style Instructor fill:#80DEEA,color:#000,stroke:#333,stroke-width:3px
+    style CPost fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style CPut fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EPut fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+```
+
+**ADMIN - Ce qu'il peut faire EN PLUS :**
+
+```mermaid
+graph LR
+    Admin["ADMIN"]
+    
+    Admin -->|OUI| CDel["DELETE Course"]
+    Admin -->|OUI| IAll["CRUD Instructors"]
+    Admin -->|OUI| StAll["CRUD Students"]
+    Admin -->|OUI| EDel["DELETE Enrollment"]
+    
+    style Admin fill:#EF5350,color:#fff,stroke:#333,stroke-width:3px
+    style CDel fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style IAll fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style StAll fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EDel fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
 ```
 
 ---
