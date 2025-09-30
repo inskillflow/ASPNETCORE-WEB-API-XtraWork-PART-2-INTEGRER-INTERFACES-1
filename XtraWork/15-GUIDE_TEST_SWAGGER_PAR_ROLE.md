@@ -98,13 +98,9 @@ Si c'est la première fois que vous lancez l'API, la base de données est créé
 
 ```mermaid
 graph TB
-    %% Noeud principal
     User["RÔLE : USER<br/>Utilisateur Standard"]
-
-    %% Groupe AUTORISÉ (vertical)
+    
     subgraph Autorise["PEUT FAIRE"]
-        direction TB
-        A0[ ]:::hidden   %% ancre invisible en haut du groupe
         UA["Lire tous les Titles"]
         UB["Lire tous les Employees"]
         UC["Créer un Employee"]
@@ -112,22 +108,15 @@ graph TB
         UE["Se connecter"]
         UF["Voir son profil"]
     end
-
-    %% Groupe INTERDIT (vertical)
+    
     subgraph Interdit["NE PEUT PAS"]
-        direction TB
-        I0[ ]:::hidden   %% ancre invisible en haut du groupe
         UX["Créer un Title"]
         UY["Modifier un Title"]
         UZ["Supprimer un Title"]
         UW["Supprimer un Employee"]
     end
-
-    %% Ordonnancement vertical global (User au-dessus, puis Autorise, puis Interdit)
-    User --> A0
-    A0 --> I0
-
-    %% Sémantique : autorisé (plein) & interdit (pointillé) depuis User
+    
+    %% Liens : autorisé (plein)
     User --> UA
     User --> UB
     User --> UC
@@ -135,13 +124,12 @@ graph TB
     User --> UE
     User --> UF
 
+    %% Liens : interdit (pointillé)
     User -.-> UX
     User -.-> UY
     User -.-> UZ
     User -.-> UW
-
-    %% Styles
-    classDef hidden fill:transparent,stroke:transparent,stroke-width:0px;
+    
     style User fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
     style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
