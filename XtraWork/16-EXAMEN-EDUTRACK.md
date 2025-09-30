@@ -991,68 +991,135 @@ graph TB
     style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
 ```
 
-**Version Verticale Décomposée (Alternative) :**
+**Version Verticale par Ressource (Alternative 1) :**
 
+**COURSES (5 endpoints) :**
 ```mermaid
 graph TB
-    API["EduTrack API<br/>https://localhost:7033"]
+    CoursesAPI["COURSES<br/>/api/courses"]
     
-    API --> Auth
-    API --> Resources
-    API --> Health
+    CoursesAPI --> CGet["GET /<br/>Lister tous les cours"]
+    CoursesAPI --> CGetId["GET /:id<br/>Un cours spécifique"]
+    CoursesAPI --> CPost["POST /<br/>Créer un cours"]
+    CoursesAPI --> CPut["PUT /:id<br/>Modifier un cours"]
+    CoursesAPI --> CDel["DELETE /:id<br/>Supprimer un cours"]
     
-    subgraph Auth["AUTHENTIFICATION"]
-        direction TB
-        A1["POST /api/auth/register<br/>Inscription"]
-        A2["POST /api/auth/login<br/>Connexion"]
-        A3["POST /api/auth/validate<br/>Valider token"]
-        A4["GET /api/auth/me<br/>Profil utilisateur"]
-    end
-    
-    subgraph Resources["RESSOURCES MÉTIER"]
-        direction TB
-        
-        Courses["COURSES"]
-        Instructors["INSTRUCTORS"]
-        Students["STUDENTS"]
-        Enrollments["ENROLLMENTS"]
-    end
-    
-    Courses --> C1["GET / - Liste"]
-    Courses --> C2["GET /:id - Un cours"]
-    Courses --> C3["POST / - Créer"]
-    Courses --> C4["PUT /:id - Modifier"]
-    Courses --> C5["DELETE /:id - Supprimer"]
-    
-    Instructors --> I1["GET / - Liste"]
-    Instructors --> I2["GET /:id - Un formateur"]
-    Instructors --> I3["POST / - Créer"]
-    Instructors --> I4["PUT /:id - Modifier"]
-    Instructors --> I5["DELETE /:id - Supprimer"]
-    
-    Students --> S1["GET / - Liste"]
-    Students --> S2["GET /:id - Un étudiant"]
-    Students --> S3["POST / - Créer"]
-    Students --> S4["PUT /:id - Modifier"]
-    Students --> S5["DELETE /:id - Supprimer"]
-    
-    Enrollments --> E1["GET / - Liste"]
-    Enrollments --> E2["GET /:id - Une inscription"]
-    Enrollments --> E3["POST / - Créer"]
-    Enrollments --> E4["PUT /:id - Modifier/Noter"]
-    Enrollments --> E5["DELETE /:id - Supprimer"]
-    
-    Health["GET /health<br/>Status de l'API"]
-    
-    style API fill:#4CAF50,color:#fff,stroke:#333,stroke-width:4px
-    style Auth fill:#FF9800,color:#fff,stroke:#333,stroke-width:3px
-    style Resources fill:#2196F3,color:#fff,stroke:#333,stroke-width:3px
-    style Courses fill:#80DEEA,color:#000,stroke:#2196F3,stroke-width:2px
-    style Instructors fill:#FFE082,color:#000,stroke:#FFC107,stroke-width:2px
-    style Students fill:#FFCDD2,color:#000,stroke:#9C27B0,stroke-width:2px
-    style Enrollments fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
-    style Health fill:#00BCD4,color:#fff,stroke:#333,stroke-width:2px
+    style CoursesAPI fill:#2196F3,color:#fff,stroke:#333,stroke-width:3px
+    style CGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style CGetId fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style CPost fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style CPut fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style CDel fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:2px
 ```
+
+**INSTRUCTORS (5 endpoints) :**
+```mermaid
+graph TB
+    InstAPI["INSTRUCTORS<br/>/api/instructors"]
+    
+    InstAPI --> IGet["GET /<br/>Lister tous les formateurs"]
+    InstAPI --> IGetId["GET /:id<br/>Un formateur spécifique"]
+    InstAPI --> IPost["POST /<br/>Créer un formateur"]
+    InstAPI --> IPut["PUT /:id<br/>Modifier un formateur"]
+    InstAPI --> IDel["DELETE /:id<br/>Supprimer un formateur"]
+    
+    style InstAPI fill:#FFC107,color:#000,stroke:#333,stroke-width:3px
+    style IGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style IGetId fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style IPost fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style IPut fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style IDel fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:2px
+```
+
+**STUDENTS (5 endpoints) :**
+```mermaid
+graph TB
+    StudAPI["STUDENTS<br/>/api/students"]
+    
+    StudAPI --> SGet["GET /<br/>Lister tous les étudiants"]
+    StudAPI --> SGetId["GET /:id<br/>Un étudiant spécifique"]
+    StudAPI --> SPost["POST /<br/>Créer un étudiant"]
+    StudAPI --> SPut["PUT /:id<br/>Modifier un étudiant"]
+    StudAPI --> SDel["DELETE /:id<br/>Supprimer un étudiant"]
+    
+    style StudAPI fill:#9C27B0,color:#fff,stroke:#333,stroke-width:3px
+    style SGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style SGetId fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style SPost fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style SPut fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style SDel fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:2px
+```
+
+**ENROLLMENTS (5 endpoints) :**
+```mermaid
+graph TB
+    EnrAPI["ENROLLMENTS<br/>/api/enrollments"]
+    
+    EnrAPI --> EGet["GET /<br/>Lister toutes les inscriptions"]
+    EnrAPI --> EGetId["GET /:id<br/>Une inscription spécifique"]
+    EnrAPI --> EPost["POST /<br/>Créer une inscription"]
+    EnrAPI --> EPut["PUT /:id<br/>Modifier/Noter une inscription"]
+    EnrAPI --> EDel["DELETE /:id<br/>Supprimer une inscription"]
+    
+    style EnrAPI fill:#4CAF50,color:#fff,stroke:#333,stroke-width:3px
+    style EGet fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EGetId fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:2px
+    style EPost fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style EPut fill:#FFE082,color:#000,stroke:#FF9800,stroke-width:2px
+    style EDel fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:2px
+```
+
+**Légende des Couleurs :**
+- 🟢 **Vert** : GET (lecture) - Accessible à tous
+- 🟡 **Jaune** : POST/PUT (création/modification) - Nécessite permissions
+- 🔴 **Rouge** : DELETE (suppression) - Admin seulement
+
+---
+
+**Résumé Textuel des Endpoints :**
+
+```
+1. COURSES (/api/courses)
+   ├── GET /                Lister tous les cours
+   ├── GET /:id             Récupérer un cours spécifique
+   ├── POST /               Créer un nouveau cours
+   ├── PUT /:id             Modifier un cours
+   └── DELETE /:id          Supprimer un cours
+
+2. INSTRUCTORS (/api/instructors)
+   ├── GET /                Lister tous les formateurs
+   ├── GET /:id             Récupérer un formateur spécifique
+   ├── POST /               Créer un nouveau formateur
+   ├── PUT /:id             Modifier un formateur
+   └── DELETE /:id          Supprimer un formateur
+
+3. STUDENTS (/api/students)
+   ├── GET /                Lister tous les étudiants
+   ├── GET /:id             Récupérer un étudiant spécifique
+   ├── POST /               Créer un nouveau étudiant
+   ├── PUT /:id             Modifier un étudiant
+   └── DELETE /:id          Supprimer un étudiant
+
+4. ENROLLMENTS (/api/enrollments)
+   ├── GET /                Lister toutes les inscriptions
+   ├── GET /:id             Récupérer une inscription spécifique
+   ├── POST /               Créer une nouvelle inscription
+   ├── PUT /:id             Modifier une inscription (attribuer note)
+   └── DELETE /:id          Supprimer une inscription
+
+5. AUTHENTIFICATION (/api/auth)
+   ├── POST /register       Inscription d'un nouvel utilisateur
+   ├── POST /login          Connexion utilisateur
+   ├── POST /validate       Valider un token JWT
+   └── GET /me              Profil de l'utilisateur connecté
+
+6. HEALTH CHECK
+   └── GET /health          Vérifier le statut de l'API
+```
+
+**TOTAL : 26 endpoints**
+
+---
 
 **Version Compacte par Catégorie (Alternative 2) :**
 
