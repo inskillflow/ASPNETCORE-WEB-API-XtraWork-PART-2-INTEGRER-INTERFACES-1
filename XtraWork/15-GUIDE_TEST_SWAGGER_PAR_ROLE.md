@@ -100,7 +100,7 @@ Si c'est la première fois que vous lancez l'API, la base de données est créé
 graph TB
     User[RÔLE : USER<br/>Utilisateur Standard]
     
-    subgraph Autorisé [✅ PEUT FAIRE]
+    subgraph Autorise[PEUT FAIRE]
         A1[Lire tous les Titles]
         A2[Lire tous les Employees]
         A3[Créer un Employee]
@@ -109,18 +109,18 @@ graph TB
         A6[Voir son profil]
     end
     
-    subgraph Interdit [❌ NE PEUT PAS]
+    subgraph Interdit[NE PEUT PAS]
         D1[Créer un Title]
         D2[Modifier un Title]
         D3[Supprimer un Title]
         D4[Supprimer un Employee]
     end
     
-    User --> Autorisé
+    User --> Autorise
     User -.x Interdit
     
     style User fill:#FFE082,color:#000,stroke:#333,stroke-width:4px
-    style Autorisé fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
 ```
 
@@ -381,7 +381,7 @@ graph LR
 graph TB
     Manager[RÔLE : MANAGER<br/>Gestionnaire]
     
-    subgraph Autorisé [✅ PEUT FAIRE]
+    subgraph Autorise[PEUT FAIRE]
         A1[Lire tous les Titles]
         A2[Créer un Title]
         A3[Modifier un Title]
@@ -393,15 +393,15 @@ graph TB
         A9[Voir son profil]
     end
     
-    subgraph Interdit [❌ NE PEUT PAS]
+    subgraph Interdit[NE PEUT PAS]
         D1[Supprimer un Title]
     end
     
-    Manager --> Autorisé
+    Manager --> Autorise
     Manager -.x Interdit
     
     style Manager fill:#80DEEA,color:#000,stroke:#333,stroke-width:4px
-    style Autorisé fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
     style Interdit fill:#FFCDD2,color:#000,stroke:#F44336,stroke-width:3px
 ```
 
@@ -680,7 +680,7 @@ graph LR
 graph TB
     Admin[RÔLE : ADMIN<br/>Administrateur]
     
-    subgraph Autorisé [✅ PEUT TOUT FAIRE]
+    subgraph Autorise[PEUT TOUT FAIRE]
         A1[Lire tous les Titles]
         A2[Créer un Title]
         A3[Modifier un Title]
@@ -693,10 +693,10 @@ graph TB
         A10[Voir son profil]
     end
     
-    Admin --> Autorisé
+    Admin --> Autorise
     
     style Admin fill:#EF5350,color:#fff,stroke:#333,stroke-width:4px
-    style Autorisé fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
+    style Autorise fill:#C8E6C9,color:#000,stroke:#4CAF50,stroke-width:3px
 ```
 
 ### PARTIE 1 : Créer un Utilisateur ADMIN
