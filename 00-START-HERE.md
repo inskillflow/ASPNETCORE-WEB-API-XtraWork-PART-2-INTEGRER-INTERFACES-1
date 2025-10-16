@@ -1,13 +1,13 @@
-# DEMARRER XTRAWORK - LE PLUS IMPORTANT
+# DÉMARRER XTRAWORK - LE PLUS IMPORTANT
 
 ## ORDRE DE LECTURE
 
 1. **Lire ce fichier** (2 minutes)
-2. **Suivre 03-GUIDE-DEMARRAGE-EXHAUSTIF.md** (30 minutes première fois)
+2. **Suivre 03-GUIDE-TRES-IMPORTANT-DEMARRAGE-EXHAUSTIF.md** (30 minutes première fois)
 
 ---
 
-## DEMARRAGE EN 5 MINUTES
+## DÉMARRAGE EN 5 MINUTES
 
 ### TERMINAL 1 - Backend
 
@@ -40,7 +40,7 @@ http://localhost:3000
 
 ---
 
-## SI CA NE MARCHE PAS
+## SI ÇA NE MARCHE PAS
 
 **Backend ne démarre pas ?**
 ```powershell
@@ -68,7 +68,7 @@ localStorage.clear()
 
 ---
 
-## PREREQUIS
+## PRÉREQUIS
 
 Vérifier que ces commandes fonctionnent :
 
@@ -107,13 +107,13 @@ SuiviEtudiantsEtape2/
 ## AIDE
 
 **Premier démarrage complet ?**
-→ Lire 03-GUIDE-DEMARRAGE-EXHAUSTIF.md
+→ Lire 03-GUIDE-TRES-IMPORTANT-DEMARRAGE-EXHAUSTIF.md
 
 **Démarrages suivants ?**
 → Utiliser ce fichier
 
 **Problème technique ?**
-→ Section 8 de 03-GUIDE-DEMARRAGE-EXHAUSTIF.md
+→ Section 8 de 03-GUIDE-TRES-IMPORTANT-DEMARRAGE-EXHAUSTIF.md
 
 **Chercher une commande ?**
 → 08-COMMANDES-ESSENTIELLES.md
@@ -135,5 +135,5 @@ Si tous cochés : Vous êtes prêt !
 
 ---
 
-IMPORTANT : Gardez les 2 terminaux (Backend et Frontend) ouverts pendant l'utilisation.
+**IMPORTANT :** Gardez les 2 terminaux (Backend et Frontend) ouverts pendant l'utilisation.
 
