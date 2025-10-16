@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AuthService.cs - Service - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .callout.copilot { border-left-color: var(--violet); background: #faf5ff; }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) { .gpt15 .grid-2 { grid-template-columns: 1fr 1fr } }
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+		<h1>AuthService.cs - Service Authentification JWT</h1>
+		<p class="meta">COUCHE 3 : SERVICES &bull; Authentification et Autorisation JWT</p>
+		<div class="callout note"><strong>Role</strong> &mdash; AuthService gere toute la logique d'authentification : inscription, connexion, generation de tokens JWT, validation. C'est le coeur du systeme de securite.</div>
+		<div class="hr"><br></div>
+
+		<h2>Code Source (extrait)</h2>
+		<div class="snippet"><pre><code>public class AuthService
+{
+    private readonly UserRepository _userRepository;
+    private readonly IConfiguration _configuration;
+
+    public async Task&lt;AuthResponse&gt; LoginAsync(LoginRequest request)
+    {
+        var user = await _userRepository.GetByUsernameAsync(request.Username);
+        
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        {
+            throw new UnauthorizedAccessException("Nom d'utilisateur ou mot de passe incorrect");
+        }
+
+        if (!user.IsActive)
+        {
+            throw new UnauthorizedAccessException("Compte desactive");
+        }
+
+        user.LastLoginAt = DateTime.UtcNow;
+        await _userRepository.UpdateAsync(user);
+
+        var token = GenerateJwtToken(user);
+        return new AuthResponse { Token = token, User = ... };
+    }
+
+    public async Task&lt;AuthResponse&gt; RegisterAsync(RegisterRequest request)
+    {
+        // Verifier unicite username et email
+        // Creer User avec PasswordHash = BCrypt.HashPassword(request.Password)
+        // Generer token JWT
+    }
+
+    private string GenerateJwtToken(User user)
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role)
+        };
+        
+        var token = new JwtSecurityToken(claims: claims, expires: DateTime.UtcNow.AddHours(24));
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Methodes Principales</h2>
+
+		<div class="callout copilot">
+			<strong>LoginAsync()</strong> &mdash; Processus : 1) Chercher user par username, 2) Verifier password avec BCrypt.Verify(), 3) Verifier IsActive, 4) Mettre a jour LastLoginAt, 5) Generer token JWT, 6) Retourner token + infos user.
+		</div>
+
+		<div class="callout tip">
+			<strong>RegisterAsync()</strong> &mdash; Processus : 1) Verifier username unique, 2) Verifier email unique, 3) Hasher le password avec BCrypt, 4) Creer User avec Role = "User", 5) Generer token, 6) Retourner.
+		</div>
+
+		<div class="callout warn">
+			<strong>GenerateJwtToken()</strong> &mdash; Cree un token JWT contenant les claims (NameIdentifier, Name, Email, Role). Expire apres 24h. Signe avec la cle secrete de appsettings.json.
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation</h2>
+		<div class="grid-2">
+			<div class="card">
+				<ul class="checklist">
+					<li><a href="../entities/User.html">User.cs</a></li>
+					<li><a href="../repositories/UserRepository.html">UserRepository.cs</a></li>
+					<li><a href="../controllers/AuthController.html">AuthController.cs</a></li>
+				</ul>
+			</div>
+			<div class="card">
+				<p><a href="../index.html">Retour a l'index</a></p>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+		<p class="center"><strong>Documentation XtraWork API</strong></p>
+	</div>
+</section>
+</body>
+</html>

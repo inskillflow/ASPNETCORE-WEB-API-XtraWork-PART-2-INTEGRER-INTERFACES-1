@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Navigation Rapide - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	
+	.gpt15 .page {
+		max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow);
+	}
+	
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 {
+		color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem
+	}
+	
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	
+	.gpt15 .callout {
+		background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0
+	}
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); margin: 8px 0; }
+	.gpt15 .card h3 { margin-top: 0; color: var(--blue); }
+	.gpt15 .card a { color: var(--blue); text-decoration: none; font-weight: 500; }
+	.gpt15 .card a:hover { text-decoration: underline; }
+	
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	.gpt15 .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	.gpt15 .grid-4 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	
+	@media (min-width:860px) {
+		.gpt15 .grid-2 { grid-template-columns: 1fr 1fr }
+		.gpt15 .grid-3 { grid-template-columns: 1fr 1fr 1fr }
+		.gpt15 .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr }
+	}
+	
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before {
+		content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac)
+	}
+	
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 td a { color: var(--blue); text-decoration: none; }
+	.gpt15 td a:hover { text-decoration: underline; }
+	
+	.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-left: 8px; }
+	.badge-entity { background: #dbeafe; color: #1e40af; }
+	.badge-repo { background: #e9d5ff; color: #6b21a8; }
+	.badge-service { background: #d1fae5; color: #065f46; }
+	.badge-controller { background: #fed7aa; color: #92400e; }
+	.badge-validator { background: #fecaca; color: #991b1b; }
+	.badge-request { background: #cffafe; color: #155e75; }
+	.badge-response { background: #fce7f3; color: #9f1239; }
+	.badge-exception { background: #e0e7ff; color: #3730a3; }
+
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+
+		<h1>Navigation Rapide - Documentation XtraWork</h1>
+
+		<p class="meta">Acces direct &bull; 24 Classes &bull; Recherche alphabetique</p>
+		<div class="callout note"><strong>Navigation rapide</strong> &mdash; Cette page liste TOUTES les 24 classes par ordre alphabétique avec accès direct. Utilisez Ctrl+F pour rechercher rapidement une classe.</div>
+		<div class="hr"><br></div>
+
+		<h2>📋 Liste Alphabétique Complète</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Classe</th>
+					<th>Couche</th>
+					<th>Description</th>
+					<th>Lien</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>AuthController</strong> <span class="badge badge-controller">Controller</span></td>
+					<td>Couche 4</td>
+					<td>Endpoints authentification (login, register, me, validate, logout)</td>
+					<td><a href="controllers/AuthController.html">Ouvrir</a></td>
+				</tr>
+				<tr>
+					<td><strong>AuthResponse</strong> <span class="badge badge-response">Response</span></td>
+					<td>Couche 7</td>
+					<td>DTO réponse auth (token + UserResponse)</td>
+					<td><a href="responses/AuthResponse.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>AuthService</strong> <span class="badge badge-service">Service</span></td>
+					<td>Couche 3</td>
+					<td>Service authentification JWT, BCrypt, génération tokens</td>
+					<td><a href="services/AuthService.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>Employee</strong> <span class="badge badge-entity">Entity</span></td>
+					<td>Couche 1</td>
+					<td>Entité employé avec relation N:1 vers Title</td>
+					<td><a href="entities/Employee.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeController</strong> <span class="badge badge-controller">Controller</span></td>
+					<td>Couche 4</td>
+					<td>CRUD employés avec autorisations</td>
+					<td><a href="controllers/EmployeeController.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeRepository</strong> <span class="badge badge-repo">Repository</span></td>
+					<td>Couche 2</td>
+					<td>CRUD Employees avec Include(e => e.Title)</td>
+					<td><a href="repositories/EmployeeRepository.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeRequest</strong> <span class="badge badge-request">Request</span></td>
+					<td>Couche 6</td>
+					<td>DTO pour créer/modifier un employé</td>
+					<td><a href="requests/EmployeeRequest.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeRequestValidator</strong> <span class="badge badge-validator">Validator</span></td>
+					<td>Couche 5</td>
+					<td>Validation avec âge 16-70 ans, genre M/F/Autre</td>
+					<td><a href="validators/EmployeeRequestValidator.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeResponse</strong> <span class="badge badge-response">Response</span></td>
+					<td>Couche 7</td>
+					<td>DTO réponse employé avec titleDescription flatté + age calculé</td>
+					<td><a href="responses/EmployeeResponse.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>EmployeeService</strong> <span class="badge badge-service">Service</span></td>
+					<td>Couche 3</td>
+					<td>Logique métier employés, flattening, vérification TitleId</td>
+					<td><a href="services/EmployeeService.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>LoginRequest</strong> <span class="badge badge-request">Request</span></td>
+					<td>Couche 6</td>
+					<td>DTO connexion (username, password)</td>
+					<td><a href="requests/LoginRequest.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>NotFoundException</strong> <span class="badge badge-exception">Exception</span></td>
+					<td>Couche 8</td>
+					<td>Exception personnalisée → 404 Not Found</td>
+					<td><a href="exceptions/NotFoundException.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>RegisterRequest</strong> <span class="badge badge-request">Request</span></td>
+					<td>Couche 6</td>
+					<td>DTO inscription (username, email, password, firstName, lastName)</td>
+					<td><a href="requests/RegisterRequest.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>Title</strong> <span class="badge badge-entity">Entity</span></td>
+					<td>Couche 1</td>
+					<td>Entité titre/poste avec relation 1:N vers Employee</td>
+					<td><a href="entities/Title.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleController</strong> <span class="badge badge-controller">Controller</span></td>
+					<td>Couche 4</td>
+					<td>CRUD titres avec Authorize(Roles), Authorize(Policy)</td>
+					<td><a href="controllers/TitleController.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleRepository</strong> <span class="badge badge-repo">Repository</span></td>
+					<td>Couche 2</td>
+					<td>CRUD Titles avec Include, ExistsAsync</td>
+					<td><a href="repositories/TitleRepository.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleRequest</strong> <span class="badge badge-request">Request</span></td>
+					<td>Couche 6</td>
+					<td>DTO pour créer/modifier un titre</td>
+					<td><a href="requests/TitleRequest.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleRequestValidator</strong> <span class="badge badge-validator">Validator</span></td>
+					<td>Couche 5</td>
+					<td>Validation titre (min 2, max 100, regex)</td>
+					<td><a href="validators/TitleRequestValidator.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleResponse</strong> <span class="badge badge-response">Response</span></td>
+					<td>Couche 7</td>
+					<td>DTO réponse titre (id, description, createdAt)</td>
+					<td><a href="responses/TitleResponse.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>TitleService</strong> <span class="badge badge-service">Service</span></td>
+					<td>Couche 3</td>
+					<td>Logique métier titres, transformation DTOs, NotFoundException</td>
+					<td><a href="services/TitleService.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>User</strong> <span class="badge badge-entity">Entity</span></td>
+					<td>Couche 1</td>
+					<td>Entité utilisateur (auth, rôles, PasswordHash)</td>
+					<td><a href="entities/User.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>UserRepository</strong> <span class="badge badge-repo">Repository</span></td>
+					<td>Couche 2</td>
+					<td>CRUD Users avec GetByUsername, GetByEmail, GetByRole</td>
+					<td><a href="repositories/UserRepository.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>WeatherForecastController</strong> <span class="badge badge-controller">Controller</span></td>
+					<td>Couche 4</td>
+					<td>Controller de démo ASP.NET (peut être supprimé)</td>
+					<td><a href="controllers/WeatherForecastController.html">📖 Ouvrir →</a></td>
+				</tr>
+				<tr>
+					<td><strong>XtraWorkContext</strong> <span class="badge badge-repo">Repository</span></td>
+					<td>Couche 2</td>
+					<td>DbContext principal, OnModelCreating, configuration relations</td>
+					<td><a href="repositories/XtraWorkContext.html">📖 Ouvrir →</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>🔍 Recherche par Type</h2>
+
+		<div class="grid-4">
+			<div class="card">
+				<h3>🗂️ Entities</h3>
+				<ul class="checklist">
+					<li><a href="entities/Employee.html">Employee</a></li>
+					<li><a href="entities/Title.html">Title</a></li>
+					<li><a href="entities/User.html">User</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>💾 Repositories</h3>
+				<ul class="checklist">
+					<li><a href="repositories/EmployeeRepository.html">EmployeeRepository</a></li>
+					<li><a href="repositories/TitleRepository.html">TitleRepository</a></li>
+					<li><a href="repositories/UserRepository.html">UserRepository</a></li>
+					<li><a href="repositories/XtraWorkContext.html">XtraWorkContext</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>⚙️ Services</h3>
+				<ul class="checklist">
+					<li><a href="services/AuthService.html">AuthService</a></li>
+					<li><a href="services/EmployeeService.html">EmployeeService</a></li>
+					<li><a href="services/TitleService.html">TitleService</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>🎮 Controllers</h3>
+				<ul class="checklist">
+					<li><a href="controllers/AuthController.html">AuthController</a></li>
+					<li><a href="controllers/EmployeeController.html">EmployeeController</a></li>
+					<li><a href="controllers/TitleController.html">TitleController</a></li>
+					<li><a href="controllers/WeatherForecastController.html">WeatherForecastController</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="grid-4">
+			<div class="card">
+				<h3>✅ Validators</h3>
+				<ul class="checklist">
+					<li><a href="validators/EmployeeRequestValidator.html">EmployeeRequestValidator</a></li>
+					<li><a href="validators/TitleRequestValidator.html">TitleRequestValidator</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>📥 Requests</h3>
+				<ul class="checklist">
+					<li><a href="requests/EmployeeRequest.html">EmployeeRequest</a></li>
+					<li><a href="requests/LoginRequest.html">LoginRequest</a></li>
+					<li><a href="requests/RegisterRequest.html">RegisterRequest</a></li>
+					<li><a href="requests/TitleRequest.html">TitleRequest</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>📤 Responses</h3>
+				<ul class="checklist">
+					<li><a href="responses/AuthResponse.html">AuthResponse</a></li>
+					<li><a href="responses/EmployeeResponse.html">EmployeeResponse</a></li>
+					<li><a href="responses/TitleResponse.html">TitleResponse</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>⚠️ Exceptions</h3>
+				<ul class="checklist">
+					<li><a href="exceptions/NotFoundException.html">NotFoundException</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>🎯 Parcours Recommandés</h2>
+
+		<div class="grid-3">
+			<div class="card">
+				<h3>📘 Parcours "Titres" (Simple)</h3>
+				<p><em>Recommandé pour débuter</em></p>
+				<ol style="font-size: 0.9rem; line-height: 1.8;">
+					<li><a href="entities/Title.html">Title.cs</a></li>
+					<li><a href="repositories/TitleRepository.html">TitleRepository.cs</a></li>
+					<li><a href="services/TitleService.html">TitleService.cs</a></li>
+					<li><a href="controllers/TitleController.html">TitleController.cs</a></li>
+					<li><a href="validators/TitleRequestValidator.html">TitleRequestValidator.cs</a></li>
+					<li><a href="requests/TitleRequest.html">TitleRequest.cs</a></li>
+					<li><a href="responses/TitleResponse.html">TitleResponse.cs</a></li>
+				</ol>
+			</div>
+			
+			<div class="card">
+				<h3>📗 Parcours "Auth" (Avancé)</h3>
+				<p><em>Comprendre JWT et sécurité</em></p>
+				<ol style="font-size: 0.9rem; line-height: 1.8;">
+					<li><a href="entities/User.html">User.cs</a></li>
+					<li><a href="repositories/UserRepository.html">UserRepository.cs</a></li>
+					<li><a href="services/AuthService.html">AuthService.cs</a></li>
+					<li><a href="controllers/AuthController.html">AuthController.cs</a></li>
+					<li><a href="requests/LoginRequest.html">LoginRequest.cs</a></li>
+					<li><a href="requests/RegisterRequest.html">RegisterRequest.cs</a></li>
+					<li><a href="responses/AuthResponse.html">AuthResponse.cs</a></li>
+				</ol>
+			</div>
+			
+			<div class="card">
+				<h3>📙 Parcours "Employés" (Complet)</h3>
+				<p><em>Relations et Include()</em></p>
+				<ol style="font-size: 0.9rem; line-height: 1.8;">
+					<li><a href="entities/Employee.html">Employee.cs</a></li>
+					<li><a href="entities/Title.html">Title.cs</a> (relation)</li>
+					<li><a href="repositories/XtraWorkContext.html">XtraWorkContext.cs</a></li>
+					<li><a href="repositories/EmployeeRepository.html">EmployeeRepository.cs</a></li>
+					<li><a href="services/EmployeeService.html">EmployeeService.cs</a></li>
+					<li><a href="controllers/EmployeeController.html">EmployeeController.cs</a></li>
+					<li><a href="validators/EmployeeRequestValidator.html">EmployeeRequestValidator.cs</a></li>
+					<li><a href="requests/EmployeeRequest.html">EmployeeRequest.cs</a></li>
+					<li><a href="responses/EmployeeResponse.html">EmployeeResponse.cs</a></li>
+				</ol>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>🔗 Autres Pages</h2>
+
+		<div class="grid-3">
+			<div class="card">
+				<h3>🏠 Accueil</h3>
+				<p><a href="index.html">Page d'accueil principale</a></p>
+			</div>
+			
+			<div class="card">
+				<h3>📖 Guide</h3>
+				<p><a href="LISEZMOI.txt" target="_blank">LISEZMOI.txt</a> (ouvrir dans éditeur)</p>
+			</div>
+			
+			<div class="card">
+				<h3>📋 README</h3>
+				<p><a href="README-DOCUMENTATION.md" target="_blank">README-DOCUMENTATION.md</a></p>
+			</div>
+		</div>
+
+		<div class="callout tip" style="margin-top: 30px;">
+			<strong>💡 Astuce de navigation</strong> &mdash; Utilisez <strong>Ctrl+F</strong> sur cette page pour rechercher rapidement une classe par son nom. Chaque fichier HTML contient également des liens vers les fichiers liés.
+		</div>
+
+		<div class="hr"><br></div>
+
+		<p class="center"><strong>Documentation XtraWork API</strong> &bull; <em>24 Classes · 8 Couches · Navigation Rapide</em></p>
+	</div>
+</section>
+</body>
+</html>

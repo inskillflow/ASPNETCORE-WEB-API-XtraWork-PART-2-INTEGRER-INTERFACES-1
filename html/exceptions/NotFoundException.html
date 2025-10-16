@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>NotFoundException.cs - Exception - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .callout.copilot { border-left-color: var(--violet); background: #faf5ff; }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	.gpt15 .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) {
+		.gpt15 .grid-2 { grid-template-columns: 1fr 1fr }
+		.gpt15 .grid-3 { grid-template-columns: 1fr 1fr 1fr }
+	}
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+		<h1>NotFoundException.cs - Exception Personnalisee</h1>
+		<p class="meta">COUCHE 8 : EXCEPTIONS &bull; Exception pour ressource introuvable</p>
+		<div class="callout note"><strong>Role</strong> &mdash; Exception personnalisee lancee quand une ressource (User, Title, Employee) n'existe pas. Traduite en 404 Not Found par les controllers.</div>
+		<div class="hr"><br></div>
+
+		<h2>Code Source Complet</h2>
+		<div class="snippet"><pre><code>namespace XtraWork.Exceptions;
+
+public class NotFoundException : Exception
+{
+    public NotFoundException(string message) : base(message)
+    {
+    }
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Explication</h2>
+
+		<div class="callout copilot">
+			<strong>Exception = Signal d'erreur</strong><br><br>
+			<strong>Pourquoi creer une exception personnalisee ?</strong><br>
+			&bull; Permet de distinguer differents types d'erreurs<br>
+			&bull; NotFoundException devient HTTP 404<br>
+			&bull; UnauthorizedAccessException devient HTTP 401<br>
+			&bull; InvalidOperationException devient HTTP 400
+		</div>
+
+		<h3>Herite de Exception</h3>
+		<div class="callout note">
+			<strong>Heritage</strong> &mdash; : Exception signifie que NotFoundException herite de la classe de base Exception. Donne acces a Message, StackTrace, InnerException.
+		</div>
+
+		<h3>Constructeur</h3>
+		<div class="callout tip">
+			<strong>Constructeur simple</strong> &mdash; Accepte un parametre message et le passe au constructeur parent avec : base(message).
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Utilisation</h2>
+
+		<h3>Dans un Service</h3>
+		<div class="snippet"><pre><code>// TitleService.Get()
+var title = await _titleRepository.GetByIdAsync(id);
+if (title == null)
+{
+    throw new NotFoundException($"Titre avec l'ID {id} non trouve");
+}</code></pre></div>
+
+		<h3>Dans un Controller</h3>
+		<div class="snippet"><pre><code>// TitleController.Get()
+try
+{
+    var response = await _titleService.Get(id);
+    return Ok(response);  // 200 OK
+}
+catch (NotFoundException ex)
+{
+    return NotFound(new { message = ex.Message });  // 404 Not Found
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Flux Complet</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Etape</th>
+					<th>Composant</th>
+					<th>Action</th>
+					<th>Resultat</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Client</td>
+					<td>GET /api/title/guid-999</td>
+					<td>Envoie requete</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Controller</td>
+					<td>TitleController.Get()</td>
+					<td>Appelle le service</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>Service</td>
+					<td>TitleService.Get()</td>
+					<td>Cherche dans repository</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>Repository</td>
+					<td>GetByIdAsync()</td>
+					<td>Retourne null</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>Service</td>
+					<td>if (title == null)</td>
+					<td>Lance NotFoundException</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>Controller</td>
+					<td>catch (NotFoundException)</td>
+					<td>Capture l'exception</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>Controller</td>
+					<td>return NotFound()</td>
+					<td>Retourne 404</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>Client</td>
+					<td>Recoit reponse</td>
+					<td>404 + message</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>Utilisee dans</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<h3>Services</h3>
+				<ul class="checklist">
+					<li>TitleService - Get(), Update(), Delete()</li>
+					<li>EmployeeService - Get(), Create(), Update(), Delete()</li>
+					<li>AuthService - GetCurrentUserAsync()</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>Controllers</h3>
+				<ul class="checklist">
+					<li>TitleController - Capture dans try/catch</li>
+					<li>EmployeeController - Retourne NotFound()</li>
+					<li>AuthController - Pour GetCurrentUser()</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<ul class="checklist">
+					<li><a href="../services/TitleService.html">TitleService.cs</a></li>
+					<li><a href="../services/EmployeeService.html">EmployeeService.cs</a></li>
+					<li><a href="../controllers/TitleController.html">TitleController.cs</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<p><a href="../index.html">Retour a l'index principal</a></p>
+				<br>
+				<div class="callout tip">
+					<strong>Felicitations !</strong><br>
+					Vous avez parcouru toute la documentation des 24 classes du projet XtraWork !
+				</div>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<p class="center"><strong>Documentation XtraWork API - Complete !</strong> &bull; <em>24/24 Classes Expliquees</em></p>
+		<p class="center"><em>Cree pour faciliter l'apprentissage d'ASP.NET Core</em></p>
+	</div>
+</section>
+</body>
+</html>

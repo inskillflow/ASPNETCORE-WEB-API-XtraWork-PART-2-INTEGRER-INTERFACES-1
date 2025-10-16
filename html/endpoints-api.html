@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Endpoints API - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) { .gpt15 .grid-2 { grid-template-columns: 1fr 1fr } }
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+	
+	.method-get { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+	.method-post { background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+	.method-put { background: #dbeafe; color: #1e40af; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+	.method-delete { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+	
+	.auth-none { color: #22c55e; font-weight: 600; }
+	.auth-required { color: #f59e0b; font-weight: 600; }
+	.auth-admin { color: #ef4444; font-weight: 600; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+
+		<h1>Endpoints API XtraWork - Reference Complete</h1>
+
+		<p class="meta">Tous les Endpoints &bull; Methodes HTTP &bull; Autorisations &bull; Exemples</p>
+		<div class="callout note"><strong>Référence rapide</strong> &mdash; Cette page liste tous les endpoints de l'API XtraWork avec méthodes HTTP, autorisations requises et exemples de requêtes.</div>
+		<div class="hr"><br></div>
+
+		<h2>📊 Résumé des Endpoints</h2>
+
+		<div class="grid-3">
+			<div class="card">
+				<h3>🔐 Authentification</h3>
+				<p><strong>5 endpoints</strong></p>
+				<ul class="checklist">
+					<li>Login</li>
+					<li>Register</li>
+					<li>Me (infos user)</li>
+					<li>Validate token</li>
+					<li>Logout</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>📋 Titres</h3>
+				<p><strong>5 endpoints</strong></p>
+				<ul class="checklist">
+					<li>Liste tous</li>
+					<li>Détails</li>
+					<li>Créer (Admin)</li>
+					<li>Modifier (Manager/Admin)</li>
+					<li>Supprimer (Admin)</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>👥 Employés</h3>
+				<p><strong>5 endpoints</strong></p>
+				<ul class="checklist">
+					<li>Liste tous</li>
+					<li>Détails</li>
+					<li>Créer</li>
+					<li>Modifier</li>
+					<li>Supprimer (Manager/Admin)</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>🔐 Endpoints Authentification</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Méthode</th>
+					<th>URL</th>
+					<th>Description</th>
+					<th>Autorisation</th>
+					<th>Controller</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/auth/login</code></td>
+					<td>Connexion utilisateur</td>
+					<td><span class="auth-none">Aucune</span></td>
+					<td><a href="controllers/AuthController.html">AuthController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/auth/register</code></td>
+					<td>Inscription nouvel utilisateur</td>
+					<td><span class="auth-none">Aucune</span></td>
+					<td><a href="controllers/AuthController.html">AuthController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-get">GET</span></td>
+					<td><code>/api/auth/me</code></td>
+					<td>Informations utilisateur connecté</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/AuthController.html">AuthController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/auth/validate</code></td>
+					<td>Validation d'un token JWT</td>
+					<td><span class="auth-none">Aucune</span></td>
+					<td><a href="controllers/AuthController.html">AuthController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/auth/logout</code></td>
+					<td>Déconnexion (côté client)</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/AuthController.html">AuthController</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>📋 Endpoints Titres</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Méthode</th>
+					<th>URL</th>
+					<th>Description</th>
+					<th>Autorisation</th>
+					<th>Controller</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="method-get">GET</span></td>
+					<td><code>/api/title</code></td>
+					<td>Liste tous les titres</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/TitleController.html">TitleController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-get">GET</span></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Détails d'un titre</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/TitleController.html">TitleController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/title</code></td>
+					<td>Créer un nouveau titre</td>
+					<td><span class="auth-admin">Admin uniquement</span></td>
+					<td><a href="controllers/TitleController.html">TitleController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-put">PUT</span></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Modifier un titre existant</td>
+					<td><span class="auth-admin">Manager ou Admin</span></td>
+					<td><a href="controllers/TitleController.html">TitleController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-delete">DELETE</span></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Supprimer un titre</td>
+					<td><span class="auth-admin">Admin uniquement</span></td>
+					<td><a href="controllers/TitleController.html">TitleController</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>👥 Endpoints Employés</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Méthode</th>
+					<th>URL</th>
+					<th>Description</th>
+					<th>Autorisation</th>
+					<th>Controller</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="method-get">GET</span></td>
+					<td><code>/api/employee</code></td>
+					<td>Liste tous les employés</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/EmployeeController.html">EmployeeController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-get">GET</span></td>
+					<td><code>/api/employee/{id}</code></td>
+					<td>Détails d'un employé</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/EmployeeController.html">EmployeeController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-post">POST</span></td>
+					<td><code>/api/employee</code></td>
+					<td>Créer un nouvel employé</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/EmployeeController.html">EmployeeController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-put">PUT</span></td>
+					<td><code>/api/employee/{id}</code></td>
+					<td>Modifier un employé</td>
+					<td><span class="auth-required">Authentifié</span></td>
+					<td><a href="controllers/EmployeeController.html">EmployeeController</a></td>
+				</tr>
+				<tr>
+					<td><span class="method-delete">DELETE</span></td>
+					<td><code>/api/employee/{id}</code></td>
+					<td>Supprimer un employé</td>
+					<td><span class="auth-admin">Manager ou Admin</span></td>
+					<td><a href="controllers/EmployeeController.html">EmployeeController</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>🔑 Légende des Autorisations</h2>
+
+		<div class="grid-3">
+			<div class="card">
+				<h3><span class="auth-none">Aucune</span></h3>
+				<p>Endpoint public, accessible sans authentification</p>
+			</div>
+			
+			<div class="card">
+				<h3><span class="auth-required">Authentifié</span></h3>
+				<p>Token JWT requis, tous les rôles acceptés</p>
+			</div>
+			
+			<div class="card">
+				<h3><span class="auth-admin">Rôle spécifique</span></h3>
+				<p>Admin uniquement ou Manager/Admin</p>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>🔗 Navigation</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<h3>📄 Documentation Controllers</h3>
+				<ul class="checklist">
+					<li><a href="controllers/AuthController.html">AuthController.cs</a></li>
+					<li><a href="controllers/TitleController.html">TitleController.cs</a></li>
+					<li><a href="controllers/EmployeeController.html">EmployeeController.cs</a></li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>🏠 Autres Pages</h3>
+				<ul class="checklist">
+					<li><a href="index.html">Page d'accueil</a></li>
+					<li><a href="navigation-rapide.html">Navigation rapide</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<p class="center"><strong>Documentation XtraWork API</strong> &bull; <em>15 Endpoints documentés</em></p>
+	</div>
+</section>
+</body>
+</html>

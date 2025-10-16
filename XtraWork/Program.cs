@@ -72,6 +72,18 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManagerOrAdmin", p => p.RequireRole("Manager", "Admin"));
 });
 
+// CORS pour Next.js frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NextJsPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Health checks
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<XtraWorkContext>("database");
@@ -138,6 +150,8 @@ app.UseSerilogRequestLogging(options =>
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("NextJsPolicy");  // Activer CORS AVANT auth
 
 app.UseHttpsRedirection();
 app.UseAuthentication();   // IMPORTANT

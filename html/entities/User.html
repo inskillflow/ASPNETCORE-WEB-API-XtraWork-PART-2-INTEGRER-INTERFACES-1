@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>User.cs - Entity - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	
+	.gpt15 .page {
+		max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow);
+	}
+	
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 {
+		color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem
+	}
+	
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	
+	.gpt15 .callout {
+		background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0
+	}
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .callout.copilot { border-left-color: var(--violet); background: #faf5ff; }
+	
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .center { text-align: center }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	.gpt15 .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	
+	@media (min-width:860px) {
+		.gpt15 .grid-2 { grid-template-columns: 1fr 1fr }
+		.gpt15 .grid-3 { grid-template-columns: 1fr 1fr 1fr }
+	}
+	
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before {
+		content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac)
+	}
+	
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 .snippet.bash { border-left: 4px solid var(--green); background: var(--soft-green); white-space: pre; }
+	
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+
+		<h1>User.cs - Entite Utilisateur</h1>
+
+		<p class="meta">COUCHE 1 : ENTITIES &bull; Represente un utilisateur du systeme</p>
+		<div class="callout note"><strong>Role de cette classe</strong> &mdash; La classe <code>User</code> est une <strong>entite</strong> qui represente un utilisateur dans la base de donnees XtraWork. Elle contient toutes les informations necessaires pour l'authentification, l'autorisation et la gestion des utilisateurs.</div>
+		<div class="hr"><br></div>
+
+		<h2>Code Source Complet</h2>
+		
+		<div class="snippet"><pre><code>using System.ComponentModel.DataAnnotations;
+
+namespace XtraWork.Entities;
+
+public class User
+{
+    public Guid Id { get; set; }
+    
+    [Required]
+    [MaxLength(50)]
+    public string Username { get; set; } = string.Empty;
+    
+    [Required]
+    [EmailAddress]
+    [MaxLength(100)]
+    public string Email { get; set; } = string.Empty;
+    
+    [Required]
+    public string PasswordHash { get; set; } = string.Empty;
+    
+    [MaxLength(50)]
+    public string FirstName { get; set; } = string.Empty;
+    
+    [MaxLength(50)]
+    public string LastName { get; set; } = string.Empty;
+    
+    public string Role { get; set; } = "User"; // User, Admin, Manager
+    
+    public bool IsActive { get; set; } = true;
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
+    public DateTime? LastLoginAt { get; set; }
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Explication Detaillee Propriete par Propriete</h2>
+
+		<h3>Ligne 1 : Import du namespace</h3>
+		<div class="snippet"><pre><code>using System.ComponentModel.DataAnnotations;</code></pre></div>
+		<div class="callout note">
+			<strong>Namespace pour les attributs de validation</strong><br>
+			Cette ligne importe le namespace <code>System.ComponentModel.DataAnnotations</code> qui contient les attributs de validation comme <code>[Required]</code>, <code>[MaxLength]</code>, <code>[EmailAddress]</code>.<br><br>
+			<strong>Pourquoi ?</strong> Ces attributs permettent de definir des regles de validation directement sur les proprietes de la classe, sans ecrire de code supplementaire.
+		</div>
+
+		<h3>Ligne 3 : Declaration du namespace</h3>
+		<div class="snippet"><pre><code>namespace XtraWork.Entities;</code></pre></div>
+		<div class="callout note">
+			<strong>Namespace = Conteneur logique</strong><br>
+			Un namespace est un conteneur logique qui permet d'organiser le code. Ici, <code>XtraWork.Entities</code> signifie que cette classe fait partie du module "Entities" du projet "XtraWork".<br><br>
+			<strong>Exemple :</strong> Si vous avez une classe <code>User</code> dans le namespace <code>XtraWork.Entities</code> et une autre dans <code>Facebook.Entities</code>, elles ne se confondront pas car elles sont dans des namespaces differents.
+		</div>
+
+		<h3>Ligne 5 : Declaration de la classe</h3>
+		<div class="snippet"><pre><code>public class User</code></pre></div>
+		<div class="callout note">
+			<strong>Definition de la classe User</strong><br>
+			Une classe est un plan ou un modele pour creer des objets. La classe <code>User</code> definit ce qu'est un utilisateur dans notre systeme.<br><br>
+			<strong>Mots-cles :</strong><br>
+			&bull; <code>public</code> : cette classe peut etre utilisee partout dans le projet et meme dans d'autres projets<br>
+			&bull; <code>class</code> : mot-cle pour declarer une classe<br>
+			&bull; <code>User</code> : nom de la classe (par convention, commence par une majuscule)
+		</div>
+
+		<h3>Ligne 7 : Propriete Id - Cle Primaire</h3>
+		<div class="snippet"><pre><code>public Guid Id { get; set; }</code></pre></div>
+		<div class="callout tip">
+			<strong>Identifiant unique universel</strong><br><br>
+			<strong>Qu'est-ce qu'un Guid ?</strong><br>
+			&bull; Guid = Globally Unique Identifier (identifiant unique universel)<br>
+			&bull; C'est un identifiant de 128 bits qui garantit l'unicite<br>
+			&bull; Exemple de valeur : <code>3fa85f64-5717-4562-b3fc-2c963f66afa6</code><br><br>
+			<strong>Pourquoi utiliser un Guid au lieu d'un int ?</strong><br>
+			&bull; Garantit l'unicite meme si vous creez des utilisateurs sur plusieurs serveurs en meme temps<br>
+			&bull; Plus securise que des entiers sequentiels (difficile de deviner l'ID d'un autre utilisateur)<br>
+			&bull; Facilite la fusion de bases de donnees<br>
+			&bull; Evite les conflits d'ID lors de la replication<br><br>
+			<strong>En base de donnees SQL :</strong><br>
+			Cette propriete devient la colonne <code>Id</code> de type <code>UNIQUEIDENTIFIER</code> dans la table <code>Users</code>. Entity Framework detecte automatiquement qu'une propriete nommee <code>Id</code> est la cle primaire.
+		</div>
+
+		<h3>Lignes 9-11 : Propriete Username</h3>
+		<div class="snippet"><pre><code>[Required]
+[MaxLength(50)]
+public string Username { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout note">
+			<strong>Nom d'utilisateur unique et obligatoire</strong><br><br>
+			<strong>Attribut [Required] :</strong><br>
+			&bull; Cette propriete est obligatoire<br>
+			&bull; Si vous essayez de creer un utilisateur sans username, vous aurez une erreur de validation<br>
+			&bull; En SQL, cela se traduit par <code>NOT NULL</code><br><br>
+			<strong>Attribut [MaxLength(50)] :</strong><br>
+			&bull; Le nom d'utilisateur ne peut pas depasser 50 caracteres<br>
+			&bull; En SQL, le type sera <code>NVARCHAR(50)</code> au lieu de <code>NVARCHAR(MAX)</code><br>
+			&bull; Optimise les performances et l'espace disque<br><br>
+			<strong>Initialisation = string.Empty :</strong><br>
+			&bull; Valeur par defaut (chaine vide "")<br>
+			&bull; En C# 11+, cela evite les warnings null<br>
+			&bull; Equivalent a <code>= ""</code><br><br>
+			<strong>En base de donnees :</strong><br>
+			Colonne <code>Username</code> de type <code>NVARCHAR(50) NOT NULL</code> avec un index UNIQUE (configure dans XtraWorkContext) pour empecher les doublons.
+		</div>
+
+		<h3>Lignes 13-16 : Propriete Email</h3>
+		<div class="snippet"><pre><code>[Required]
+[EmailAddress]
+[MaxLength(100)]
+public string Email { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout note">
+			<strong>Adresse email validee</strong><br><br>
+			<strong>Attribut [Required] :</strong><br>
+			&bull; L'email est obligatoire<br>
+			&bull; Ne peut pas etre vide ou null<br><br>
+			<strong>Attribut [EmailAddress] :</strong><br>
+			&bull; Valide que la chaine est un email valide<br>
+			&bull; Exemples valides : <code>marie@xtrawork.com</code>, <code>jean.dupont+test@gmail.com</code><br>
+			&bull; Exemples invalides : <code>marie@@@</code>, <code>test</code>, <code>@example.com</code><br>
+			&bull; Utilise une regex interne pour valider le format<br><br>
+			<strong>Attribut [MaxLength(100)] :</strong><br>
+			&bull; Maximum 100 caracteres<br>
+			&bull; Type SQL sera <code>NVARCHAR(100)</code><br><br>
+			<strong>En base de donnees :</strong><br>
+			Colonne <code>Email</code> de type <code>NVARCHAR(100) NOT NULL</code> avec un index UNIQUE (configure dans XtraWorkContext.OnModelCreating) pour garantir qu'il n'y a pas deux utilisateurs avec le meme email.
+		</div>
+
+		<h3>Lignes 18-19 : Propriete PasswordHash - SECURITE CRITIQUE</h3>
+		<div class="snippet"><pre><code>[Required]
+public string PasswordHash { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout warn">
+			<strong>ATTENTION SECURITE : Hash BCrypt du mot de passe</strong><br><br>
+			<strong>REGLE D'OR : JAMAIS de mot de passe en clair dans la base de donnees !</strong><br><br>
+			<strong>Qu'est-ce qu'un hash ?</strong><br>
+			Un hash est une transformation irreversible d'un mot de passe. C'est comme une empreinte digitale du mot de passe : unique, mais impossible de retrouver le mot de passe d'origine a partir du hash.<br><br>
+			<strong>Exemple concret :</strong><br>
+			&bull; Mot de passe utilisateur : <code>"Marie123!"</code><br>
+			&bull; Hash BCrypt genere : <code>"$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy"</code><br>
+			&bull; Longueur du hash : 60 caracteres<br>
+			&bull; Transformation IRREVERSIBLE : impossible de retrouver "Marie123!" a partir du hash<br><br>
+			<strong>Comment ca marche dans le code ?</strong><br><br>
+			<strong>Pour hasher un mot de passe (lors de l'inscription) :</strong><br>
+			<code>user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Marie123!");</code><br><br>
+			<strong>Pour verifier un mot de passe (lors de la connexion) :</strong><br>
+			<code>bool isValid = BCrypt.Net.BCrypt.Verify("Marie123!", user.PasswordHash);</code><br>
+			&bull; Retourne <code>true</code> si le mot de passe est correct<br>
+			&bull; Retourne <code>false</code> sinon<br><br>
+			<strong>Pourquoi BCrypt et pas MD5 ou SHA256 ?</strong><br>
+			&bull; MD5 et SHA256 sont TROP RAPIDES (dangereux pour les mots de passe)<br>
+			&bull; BCrypt est volontairement LENT (environ 0.3 seconde par hash)<br>
+			&bull; Cette lenteur ralentit les attaques par force brute<br>
+			&bull; BCrypt ajoute automatiquement un "salt" aleatoire pour chaque mot de passe<br><br>
+			<strong>Avantages de securite :</strong><br>
+			&bull; Si un hacker vole la base de donnees, il ne peut pas lire les mots de passe<br>
+			&bull; Meme l'administrateur ne peut pas voir les mots de passe des utilisateurs<br>
+			&bull; Chaque mot de passe a un hash unique meme si deux utilisateurs ont le meme mot de passe (grace au salt)<br>
+			&bull; Les attaques par rainbow table sont inutiles
+		</div>
+
+		<h3>Lignes 21-22 : Propriete FirstName - Prenom</h3>
+		<div class="snippet"><pre><code>[MaxLength(50)]
+public string FirstName { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout note">
+			<strong>Prenom de l'utilisateur (optionnel)</strong><br><br>
+			<strong>Attribut [MaxLength(50)] :</strong><br>
+			&bull; Maximum 50 caracteres<br>
+			&bull; Type SQL sera <code>NVARCHAR(50)</code><br><br>
+			<strong>REMARQUE IMPORTANTE : Pas de [Required]</strong><br>
+			&bull; Le prenom est OPTIONNEL<br>
+			&bull; L'utilisateur peut ne pas le renseigner lors de l'inscription<br>
+			&bull; En SQL, la colonne sera <code>NULL</code> (et non <code>NOT NULL</code>)<br><br>
+			<strong>Pourquoi optionnel ?</strong><br>
+			Cela permet une inscription plus rapide. L'utilisateur peut completer son profil plus tard.
+		</div>
+
+		<h3>Lignes 24-25 : Propriete LastName - Nom de famille</h3>
+		<div class="snippet"><pre><code>[MaxLength(50)]
+public string LastName { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout note">
+			<strong>Nom de famille de l'utilisateur (optionnel)</strong><br><br>
+			Meme logique que <code>FirstName</code> :<br>
+			&bull; Maximum 50 caracteres<br>
+			&bull; Optionnel (pas de <code>[Required]</code>)<br>
+			&bull; En SQL : <code>NVARCHAR(50) NULL</code>
+		</div>
+
+		<h3>Ligne 27 : Propriete Role - Systeme d'autorisation</h3>
+		<div class="snippet"><pre><code>public string Role { get; set; } = "User"; // User, Admin, Manager</code></pre></div>
+		<div class="callout warn">
+			<strong>Role de l'utilisateur - CRUCIAL pour les autorisations</strong><br><br>
+			<strong>Valeurs possibles :</strong><br>
+			&bull; <code>"User"</code> : utilisateur normal (valeur par defaut)<br>
+			&bull; <code>"Manager"</code> : manager (peut modifier certaines ressources)<br>
+			&bull; <code>"Admin"</code> : administrateur (tous les droits)<br><br>
+			<strong>Valeur par defaut :</strong><br>
+			<code>= "User"</code> signifie que tout nouvel utilisateur cree aura automatiquement le role "User".<br><br>
+			<strong>Utilisation dans les Controllers :</strong><br>
+			Les attributs <code>[Authorize(Roles = "Admin")]</code> dans les controllers utilisent cette propriete pour restreindre l'acces aux endpoints.<br><br>
+			<strong>Exemple concret :</strong><br>
+			&bull; Marie s'inscrit avec RegisterAsync()<br>
+			&bull; Son role est automatiquement defini a "User"<br>
+			&bull; Elle peut lire la liste des titres (GET /api/title)<br>
+			&bull; MAIS elle ne peut PAS creer de titre (POST /api/title) car cet endpoint requiert le role "Admin"<br>
+			&bull; Si un admin change son role en "Admin" avec UpdateAsync(), elle pourra alors creer des titres<br><br>
+			<strong>En base de donnees :</strong><br>
+			Colonne <code>Role</code> de type <code>NVARCHAR(20)</code> avec valeur par defaut <code>'User'</code> (configure dans XtraWorkContext).
+		</div>
+
+		<h3>Ligne 29 : Propriete IsActive - Statut du compte</h3>
+		<div class="snippet"><pre><code>public bool IsActive { get; set; } = true;</code></pre></div>
+		<div class="callout tip">
+			<strong>Compte actif ou desactive</strong><br><br>
+			<strong>Type bool :</strong><br>
+			&bull; Booleen qui peut etre <code>true</code> (vrai) ou <code>false</code> (faux)<br>
+			&bull; En SQL, ca devient un type <code>BIT</code> (0 ou 1)<br><br>
+			<strong>Valeur par defaut = true :</strong><br>
+			&bull; Par defaut, un nouveau compte est actif<br>
+			&bull; L'utilisateur peut se connecter immediatement apres l'inscription<br><br>
+			<strong>Utilisation dans AuthService.LoginAsync() :</strong><br>
+			<code>if (!user.IsActive)</code><br>
+			<code>{</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;throw new UnauthorizedAccessException("Compte utilisateur desactive");</code><br>
+			<code>}</code><br><br>
+			<strong>Exemple de desactivation :</strong><br>
+			Si un administrateur desactive le compte de Marie (<code>IsActive = false</code>), Marie ne pourra plus se connecter meme si elle entre le bon mot de passe. L'API retournera "401 Unauthorized" avec le message "Compte utilisateur desactive".<br><br>
+			<strong>Utilite :</strong><br>
+			&bull; Permet de suspendre temporairement un compte sans le supprimer<br>
+			&bull; Utile pour bannir un utilisateur malveillant<br>
+			&bull; Permet de reactivate le compte plus tard<br>
+			&bull; Conserve l'historique (meilleur que la suppression)
+		</div>
+
+		<h3>Ligne 31 : Propriete CreatedAt - Date de creation</h3>
+		<div class="snippet"><pre><code>public DateTime CreatedAt { get; set; } = DateTime.UtcNow;</code></pre></div>
+		<div class="callout note">
+			<strong>Date et heure de creation du compte</strong><br><br>
+			<strong>Type DateTime :</strong><br>
+			&bull; Type pour stocker une date ET une heure<br>
+			&bull; Exemple de valeur : <code>2025-09-30 08:30:15</code><br><br>
+			<strong>DateTime.UtcNow - Heure UTC :</strong><br>
+			&bull; <code>UtcNow</code> retourne l'heure actuelle en UTC (Temps Universel Coordonne)<br>
+			&bull; UTC = Greenwich Mean Time (GMT) = fuseau horaire de reference<br><br>
+			<strong>Pourquoi UTC et pas DateTime.Now (heure locale) ?</strong><br>
+			&bull; <strong>Independant du fuseau horaire du serveur</strong> : si vous deployez votre API sur un serveur en Californie (UTC-8) ou a Tokyo (UTC+9), les dates seront coherentes<br>
+			&bull; <strong>Facilite les comparaisons</strong> : comparer des dates entre utilisateurs de differents pays<br>
+			&bull; <strong>Evite les bugs de changement d'heure</strong> : pas de probleme avec l'heure d'ete/hiver<br>
+			&bull; <strong>Standard international</strong> : toutes les APIs modernes utilisent UTC<br><br>
+			<strong>Exemple concret :</strong><br>
+			&bull; Marie cree son compte le 30 septembre 2025 a 10h30 a Paris<br>
+			&bull; Paris est en UTC+2 (heure d'ete)<br>
+			&bull; <code>CreatedAt</code> sera enregistre comme <code>2025-09-30 08:30:00</code> (UTC = Paris - 2h)<br>
+			&bull; Quand l'API retourne cette date au client, le client peut la convertir dans son fuseau horaire local<br><br>
+			<strong>En base de donnees :</strong><br>
+			Colonne <code>CreatedAt</code> de type <code>DATETIME2</code> avec valeur par defaut SQL <code>GETUTCDATE()</code> (configure dans XtraWorkContext).
+		</div>
+
+		<h3>Ligne 33 : Propriete LastLoginAt - Derniere connexion</h3>
+		<div class="snippet"><pre><code>public DateTime? LastLoginAt { get; set; }</code></pre></div>
+		<div class="callout tip">
+			<strong>Date de derniere connexion (nullable)</strong><br><br>
+			<strong>Type DateTime? - Nullable :</strong><br>
+			&bull; Le point d'interrogation <code>?</code> apres <code>DateTime</code> signifie que cette propriete est nullable<br>
+			&bull; Peut contenir une date/heure OU <code>null</code><br>
+			&bull; <code>DateTime</code> normal ne peut PAS etre <code>null</code><br><br>
+			<strong>Pourquoi nullable ?</strong><br>
+			&bull; Quand un utilisateur vient de creer son compte, il ne s'est jamais connecte<br>
+			&bull; Donc <code>LastLoginAt</code> est <code>null</code> (pas de valeur)<br>
+			&bull; Apres la premiere connexion, on lui donne une valeur<br>
+			&bull; On ne peut pas utiliser une date "par defaut" comme <code>DateTime.MinValue</code> car ce serait trompeur<br><br>
+			<strong>Mise a jour automatique dans AuthService.LoginAsync() :</strong><br>
+			<code>// Mettre a jour la derniere connexion</code><br>
+			<code>user.LastLoginAt = DateTime.UtcNow;</code><br>
+			<code>await _userRepository.UpdateAsync(user);</code><br><br>
+			<strong>Exemple de verification :</strong><br>
+			<code>if (user.LastLoginAt.HasValue)</code><br>
+			<code>{</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine($"Derniere connexion : {user.LastLoginAt.Value}");</code><br>
+			<code>}</code><br>
+			<code>else</code><br>
+			<code>{</code><br>
+			<code>&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("Jamais connecte");</code><br>
+			<code>}</code><br><br>
+			<strong>En base de donnees :</strong><br>
+			Colonne <code>LastLoginAt</code> de type <code>DATETIME2 NULL</code> (peut etre NULL).
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Table SQL Generee par Entity Framework</h2>
+
+		<div class="callout tip"><strong>Code First</strong> &mdash; Entity Framework genere automatiquement la table SQL a partir de cette classe C#. Quand vous lancez <code>context.Database.EnsureCreated()</code> dans Program.cs, Entity Framework cree la table <code>Users</code> avec toutes les colonnes et contraintes.</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Colonne SQL</th>
+					<th>Type SQL</th>
+					<th>Propriete C#</th>
+					<th>Contraintes</th>
+					<th>Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>Id</code></td>
+					<td><code>UNIQUEIDENTIFIER</code></td>
+					<td><code>Guid Id</code></td>
+					<td><strong>PRIMARY KEY</strong></td>
+					<td>Cle primaire, unique, non null</td>
+				</tr>
+				<tr>
+					<td><code>Username</code></td>
+					<td><code>NVARCHAR(50)</code></td>
+					<td><code>string Username</code></td>
+					<td><strong>NOT NULL, UNIQUE</strong></td>
+					<td>Nom d'utilisateur unique</td>
+				</tr>
+				<tr>
+					<td><code>Email</code></td>
+					<td><code>NVARCHAR(100)</code></td>
+					<td><code>string Email</code></td>
+					<td><strong>NOT NULL, UNIQUE</strong></td>
+					<td>Email unique</td>
+				</tr>
+				<tr>
+					<td><code>PasswordHash</code></td>
+					<td><code>NVARCHAR(MAX)</code></td>
+					<td><code>string PasswordHash</code></td>
+					<td><strong>NOT NULL</strong></td>
+					<td>Hash BCrypt (60 caracteres)</td>
+				</tr>
+				<tr>
+					<td><code>FirstName</code></td>
+					<td><code>NVARCHAR(50)</code></td>
+					<td><code>string FirstName</code></td>
+					<td>NULL</td>
+					<td>Prenom optionnel</td>
+				</tr>
+				<tr>
+					<td><code>LastName</code></td>
+					<td><code>NVARCHAR(50)</code></td>
+					<td><code>string LastName</code></td>
+					<td>NULL</td>
+					<td>Nom optionnel</td>
+				</tr>
+				<tr>
+					<td><code>Role</code></td>
+					<td><code>NVARCHAR(20)</code></td>
+					<td><code>string Role</code></td>
+					<td><strong>DEFAULT 'User'</strong></td>
+					<td>Role par defaut "User"</td>
+				</tr>
+				<tr>
+					<td><code>IsActive</code></td>
+					<td><code>BIT</code></td>
+					<td><code>bool IsActive</code></td>
+					<td><strong>DEFAULT 1</strong></td>
+					<td>Actif par defaut (true=1)</td>
+				</tr>
+				<tr>
+					<td><code>CreatedAt</code></td>
+					<td><code>DATETIME2</code></td>
+					<td><code>DateTime CreatedAt</code></td>
+					<td><strong>DEFAULT GETUTCDATE()</strong></td>
+					<td>Date de creation automatique</td>
+				</tr>
+				<tr>
+					<td><code>LastLoginAt</code></td>
+					<td><code>DATETIME2</code></td>
+					<td><code>DateTime? LastLoginAt</code></td>
+					<td>NULL</td>
+					<td>Derniere connexion (nullable)</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="callout note"><strong>Index crees par Entity Framework :</strong><br>
+		&bull; Index UNIQUE sur <code>Username</code> (empeche les doublons)<br>
+		&bull; Index UNIQUE sur <code>Email</code> (empeche les doublons)<br>
+		&bull; Ces index sont configures dans <code>XtraWorkContext.OnModelCreating()</code>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Relations avec d'autres classes du projet</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<h3>Utilisee par : Repositories</h3>
+				<p><strong>UserRepository.cs</strong> - Gestion CRUD</p>
+				<ul class="checklist">
+					<li><code>GetByIdAsync(Guid id)</code> - Recherche par ID</li>
+					<li><code>GetByUsernameAsync(string username)</code> - Recherche par username</li>
+					<li><code>GetByEmailAsync(string email)</code> - Recherche par email</li>
+					<li><code>CreateAsync(User user)</code> - Creer un utilisateur</li>
+					<li><code>UpdateAsync(User user)</code> - Modifier un utilisateur</li>
+					<li><code>GetAllAsync()</code> - Liste tous les utilisateurs</li>
+					<li><code>GetByRoleAsync(string role)</code> - Filtrer par role</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>Utilisee par : Services</h3>
+				<p><strong>AuthService.cs</strong> - Authentification JWT</p>
+				<ul class="checklist">
+					<li><code>LoginAsync(LoginRequest)</code> - Connexion utilisateur</li>
+					<li><code>RegisterAsync(RegisterRequest)</code> - Inscription</li>
+					<li><code>GenerateJwtToken(User user)</code> - Generation du token JWT</li>
+					<li><code>GetCurrentUserAsync(string userId)</code> - Infos user connecte</li>
+					<li><code>ValidateTokenAsync(string token)</code> - Validation token</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="grid-2">
+			<div class="card">
+				<h3>Utilisee par : Controllers</h3>
+				<p><strong>AuthController.cs</strong> - Endpoints authentification</p>
+				<ul class="checklist">
+					<li><code>POST /api/auth/register</code> - Inscription</li>
+					<li><code>POST /api/auth/login</code> - Connexion</li>
+					<li><code>GET /api/auth/me</code> - Infos utilisateur connecte</li>
+					<li><code>POST /api/auth/validate</code> - Valider un token</li>
+					<li><code>POST /api/auth/logout</code> - Deconnexion</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>Utilisee par : DbContext</h3>
+				<p><strong>XtraWorkContext.cs</strong> - Configuration EF Core</p>
+				<ul class="checklist">
+					<li><code>DbSet&lt;User&gt; Users</code> - Representation de la table</li>
+					<li><code>OnModelCreating()</code> - Configuration des contraintes</li>
+					<li>Index UNIQUE sur Username</li>
+					<li>Index UNIQUE sur Email</li>
+					<li>Valeur par defaut pour Role</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Exemples de Code Pratiques</h2>
+
+		<h3>Exemple 1 : Creer un nouvel utilisateur</h3>
+		<div class="snippet"><pre><code>// Dans AuthService.RegisterAsync()
+var user = new User
+{
+    Id = Guid.NewGuid(),  // Genere un nouveau GUID unique
+    Username = "marie.user",
+    Email = "marie@xtrawork.com",
+    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Marie123!"),  // Hash du mot de passe
+    FirstName = "Marie",
+    LastName = "Dupont",
+    Role = "User",  // Role par defaut
+    IsActive = true,  // Compte actif
+    CreatedAt = DateTime.UtcNow  // Date de creation en UTC
+};
+
+await userRepository.CreateAsync(user);
+Console.WriteLine($"Utilisateur cree : {user.Username} (ID: {user.Id})");</code></pre></div>
+
+		<h3>Exemple 2 : Verifier un mot de passe lors de la connexion</h3>
+		<div class="snippet"><pre><code>// Dans AuthService.LoginAsync()
+var user = await userRepository.GetByUsernameAsync("marie.user");
+
+if (user == null)
+{
+    throw new UnauthorizedAccessException("Nom d'utilisateur ou mot de passe incorrect");
+}
+
+// Verification du mot de passe avec BCrypt
+bool passwordIsCorrect = BCrypt.Net.BCrypt.Verify("Marie123!", user.PasswordHash);
+
+if (!passwordIsCorrect)
+{
+    throw new UnauthorizedAccessException("Nom d'utilisateur ou mot de passe incorrect");
+}
+
+if (!user.IsActive)
+{
+    throw new UnauthorizedAccessException("Compte utilisateur desactive");
+}
+
+// Tout est OK, mettre a jour la derniere connexion
+user.LastLoginAt = DateTime.UtcNow;
+await userRepository.UpdateAsync(user);
+
+Console.WriteLine("Authentification reussie !");</code></pre></div>
+
+		<h3>Exemple 3 : Promouvoir un utilisateur en Admin</h3>
+		<div class="snippet"><pre><code>// Recuperer l'utilisateur par son ID
+var user = await userRepository.GetByIdAsync(userId);
+
+if (user == null)
+{
+    throw new NotFoundException("Utilisateur non trouve");
+}
+
+// Changer le role
+user.Role = "Admin";
+
+// Sauvegarder en base de donnees
+await userRepository.UpdateAsync(user);
+
+Console.WriteLine($"{user.Username} est maintenant Admin !");</code></pre></div>
+
+		<h3>Exemple 4 : Desactiver un compte utilisateur</h3>
+		<div class="snippet"><pre><code>var user = await userRepository.GetByIdAsync(userId);
+
+// Desactiver le compte
+user.IsActive = false;
+
+await userRepository.UpdateAsync(user);
+
+Console.WriteLine($"Compte {user.Username} desactive");
+
+// Maintenant, si cet utilisateur essaie de se connecter,
+// il recevra "401 Unauthorized - Compte utilisateur desactive"</code></pre></div>
+
+		<h3>Exemple 5 : Recuperer tous les administrateurs</h3>
+		<div class="snippet"><pre><code>var admins = await userRepository.GetByRoleAsync("Admin");
+
+Console.WriteLine($"Il y a {admins.Count} administrateurs :");
+foreach (var admin in admins)
+{
+    Console.WriteLine($"- {admin.Username} ({admin.Email})");
+    
+    if (admin.LastLoginAt.HasValue)
+    {
+        Console.WriteLine($"  Derniere connexion : {admin.LastLoginAt.Value}");
+    }
+    else
+    {
+        Console.WriteLine($"  Jamais connecte");
+    }
+}</code></pre></div>
+
+		<h3>Exemple 6 : Verifier si un username existe deja</h3>
+		<div class="snippet"><pre><code>// Dans AuthService.RegisterAsync(), avant de creer l'utilisateur
+var existingUser = await userRepository.GetByUsernameAsync(request.Username);
+
+if (existingUser != null)
+{
+    throw new InvalidOperationException("Ce nom d'utilisateur est deja utilise");
+}
+
+// Meme verification pour l'email
+var existingEmail = await userRepository.GetByEmailAsync(request.Email);
+
+if (existingEmail != null)
+{
+    throw new InvalidOperationException("Cette adresse email est deja utilisee");
+}
+
+// Si on arrive ici, username et email sont disponibles, on peut creer l'utilisateur</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Concepts Cles a Retenir</h2>
+
+		<div class="grid-3">
+			<div class="card">
+				<h3>Entity (Entite)</h3>
+				<p>Une classe qui represente une <strong>table</strong> dans la base de donnees. Chaque propriete publique devient une colonne dans la table SQL correspondante.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Primary Key (Cle Primaire)</h3>
+				<p><code>Id</code> est la cle primaire. Elle identifie de facon unique chaque ligne dans la table. Entity Framework detecte automatiquement qu'une propriete nommee "Id" est la cle primaire.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Guid vs Int</h3>
+				<p>Guid garantit l'unicite meme sur plusieurs serveurs. Plus securise que des entiers sequentiels. Evite les conflits lors de fusions de bases de donnees.</p>
+			</div>
+		</div>
+		
+		<div class="grid-3">
+			<div class="card">
+				<h3>Hashing de mot de passe</h3>
+				<p>Transformation irreversible d'un mot de passe. On ne stocke JAMAIS le mot de passe en clair ! BCrypt est lent (securite) et ajoute un salt automatique.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Data Annotations</h3>
+				<p>Attributs comme <code>[Required]</code>, <code>[MaxLength]</code>, <code>[EmailAddress]</code> qui definissent des regles de validation et des contraintes de base de donnees.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Nullable Types</h3>
+				<p><code>DateTime?</code> avec le <code>?</code> peut etre <code>null</code>. Utile pour les valeurs optionnelles ou les dates futures. Utilisez <code>.HasValue</code> et <code>.Value</code> pour y acceder.</p>
+			</div>
+		</div>
+		
+		<div class="grid-3">
+			<div class="card">
+				<h3>UTC vs Local Time</h3>
+				<p>Toujours utiliser <code>DateTime.UtcNow</code> pour les timestamps. Independant du fuseau horaire, facilite les comparaisons internationales, evite les bugs de changement d'heure.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Role-Based Authorization</h3>
+				<p>La propriete <code>Role</code> permet de restreindre l'acces aux endpoints avec <code>[Authorize(Roles = "Admin")]</code> dans les controllers.</p>
+			</div>
+			
+			<div class="card">
+				<h3>Soft Delete Pattern</h3>
+				<p><code>IsActive</code> permet de desactiver un compte sans le supprimer. Conserve l'historique et permet une reactivation facile.</p>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation Documentation</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<h3>Fichiers Lies</h3>
+				<ul class="checklist">
+					<li><a href="../repositories/UserRepository.html">UserRepository.cs</a> - Acces donnees (CRUD)</li>
+					<li><a href="../repositories/XtraWorkContext.html">XtraWorkContext.html">XtraWorkContext.cs</a> - DbContext EF Core</li>
+					<li><a href="../services/AuthService.html">AuthService.cs</a> - Logique authentification</li>
+					<li><a href="../controllers/AuthController.html">AuthController.cs</a> - Endpoints API auth</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>Autres Entites</h3>
+				<ul class="checklist">
+					<li><a href="Title.html">Title.cs</a> - Entite Titre/Poste</li>
+					<li><a href="Employee.html">Employee.cs</a> - Entite Employe</li>
+				</ul>
+				<br>
+				<p><a href="../index.html">Retour a l'index principal</a></p>
+			</div>
+		</div>
+
+		<div class="callout tip" style="margin-top: 30px;">
+			<strong>Prochaine etape</strong> &mdash; Passez a <a href="Title.html">Title.cs</a> pour decouvrir l'entite des titres de poste et la relation 1:N avec Employee !
+		</div>
+
+		<div class="hr"><br></div>
+
+		<p class="center"><strong>Documentation XtraWork API</strong> &bull; <em>Explications detaillees pour etudiants</em></p>
+	</div>
+</section>
+</body>
+</html>

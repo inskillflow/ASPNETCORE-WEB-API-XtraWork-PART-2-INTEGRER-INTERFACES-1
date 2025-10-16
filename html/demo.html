@@ -1,0 +1,620 @@
+<p>
+	<title>Guide T&eacute;l&eacute;chargement Projet XtraWork par &Eacute;tapes</title>
+</p>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	
+	.gpt15 .page {
+		max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow);
+	}
+	
+	.gpt15 h1,
+	.gpt15 h2,
+	.gpt15 h3 {
+		color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem
+	}
+	
+	.gpt15 h1 {
+		font-size: 2rem; letter-spacing: .2px
+	}
+	
+	.gpt15 .meta {
+		color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem
+	}
+	
+	.gpt15 .hr {
+		height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0
+	}
+	
+	.gpt15 .callout {
+		background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0
+	}
+	
+	.gpt15 .callout.note {
+		border-left-color: #1e90ff; background: var(--soft-blue)
+	}
+	
+	.gpt15 .callout.tip {
+		border-left-color: var(--green); background: var(--soft-green)
+	}
+	
+	.gpt15 .callout.warn {
+		border-left-color: var(--red); background: var(--soft-red)
+	}
+	
+	.gpt15 .callout.copilot {
+		border-left-color: var(--violet); background: #faf5ff;
+	}
+	
+	.gpt15 .snippet {
+		background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto;
+	}
+	
+	.gpt15 .snippet pre {
+		margin: 0; white-space: pre; tab-size: 4;
+	}
+	
+	.gpt15 .snippet.bash {
+		border-left: 4px solid var(--green); background: var(--soft-green); white-space: pre;
+	}
+	
+	.gpt15 .card {
+		background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04);
+	}
+	
+	.gpt15 .center {
+		text-align: center
+	}
+	
+	.gpt15 .grid-2 {
+		display: grid; grid-template-columns: 1fr; gap: 16px
+	}
+	
+	.gpt15 .grid-3 {
+		display: grid; grid-template-columns: 1fr; gap: 16px
+	}
+	
+	.gpt15 .grid-4 {
+		display: grid; grid-template-columns: 1fr; gap: 16px
+	}
+	
+	@media (min-width:860px) {
+		.gpt15 .grid-2 {
+			grid-template-columns: 1fr 1fr
+		}
+		.gpt15 .grid-3 {
+			grid-template-columns: 1fr 1fr 1fr
+		}
+		.gpt15 .grid-4 {
+			grid-template-columns: 1fr 1fr 1fr 1fr
+		}
+	}
+	
+	.gpt15 .checklist li {
+		margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem
+	}
+	
+	.gpt15 .checklist li::before {
+		content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac)
+	}
+	
+	.gpt15 table {
+		width: 100%; border-collapse: collapse; margin: 20px 0;
+	}
+	
+	.gpt15 th,
+	.gpt15 td {
+		border: 1px solid var(--border); padding: 12px; text-align: left;
+	}
+	
+	.gpt15 th {
+		background: var(--soft-blue); font-weight: 600;
+	}
+	
+	.gpt15 .step-1 {
+		background: var(--soft-green); border-left: 4px solid var(--green);
+	}
+	
+	.gpt15 .step-2 {
+		background: var(--soft-blue); border-left: 4px solid var(--blue);
+	}
+	
+	.gpt15 .step-3 {
+		background: var(--soft-orange); border-left: 4px solid var(--orange);
+	}
+	
+	.gpt15 .commit-hash {
+		background: var(--soft); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--violet);
+	}
+	
+	.gpt15 .download-button {
+		background: linear-gradient(135deg, var(--green), #86efac); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; margin: 8px 0;
+	}
+	
+	.gpt15 .github-url {
+		background: var(--soft-blue); padding: 8px 12px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.9rem; word-break: break-all;
+	}
+
+</style>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+
+		<h1>Guide T&eacute;l&eacute;chargement Projet XtraWork par &Eacute;tapes</h1>
+
+		<p class="meta">GitHub &bull; Git &bull; Commits &bull; Versions &bull; T&eacute;l&eacute;chargement &bull; Apprentissage Progressif</p>
+		<div class="callout note"><strong>Projet p&eacute;dagogique</strong> &mdash; T&eacute;l&eacute;chargez le projet XtraWork &eacute;tape par &eacute;tape pour suivre l&#39;&eacute;volution du d&eacute;veloppement de l&#39;API .NET Core.</div>
+		<div class="hr">
+			<br>
+		</div>
+
+		<h2>Projet XtraWork : Apprentissage par &eacute;tapes</h2>
+		<div class="callout copilot"><strong>Repository officiel</strong> &mdash; Le projet est h&eacute;berg&eacute; sur GitHub avec plusieurs commits repr&eacute;sentant les &eacute;tapes d&#39;apprentissage.</div>
+
+		<h3>Informations du repository</h3>
+		<div class="card">
+
+			<h3>🔗 Repository GitHub</h3>
+			<div class="github-url"><strong>URL :</strong> https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git</div>
+
+			<ul class="checklist">
+				<li><strong>Propri&eacute;taire :</strong> inskillflow</li>
+				<li><strong>Nom :</strong> ASPNETCORE-WEB-API-XtraWork</li>
+				<li><strong>Type :</strong> Repository public</li>
+				<li><strong>Langage :</strong> C# 100%</li>
+				<li><strong>Structure :</strong> Projet ASP.NET Core Web API</li>
+			</ul>
+		</div>
+
+		<h2>Chapitre 1 : Comprendre la structure des commits</h2>
+		<div class="callout tip"><strong>Apprentissage progressif</strong> &mdash; Chaque commit repr&eacute;sente une &eacute;tape de d&eacute;veloppement du projet XtraWork.</div>
+
+		<h3>1.1. Structure des &eacute;tapes de d&eacute;veloppement</h3>
+		<div class="grid-3">
+			<div class="card step-1">
+
+				<h3>📦 &Eacute;tape 1 : Projet de base</h3>
+
+				<p><strong>Commit :</strong> Initialisation du projet</p>
+
+				<ul class="checklist">
+					<li>Structure de base ASP.NET Core</li>
+					<li>Configuration initiale</li>
+					<li>Controllers de base</li>
+					<li>Models simples</li>
+					<li>DbContext basique</li>
+				</ul>
+			</div>
+			<div class="card step-2">
+
+				<h3>🔧 &Eacute;tape 2 : Fonctionnalit&eacute;s avanc&eacute;es</h3>
+
+				<p><strong>Commit :</strong> Ajout des features</p>
+
+				<ul class="checklist">
+					<li>Entity Framework complet</li>
+					<li>Relations entre entit&eacute;s</li>
+					<li>Validation des donn&eacute;es</li>
+					<li>Gestion d&#39;erreurs</li>
+					<li>Swagger documentation</li>
+				</ul>
+			</div>
+			<div class="card step-3">
+
+				<h3>🚀 &Eacute;tape 3 : Production ready</h3>
+
+				<p><strong>Commit :</strong> Version finale</p>
+
+				<ul class="checklist">
+					<li>Authentification JWT</li>
+					<li>Autorisation par r&ocirc;les</li>
+					<li>Tests unitaires</li>
+					<li>Logging avanc&eacute;</li>
+					<li>Configuration production</li>
+				</ul>
+			</div></div>
+
+		<h2>Chapitre 2 : M&eacute;thodes de t&eacute;l&eacute;chargement</h2>
+		<div class="callout note"><strong>Plusieurs options</strong> &mdash; Selon vos besoins et comp&eacute;tences Git.</div>
+
+		<h3>2.1. M&eacute;thode 1 : T&eacute;l&eacute;chargement direct via GitHub (Recommand&eacute; pour d&eacute;butants)</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>🌐 Via l&#39;interface GitHub</h3>
+				<div class="callout tip"><strong>Plus simple</strong> &mdash; Aucune installation Git requise</div>
+
+				<ol>
+					<li><strong>Aller sur :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork" target="_blank">https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork</a></li>
+					<li><strong>Cliquer sur :</strong> &quot;Code&quot; (bouton vert)</li>
+					<li><strong>S&eacute;lectionner :</strong> &quot;Download ZIP&quot;</li>
+					<li><strong>Extraire :</strong> Le fichier ZIP t&eacute;l&eacute;charg&eacute;</li>
+				</ol>
+
+				<p><strong>R&eacute;sultat :</strong> Version actuelle (derni&egrave;re &eacute;tape)</p>
+			</div>
+			<div class="card">
+
+				<h3>📚 Acc&eacute;der aux &eacute;tapes pr&eacute;c&eacute;dentes</h3>
+				<div class="callout note"><strong>Navigation dans l&#39;historique</strong></div>
+
+				<ol>
+					<li><strong>Cliquer sur :</strong> &quot;1 Commit&quot; (&agrave; c&ocirc;t&eacute; de main)</li>
+					<li><strong>S&eacute;lectionner :</strong> Le commit souhait&eacute;</li>
+					<li><strong>Cliquer sur :</strong> &quot;Browse the repository at this point&quot;</li>
+					<li><strong>T&eacute;l&eacute;charger :</strong> &quot;Code&quot; &rarr; &quot;Download ZIP&quot;</li>
+				</ol>
+
+				<p><strong>Avantage :</strong> R&eacute;cup&eacute;ration d&#39;une &eacute;tape sp&eacute;cifique</p>
+			</div></div>
+
+		<h3>2.2. M&eacute;thode 2 : Clonage Git (Recommand&eacute; pour d&eacute;veloppeurs)</h3>
+		<div class="card">
+
+			<h3>🔧 Clonage complet du repository</h3>
+			<div class="callout copilot"><strong>Contr&ocirc;le total</strong> &mdash; Acc&egrave;s &agrave; tout l&#39;historique et possibilit&eacute; de navigation entre commits</div>
+
+			<h4>Installation et clonage</h4>
+			<div class="snippet bash"><pre><code># Cloner le repository complet
+git clone https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git
+
+# Entrer dans le dossier
+cd ASPNETCORE-WEB-API-XtraWork
+
+# Voir l&#39;historique des commits
+git log --oneline
+
+# Voir tous les commits avec d&eacute;tails
+git log --graph --pretty=format:&#39;%h - %s (%cr) &lt;%an&gt;&#39;</code></pre></div></div>
+
+		<h3>2.3. Navigation entre les commits avec Git</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>🔍 Identifier les commits</h3>
+				<div class="snippet bash"><pre><code># Lister tous les commits
+git log --oneline
+
+# R&eacute;sultat attendu (exemple) :
+# a1b2c3d &Eacute;tape 3: Authentification et production
+# e4f5g6h &Eacute;tape 2: Fonctionnalit&eacute;s avanc&eacute;es  
+# i7j8k9l &Eacute;tape 1: Projet de base initial
+
+# Voir les d&eacute;tails d&#39;un commit sp&eacute;cifique
+git show a1b2c3d</code></pre></div></div>
+			<div class="card">
+
+				<h3>📂 R&eacute;cup&eacute;rer une &eacute;tape sp&eacute;cifique</h3>
+				<div class="snippet bash"><pre><code># M&eacute;thode 1: Checkout temporaire
+git checkout e4f5g6h
+# ⚠️ Mode &quot;detached HEAD&quot; - pour exploration seulement
+
+# M&eacute;thode 2: Cr&eacute;er une branche depuis un commit
+git checkout -b etape-2 e4f5g6h
+# ✅ Branche persistante pour travailler
+
+# Revenir au dernier commit
+git checkout main
+
+# M&eacute;thode 3: Copier un commit vers un nouveau dossier
+git archive e4f5g6h | tar -x -C ../xtrawork-etape2/</code></pre></div></div></div>
+
+		<h2>Chapitre 3 : Guide pratique par &eacute;tape</h2>
+		<div class="callout tip"><strong>Workflows recommand&eacute;s</strong> &mdash; Comment t&eacute;l&eacute;charger et utiliser chaque &eacute;tape du projet.</div>
+
+		<h3>3.1. Workflow&nbsp;</h3>
+		<div class="grid-3">
+			<div class="card step-1">
+
+				<h3>📚 &Eacute;tape 1 : D&eacute;couverte</h3>
+				<div class="callout note"><strong>Premier contact</strong></div>
+
+				<h4>Objectif :</h4>
+
+				<ul class="checklist">
+					<li>Comprendre la structure ASP.NET Core</li>
+					<li>Voir les Controllers de base</li>
+					<li>Analyser les Models simples</li>
+				</ul>
+
+				<h4>Comment t&eacute;l&eacute;charger :</h4>
+				<div class="snippet bash"><pre><code># M&eacute;thode Git
+git clone https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git
+cd ASPNETCORE-WEB-API-XtraWork
+git checkout -b etape-1 [hash-commit-etape-1]
+
+# Ou t&eacute;l&eacute;chargement direct
+# 1. Aller sur GitHub
+# 2. Commits &rarr; S&eacute;lectionner &quot;&Eacute;tape 1&quot;
+# 3. Download ZIP</code></pre></div></div>
+			<div class="card step-2">
+
+				<h3>🔧 &Eacute;tape 2 : Approfondissement</h3>
+				<div class="callout note"><strong>Fonctionnalit&eacute;s avanc&eacute;es</strong></div>
+
+				<h4>Objectif :</h4>
+
+				<ul class="checklist">
+					<li>&Eacute;tudier Entity Framework</li>
+					<li>Comprendre les relations</li>
+					<li>Analyser la validation</li>
+				</ul>
+
+				<h4>Comment t&eacute;l&eacute;charger :</h4>
+				<div class="snippet bash"><pre><code># Depuis le repository d&eacute;j&agrave; clon&eacute;
+git checkout -b etape-2 [hash-commit-etape-2]
+
+# Comparer avec l&#39;&eacute;tape pr&eacute;c&eacute;dente
+git diff etape-1..etape-2
+
+# Voir les fichiers modifi&eacute;s
+git diff --name-only etape-1..etape-2</code></pre></div></div>
+			<div class="card step-3">
+
+				<h3>🚀 &Eacute;tape 3 : Production</h3>
+				<div class="callout note"><strong>Version compl&egrave;te</strong></div>
+
+				<h4>Objectif :</h4>
+
+				<ul class="checklist">
+					<li>Voir l&#39;authentification JWT</li>
+					<li>Comprendre les autorisations</li>
+					<li>Analyser les tests</li>
+				</ul>
+
+				<h4>Comment t&eacute;l&eacute;charger :</h4>
+				<div class="snippet bash"><pre><code># Version finale (main branch)
+git checkout main
+
+# Ou sp&eacute;cifiquement l&#39;&eacute;tape 3
+git checkout -b etape-3 [hash-commit-etape-3]
+
+# Comparer toute l&#39;&eacute;volution
+git diff etape-1..etape-3 --stat</code></pre></div></div></div>
+
+		<h3>3.2. Workflow pour instructeurs/formateurs</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>Pr&eacute;paration des cours</h3>
+				<div class="callout copilot"><strong>Mat&eacute;riel p&eacute;dagogique</strong></div>
+				<div class="snippet bash"><pre><code># Cloner le repository complet
+git clone https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git
+cd ASPNETCORE-WEB-API-XtraWork
+
+# Cr&eacute;er des dossiers pour chaque &eacute;tape
+mkdir -p cours/etape-1 cours/etape-2 cours/etape-3
+
+# Extraire chaque &eacute;tape dans son dossier
+git archive etape-1-hash | tar -x -C cours/etape-1/
+git archive etape-2-hash | tar -x -C cours/etape-2/
+git archive etape-3-hash | tar -x -C cours/etape-3/
+
+# Cr&eacute;er des archives ZIP pour distribution
+cd cours
+zip -r xtrawork-etape-1.zip etape-1/
+zip -r xtrawork-etape-2.zip etape-2/
+zip -r xtrawork-etape-3.zip etape-3/</code></pre></div></div>
+			<div class="card">
+
+				<h3>Analyse des diff&eacute;rences</h3>
+				<div class="callout tip"><strong>Points d&#39;enseignement</strong></div>
+				<div class="snippet bash"><pre><code># Voir les changements entre &eacute;tapes
+git diff --stat etape-1..etape-2
+git diff --stat etape-2..etape-3
+
+# G&eacute;n&eacute;rer un rapport des modifications
+git log --oneline etape-1..etape-2 &gt; changements-etape-2.txt
+git log --oneline etape-2..etape-3 &gt; changements-etape-3.txt
+
+# Voir les fichiers ajout&eacute;s/supprim&eacute;s
+git diff --name-status etape-1..etape-2
+git diff --name-status etape-2..etape-3</code></pre></div></div></div>
+
+		<h2>Chapitre 4 : Commandes Git utiles pour le projet</h2>
+		<div class="callout note"><strong>R&eacute;f&eacute;rence rapide</strong> &mdash; Commandes essentielles pour naviguer dans le projet XtraWork.</div>
+
+		<h3>4.1. Exploration du repository</h3>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Commande</th>
+					<th>Description</th>
+					<th>Usage</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>git log --oneline</code></td>
+					<td>Liste des commits condens&eacute;e</td>
+					<td>Voir toutes les &eacute;tapes</td>
+				</tr>
+				<tr>
+					<td><code>git log --graph</code></td>
+					<td>Historique graphique</td>
+					<td>Visualiser l&#39;&eacute;volution</td>
+				</tr>
+				<tr>
+					<td><code>git show [hash]</code></td>
+					<td>D&eacute;tails d&#39;un commit</td>
+					<td>Comprendre les changements</td>
+				</tr>
+				<tr>
+					<td><code>git diff [hash1]..[hash2]</code></td>
+					<td>Comparer deux commits</td>
+					<td>Voir les diff&eacute;rences entre &eacute;tapes</td>
+				</tr>
+				<tr>
+					<td><code>git checkout [hash]</code></td>
+					<td>Aller &agrave; un commit sp&eacute;cifique</td>
+					<td>Explorer une &eacute;tape</td>
+				</tr>
+				<tr>
+					<td><code>git checkout -b [branch] [hash]</code></td>
+					<td>Cr&eacute;er branche depuis commit</td>
+					<td>Travailler sur une &eacute;tape</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h3>4.2. Commandes pour t&eacute;l&eacute;chargement s&eacute;lectif</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>Extraction d&#39;une &eacute;tape</h3>
+				<div class="snippet bash"><pre><code># M&eacute;thode 1: Archive vers dossier
+git archive [commit-hash] | tar -x -C ../nom-dossier/
+
+# M&eacute;thode 2: Archive vers ZIP
+git archive [commit-hash] --format=zip &gt; etape-X.zip
+
+# M&eacute;thode 3: Shallow clone d&#39;un commit sp&eacute;cifique
+git clone --depth 1 https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git
+cd ASPNETCORE-WEB-API-XtraWork
+git fetch --depth 1 origin [commit-hash]
+git checkout [commit-hash]</code></pre></div></div>
+			<div class="card">
+
+				<h3>Synchronisation et mise &agrave; jour</h3>
+				<div class="snippet bash"><pre><code># Mettre &agrave; jour le repository local
+git fetch origin
+
+# Voir les nouveaux commits
+git log HEAD..origin/main --oneline
+
+# Mettre &agrave; jour vers la derni&egrave;re version
+git pull origin main
+
+# V&eacute;rifier les branches locales
+git branch -a
+
+# Nettoyer les branches obsol&egrave;tes
+git remote prune origin</code></pre></div></div></div>
+
+		<h2>Chapitre 5 : Utilisation pratique des &eacute;tapes t&eacute;l&eacute;charg&eacute;es</h2>
+		<div class="callout copilot"><strong>Mise en pratique</strong> &mdash; Comment utiliser efficacement chaque &eacute;tape du projet.</div>
+
+		<h3>5.1. Configuration apr&egrave;s t&eacute;l&eacute;chargement</h3>
+		<div class="grid-3">
+			<div class="card">
+
+				<h3>🔧 Premi&egrave;re configuration</h3>
+				<div class="snippet bash"><pre><code># Apr&egrave;s t&eacute;l&eacute;chargement/extraction
+cd XtraWork
+
+# Restaurer les packages NuGet
+dotnet restore
+
+# V&eacute;rifier la configuration
+dotnet build
+
+# Mettre &agrave; jour les outils
+dotnet tool restore</code></pre></div></div>
+			<div class="card">
+
+				<h3>🗄️Configuration base de donn&eacute;es</h3>
+				<div class="snippet bash"><pre><code># V&eacute;rifier Entity Framework
+dotnet ef
+
+# Cr&eacute;er/mettre &agrave; jour la base
+dotnet ef database update
+
+# Si besoin, cr&eacute;er migration
+dotnet ef migrations add InitialCreate</code></pre></div></div>
+			<div class="card">
+
+				<h3>▶️ Lancement du projet</h3>
+				<div class="snippet bash"><pre><code># Lancer en mode d&eacute;veloppement
+dotnet run
+
+# Ou avec un profil sp&eacute;cifique
+dotnet run --launch-profile https
+
+# Acc&eacute;der &agrave; Swagger
+# https://localhost:7033/swagger</code></pre></div></div></div>
+
+		<h3>5.2. Comparaison pratique entre &eacute;tapes</h3>
+		<div class="card">
+
+			<h3>Analyser l&#39;&eacute;volution du code</h3>
+			<div class="callout tip"><strong>Apprentissage par comparaison</strong></div>
+			<div class="snippet bash"><pre><code># Comparer la structure des fichiers
+# &Eacute;tape 1 vs &Eacute;tape 2
+diff -r ../xtrawork-etape-1 ../xtrawork-etape-2
+
+# Ou avec Git (si clon&eacute;)
+git diff --name-only etape-1..etape-2
+
+# Voir les changements dans un fichier sp&eacute;cifique
+git diff etape-1..etape-2 -- Controllers/EmployeeController.cs
+
+# G&eacute;n&eacute;rer un rapport HTML des diff&eacute;rences
+git diff etape-1..etape-2 &gt; changes.patch</code></pre></div></div>
+
+		<h2>URLs et raccourcis utiles</h2>
+		<div class="callout note"><strong>Acc&egrave;s rapide</strong> &mdash; Liens directs vers les diff&eacute;rentes parties du projet GitHub.</div>
+
+		<h3>🔗 Liens directs GitHub</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>Repository principal</h3>
+
+				<ul class="checklist">
+					<li><strong>Code :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork" target="_blank">github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork</a></li>
+					<li><strong>Commits :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork/commits/main" target="_blank">Historique des commits</a></li>
+					<li><strong>Download ZIP :</strong> Code &rarr; Download ZIP</li>
+					<li><strong>Clone HTTPS :</strong> <code>git clone https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork.git</code></li>
+				</ul>
+			</div>
+			<div class="card">
+
+				<h3>Navigation rapide</h3>
+
+				<ul class="checklist">
+					<li><strong>Dossier XtraWork :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork/tree/main/XtraWork" target="_blank">/XtraWork</a></li>
+					<li><strong>Solution :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork/blob/main/SuiviEtudiants.sln" target="_blank">SuiviEtudiants.sln</a></li>
+					<li><strong>Issues :</strong> <a href="https://github.com/inskillflow/ASPNETCORE-WEB-API-XtraWork/issues" target="_blank">Support et questions</a></li>
+					<li><strong>README :</strong> Documentation du projet</li>
+				</ul>
+			</div></div>
+
+		<h2>Troubleshooting et FAQ</h2>
+		<div class="callout warn"><strong>Probl&egrave;mes courants</strong> &mdash; Solutions aux difficult&eacute;s fr&eacute;quentes.</div>
+
+		<h3>🔧 Probl&egrave;mes de t&eacute;l&eacute;chargement</h3>
+		<div class="grid-2">
+			<div class="card">
+
+				<h3>❌ Erreurs Git courantes</h3>
+				<div class="callout warn"><strong>Solutions</strong></div>
+
+				<ul class="checklist">
+					<li><strong>Git non install&eacute; :</strong> T&eacute;l&eacute;charger depuis git-scm.com</li>
+					<li><strong>Timeout de clonage :</strong> Utiliser Download ZIP</li>
+					<li><strong>Commit inexistant :</strong> V&eacute;rifier l&#39;historique r&eacute;cent</li>
+					<li><strong>Permissions :</strong> Utiliser terminal/cmd en admin</li>
+				</ul>
+			</div>
+			<div class="card">
+
+				<h3>⚠️ Probl&egrave;mes projet .NET</h3>
+				<div class="callout tip"><strong>R&eacute;solutions</strong></div>
+
+				<ul class="checklist">
+					<li><strong>.NET non install&eacute; :</strong> T&eacute;l&eacute;charger .NET 8 SDK</li>
+					<li><strong>Packages manquants :</strong> <code>dotnet restore</code></li>
+					<li><strong>Base non cr&eacute;&eacute;e :</strong> <code>dotnet ef database update</code></li>
+					<li><strong>Port occup&eacute; :</strong> Modifier launchSettings.json</li>
+				</ul>
+			</div></div>
+		<div class="callout tip"><strong>Conseil final :</strong> Commencez par t&eacute;l&eacute;charger l&#39;&eacute;tape 1 pour vous familiariser avec la structure de base, puis progressez vers les &eacute;tapes suivantes au fur et &agrave; mesure de votre apprentissage.</div>
+		<div class="hr">
+			<br>
+		</div>
+
+		<p class="center"><strong>Projet XtraWork :</strong> <em>Apprentissage progressif &bull; Code source &bull; &Eacute;tapes structur&eacute;es &bull; Support GitHub</em></p>
+	</div>
+</section>

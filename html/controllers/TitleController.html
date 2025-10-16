@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TitleController.cs - Controller - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) { .gpt15 .grid-2 { grid-template-columns: 1fr 1fr } }
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+		<h1>TitleController.cs - Controller Titres</h1>
+		<p class="meta">COUCHE 4 : CONTROLLERS &bull; CRUD titres avec autorisations</p>
+		<div class="callout note"><strong>Role</strong> &mdash; Expose les endpoints REST pour gerer les titres avec autorisations par role.</div>
+		<div class="hr"><br></div>
+
+		<h2>Endpoints et Autorisations</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Methode</th>
+					<th>URL</th>
+					<th>Action</th>
+					<th>Autorisation</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>GET</strong></td>
+					<td><code>/api/title</code></td>
+					<td>Liste tous</td>
+					<td>[Authorize] - Tous</td>
+				</tr>
+				<tr>
+					<td><strong>GET</strong></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Details</td>
+					<td>[Authorize] - Tous</td>
+				</tr>
+				<tr>
+					<td><strong>POST</strong></td>
+					<td><code>/api/title</code></td>
+					<td>Creer</td>
+					<td>[Authorize(Roles = "Admin")]</td>
+				</tr>
+				<tr>
+					<td><strong>PUT</strong></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Modifier</td>
+					<td>[Authorize(Policy = "ManagerOrAdmin")]</td>
+				</tr>
+				<tr>
+					<td><strong>DELETE</strong></td>
+					<td><code>/api/title/{id}</code></td>
+					<td>Supprimer</td>
+					<td>[Authorize(Roles = "Admin")]</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="hr"><br></div>
+
+		<h2>Attributs d'Autorisation</h2>
+
+		<div class="callout warn">
+			<strong>[Authorize]</strong> &mdash; Au niveau de la classe : tous les endpoints necessitent authentification. Le client doit envoyer un token JWT valide.
+		</div>
+
+		<div class="callout tip">
+			<strong>[Authorize(Roles = "Admin")]</strong> &mdash; Seuls les Admin peuvent acceder. Si Role = "User", retourne 403 Forbidden.
+		</div>
+
+		<div class="callout note">
+			<strong>[Authorize(Policy = "ManagerOrAdmin")]</strong> &mdash; Policy personnalisee. Accepte Manager OU Admin.
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation</h2>
+		<div class="grid-2">
+			<div class="card">
+				<ul class="checklist">
+					<li><a href="../services/TitleService.html">TitleService.cs</a></li>
+					<li><a href="../requests/TitleRequest.html">TitleRequest.cs</a></li>
+					<li><a href="../responses/TitleResponse.html">TitleResponse.cs</a></li>
+				</ul>
+			</div>
+			<div class="card">
+				<p><a href="../index.html">Retour a l'index</a></p>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+		<p class="center"><strong>Documentation XtraWork API</strong></p>
+	</div>
+</section>
+</body>
+</html>

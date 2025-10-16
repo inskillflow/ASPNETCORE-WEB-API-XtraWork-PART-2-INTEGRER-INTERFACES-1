@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UserRepository.cs - Repository - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) { .gpt15 .grid-2 { grid-template-columns: 1fr 1fr } }
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+		<h1>UserRepository.cs - Repository Utilisateurs</h1>
+		<p class="meta">COUCHE 2 : REPOSITORIES &bull; Gestion CRUD des utilisateurs</p>
+		<div class="callout note"><strong>Role</strong> &mdash; <code>UserRepository</code> encapsule toutes les operations d'acces aux donnees pour l'entite <code>User</code>. C'est la seule classe qui communique directement avec la table <code>Users</code> via Entity Framework.</div>
+		<div class="hr"><br></div>
+
+		<h2>Code Source Complet</h2>
+		<div class="snippet"><pre><code>using Microsoft.EntityFrameworkCore;
+using XtraWork.Entities;
+
+namespace XtraWork.Repositories;
+
+public class UserRepository
+{
+    private readonly XtraWorkContext _context;
+
+    public UserRepository(XtraWorkContext context)
+    {
+        _context = context;
+    }
+
+    public async Task&lt;User?&gt; GetByIdAsync(Guid id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+
+    public async Task&lt;User?&gt; GetByUsernameAsync(string username)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Username == username);
+    }
+
+    public async Task&lt;User?&gt; GetByEmailAsync(string email)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task&lt;User&gt; CreateAsync(User user)
+    {
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task&lt;User&gt; UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task&lt;List&lt;User&gt;&gt; GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
+
+    public async Task&lt;List&lt;User&gt;&gt; GetByRoleAsync(string role)
+    {
+        return await _context.Users
+            .Where(u => u.Role == role)
+            .ToListAsync();
+    }
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Methodes Principales</h2>
+
+		<h3>GetByUsernameAsync() - Recherche par username</h3>
+		<div class="callout tip">
+			<strong>Utilisation</strong> &mdash; Utilisee dans <code>AuthService.LoginAsync()</code> pour chercher l'utilisateur lors de la connexion.<br><br>
+			&bull; <code>FirstOrDefaultAsync()</code> : retourne le premier ou <code>null</code><br>
+			&bull; <code>u => u.Username == username</code> : expression lambda (filtre LINQ)<br>
+			&bull; SQL genere : <code>SELECT TOP(1) * FROM Users WHERE Username = @p0</code>
+		</div>
+
+		<h3>GetByEmailAsync() - Recherche par email</h3>
+		<div class="callout note">
+			<strong>Verification unicite</strong> &mdash; Utilisee dans <code>RegisterAsync()</code> pour verifier qu'un email n'est pas deja utilise avant de creer un nouvel utilisateur.
+		</div>
+
+		<h3>CreateAsync() - Creer un utilisateur</h3>
+		<div class="callout note">
+			<strong>Insertion en BDD</strong><br>
+			&bull; <code>Add(user)</code> : marque l'entite pour insertion<br>
+			&bull; <code>SaveChangesAsync()</code> : execute l'INSERT SQL<br>
+			&bull; SQL : <code>INSERT INTO Users (...) VALUES (...)</code>
+		</div>
+
+		<h3>GetByRoleAsync() - Filtrer par role</h3>
+		<div class="callout tip">
+			<strong>Filtrage</strong> &mdash; Permet de recuperer tous les utilisateurs d'un role specifique.<br><br>
+			Exemples : <code>GetByRoleAsync("Admin")</code>, <code>GetByRoleAsync("Manager")</code>
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Exemples Pratiques</h2>
+
+		<h3>Verifier si username existe</h3>
+		<div class="snippet"><pre><code>var existingUser = await userRepository.GetByUsernameAsync("marie.user");
+if (existingUser != null)
+{
+    throw new InvalidOperationException("Ce nom d'utilisateur existe deja");
+}</code></pre></div>
+
+		<h3>Lister tous les admins</h3>
+		<div class="snippet"><pre><code>var admins = await userRepository.GetByRoleAsync("Admin");
+Console.WriteLine($"Il y a {admins.Count} administrateurs");</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation</h2>
+		<div class="grid-2">
+			<div class="card">
+				<h3>Fichiers Lies</h3>
+				<ul class="checklist">
+					<li><a href="../entities/User.html">User.cs</a> - Entite</li>
+					<li><a href="../services/AuthService.html">AuthService.cs</a> - Service</li>
+					<li><a href="XtraWorkContext.html">XtraWorkContext.cs</a> - DbContext</li>
+				</ul>
+			</div>
+			<div class="card">
+				<p><a href="../index.html">Retour a l'index</a></p>
+			</div>
+		</div>
+
+		<div class="hr"><br></div>
+		<p class="center"><strong>Documentation XtraWork API</strong> &bull; <em>Explications detaillees pour etudiants</em></p>
+	</div>
+</section>
+</body>
+</html>

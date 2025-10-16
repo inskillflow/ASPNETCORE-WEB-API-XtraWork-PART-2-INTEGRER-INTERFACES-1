@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Employee.cs - Entity - Documentation XtraWork</title>
+<style>
+	.gpt15 {
+		--text: #1f2937; --muted: #374151; --title: #111827; --blue: #2563eb; --green: #22c55e; --orange: #f59e0b; --red: #ef4444; --violet: #7c3aed; --cyan: #06b6d4; --yellow: #eab308; --slate: #0f172a; --bg: #ffffff; --soft: #f8fafc; --soft-blue: #eff6ff; --soft-green: #f0fdf4; --soft-orange: #fffbeb; --soft-red: #fef2f2; --border: #e5e7eb; --border-strong: #cbd5e1; --shadow: 0 6px 18px rgba(17, 24, 39, .06);
+	}
+	.gpt15 .page { max-width: 980px; margin: 40px auto 80px; padding: 24px 24px 32px; color: var(--text); font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif; line-height: 1.7; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+	.gpt15 h1, .gpt15 h2, .gpt15 h3 { color: var(--title); font-weight: 700; line-height: 1.2; margin: 1.25rem 0 .75rem }
+	.gpt15 h1 { font-size: 2rem; letter-spacing: .2px }
+	.gpt15 .meta { color: var(--blue); font-weight: 600; margin: -.25rem 0 1.1rem }
+	.gpt15 .hr { height: 1px; background: linear-gradient(90deg, transparent, #93c5fd, transparent); border: none; margin: 1.25rem 0 }
+	.gpt15 .callout { background: var(--soft); color: var(--text); border: 1px solid var(--border); border-left-width: 6px; border-radius: 12px; padding: 14px 16px; margin: 16px 0 }
+	.gpt15 .callout.note { border-left-color: #1e90ff; background: var(--soft-blue) }
+	.gpt15 .callout.tip { border-left-color: var(--green); background: var(--soft-green) }
+	.gpt15 .callout.warn { border-left-color: var(--red); background: var(--soft-red) }
+	.gpt15 .callout.copilot { border-left-color: var(--violet); background: #faf5ff; }
+	.gpt15 .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 10px rgba(17, 24, 39, .04); }
+	.gpt15 .grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	.gpt15 .grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px }
+	@media (min-width:860px) {
+		.gpt15 .grid-2 { grid-template-columns: 1fr 1fr }
+		.gpt15 .grid-3 { grid-template-columns: 1fr 1fr 1fr }
+	}
+	.gpt15 .checklist li { margin: .3rem 0; list-style: none; position: relative; padding-left: 1.2rem }
+	.gpt15 .checklist li::before { content: ""; position: absolute; left: 0; top: .45rem; width: .65rem; height: .65rem; border-radius: 3px; background: linear-gradient(135deg, var(--green), #86efac) }
+	.gpt15 .snippet { background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: .9rem; white-space: pre-wrap; tab-size: 4; overflow-x: auto; }
+	.gpt15 .snippet pre { margin: 0; white-space: pre; tab-size: 4; }
+	.gpt15 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	.gpt15 th, .gpt15 td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+	.gpt15 th { background: var(--soft-blue); font-weight: 600; }
+	.gpt15 code { background: var(--soft); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: .9em; }
+</style>
+</head>
+<body>
+<section class="gpt15" id="gpt15">
+	<div class="page">
+
+		<h1>Employee.cs - Entite Employe</h1>
+
+		<p class="meta">COUCHE 1 : ENTITIES &bull; Represente un employe de l'entreprise</p>
+		<div class="callout note"><strong>Role de cette classe</strong> &mdash; La classe <code>Employee</code> represente un employe dans la base de donnees XtraWork. Elle contient les informations personnelles et professionnelles, ainsi qu'une relation vers son titre de poste (Title) via la cle etrangere TitleId et la Navigation Property Title.</div>
+		<div class="hr"><br></div>
+
+		<h2>Code Source Complet</h2>
+		
+		<div class="snippet"><pre><code>using System.ComponentModel.DataAnnotations;
+
+namespace XtraWork.Entities;
+
+public class Employee
+{
+    public Guid Id { get; set; }
+    
+    [Required]
+    [MaxLength(50)]
+    public string FirstName { get; set; } = string.Empty;
+    
+    [Required]
+    [MaxLength(50)]
+    public string LastName { get; set; } = string.Empty;
+    
+    [Required]
+    public DateTime BirthDate { get; set; }
+    
+    [Required]
+    [MaxLength(10)]
+    public string Gender { get; set; } = string.Empty;
+    
+    [Required]
+    public Guid TitleId { get; set; }
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
+    // Navigation properties
+    public Title Title { get; set; } = null!;
+}</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Explication Detaillee</h2>
+
+		<h3>Propriete TitleId - Cle Etrangere CRUCIALE</h3>
+		<div class="snippet"><pre><code>[Required]
+public Guid TitleId { get; set; }</code></pre></div>
+		<div class="callout warn">
+			<strong>CLEE ETRANGERE vers la table Titles</strong><br><br>
+			<code>TitleId</code> est la Foreign Key (cle etrangere) qui etablit la relation entre Employee et Title.<br><br>
+			<strong>Comment ca marche ?</strong><br>
+			&bull; Cette propriete stocke l'Id d'un Title existant<br>
+			&bull; En SQL, c'est une contrainte FOREIGN KEY<br>
+			&bull; SQL genere : <code>FOREIGN KEY (TitleId) REFERENCES Titles(Id)</code><br><br>
+			<strong>Exemple concret :</strong><br>
+			&bull; Title "Manager" a l'Id : <code>a3f8d9c2-4b7e-4c8a-9f2d-1e3b5c7d9a4f</code><br>
+			&bull; Employee "Jean Dupont" a TitleId : <code>a3f8d9c2-4b7e-4c8a-9f2d-1e3b5c7d9a4f</code><br>
+			&bull; Donc Jean Dupont est Manager<br><br>
+			<strong>Attribut [Required] :</strong><br>
+			Un employe DOIT avoir un titre. On ne peut pas creer un employe sans titre.<br><br>
+			<strong>Configuration dans XtraWorkContext :</strong><br>
+			<code>entity.HasForeignKey(e => e.TitleId)</code><br>
+			<code>.OnDelete(DeleteBehavior.Restrict)</code><br>
+			Cela empeche de supprimer un Title si des employes l'utilisent encore.
+		</div>
+
+		<h3>Propriete Title - Navigation Property</h3>
+		<div class="snippet"><pre><code>public Title Title { get; set; } = null!;</code></pre></div>
+		<div class="callout warn">
+			<strong>Navigation vers l'objet Title complet</strong><br><br>
+			<strong>Qu'est-ce que c'est ?</strong><br>
+			C'est une propriete qui permet d'acceder a l'objet Title complet associe a cet employe.<br><br>
+			<strong>DIFFERENCE IMPORTANTE :</strong><br>
+			&bull; <code>TitleId</code> : stocke seulement l'ID (Guid) du titre<br>
+			&bull; <code>Title</code> : contient l'objet Title COMPLET avec toutes ses proprietes (Id, Description, CreatedAt, Employees)<br><br>
+			<strong>ATTENTION - Include() OBLIGATOIRE :</strong><br>
+			Sans <code>.Include(e => e.Title)</code> dans votre requete LINQ, cette propriete sera NULL !<br><br>
+			<strong>Exemple CORRECT :</strong><br>
+			<code>var employee = await _context.Employees.Include(e => e.Title).FirstAsync();</code><br>
+			<code>Console.WriteLine(employee.Title.Description);  // Fonctionne !</code><br><br>
+			<strong>Exemple INCORRECT (ERREUR) :</strong><br>
+			<code>var employee = await _context.Employees.FirstAsync();</code><br>
+			<code>Console.WriteLine(employee.Title.Description);  // NullReferenceException !</code><br><br>
+			<strong>Operateur null! :</strong><br>
+			Le <code>!</code> a la fin de <code>= null!</code> est un "null-forgiving operator". Il indique au compilateur C# : "Je sais que cette valeur ne sera jamais null en pratique (apres Include), donc ne me donne pas de warnings".
+		</div>
+
+		<h3>Propriete BirthDate - Date de naissance</h3>
+		<div class="snippet"><pre><code>[Required]
+public DateTime BirthDate { get; set; }</code></pre></div>
+		<div class="callout note">
+			<strong>Date de naissance de l'employe</strong><br><br>
+			Utilisee pour calculer l'age de l'employe dans EmployeeResponse :<br>
+			<code>public int Age => DateTime.Today.Year - BirthDate.Year - (BirthDate.Date > DateTime.Today.AddYears(-(DateTime.Today.Year - BirthDate.Year)) ? 1 : 0);</code><br><br>
+			<strong>Format exemple :</strong> <code>1990-05-15T00:00:00</code><br><br>
+			<strong>Validation :</strong> EmployeeRequestValidator verifie que l'age est entre 16 et 70 ans.
+		</div>
+
+		<h3>Propriete Gender - Genre</h3>
+		<div class="snippet"><pre><code>[Required]
+[MaxLength(10)]
+public string Gender { get; set; } = string.Empty;</code></pre></div>
+		<div class="callout note">
+			<strong>Genre de l'employe</strong><br><br>
+			<strong>Valeurs acceptees</strong> (validees par EmployeeRequestValidator) :<br>
+			&bull; "M" ou "Masculin"<br>
+			&bull; "F" ou "Feminin"<br>
+			&bull; "Autre"<br><br>
+			La validation est insensible a la casse (OrdinalIgnoreCase).
+		</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Table SQL Generee</h2>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Colonne SQL</th>
+					<th>Type SQL</th>
+					<th>Propriete C#</th>
+					<th>Contraintes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>Id</code></td>
+					<td><code>UNIQUEIDENTIFIER</code></td>
+					<td><code>Guid Id</code></td>
+					<td><strong>PRIMARY KEY</strong></td>
+				</tr>
+				<tr>
+					<td><code>FirstName</code></td>
+					<td><code>NVARCHAR(50)</code></td>
+					<td><code>string FirstName</code></td>
+					<td><strong>NOT NULL</strong></td>
+				</tr>
+				<tr>
+					<td><code>LastName</code></td>
+					<td><code>NVARCHAR(50)</code></td>
+					<td><code>string LastName</code></td>
+					<td><strong>NOT NULL</strong></td>
+				</tr>
+				<tr>
+					<td><code>BirthDate</code></td>
+					<td><code>DATETIME2</code></td>
+					<td><code>DateTime BirthDate</code></td>
+					<td><strong>NOT NULL</strong></td>
+				</tr>
+				<tr>
+					<td><code>Gender</code></td>
+					<td><code>NVARCHAR(10)</code></td>
+					<td><code>string Gender</code></td>
+					<td><strong>NOT NULL</strong></td>
+				</tr>
+				<tr>
+					<td><code>TitleId</code></td>
+					<td><code>UNIQUEIDENTIFIER</code></td>
+					<td><code>Guid TitleId</code></td>
+					<td><strong>FK vers Titles.Id, NOT NULL</strong></td>
+				</tr>
+				<tr>
+					<td><code>CreatedAt</code></td>
+					<td><code>DATETIME2</code></td>
+					<td><code>DateTime CreatedAt</code></td>
+					<td><strong>DEFAULT GETUTCDATE()</strong></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="callout note"><strong>Note sur Title</strong> &mdash; La propriete <code>Title</code> n'est PAS une colonne dans cette table. C'est une Navigation Property qui permet d'acceder a l'objet Title lie via le TitleId.</div>
+
+		<div class="hr"><br></div>
+
+		<h2>Exemples Pratiques</h2>
+
+		<h3>Exemple : Creer un employe</h3>
+		<div class="snippet"><pre><code>var employee = new Employee
+{
+    Id = Guid.NewGuid(),
+    FirstName = "Jean",
+    LastName = "Dupont",
+    BirthDate = new DateTime(1990, 5, 15),
+    Gender = "M",
+    TitleId = titleManagerId,  // ID d'un titre existant
+    CreatedAt = DateTime.UtcNow
+};
+
+await employeeRepository.CreateAsync(employee);</code></pre></div>
+
+		<h3>Exemple : Recuperer avec Include() - OBLIGATOIRE</h3>
+		<div class="snippet"><pre><code>// AVEC Include() - RECOMMANDE
+var employee = await _context.Employees
+    .Include(e => e.Title)  // Charge la relation
+    .FirstOrDefaultAsync(e => e.Id == employeeId);
+
+Console.WriteLine($"{employee.FirstName} {employee.LastName}");
+Console.WriteLine($"Poste : {employee.Title.Description}");  // Fonctionne !
+
+
+// SANS Include() - ERREUR !
+var employee = await _context.Employees
+    .FirstOrDefaultAsync(e => e.Id == employeeId);
+
+Console.WriteLine($"{employee.FirstName} {employee.LastName}");
+Console.WriteLine($"Poste : {employee.Title.Description}");  // NullReferenceException !</code></pre></div>
+
+		<div class="hr"><br></div>
+
+		<h2>Navigation</h2>
+
+		<div class="grid-2">
+			<div class="card">
+				<h3>Fichiers Lies</h3>
+				<ul class="checklist">
+					<li><a href="Title.html">Title.cs</a> - Entite titre (relation)</li>
+					<li><a href="../repositories/EmployeeRepository.html">EmployeeRepository.cs</a> - CRUD</li>
+					<li><a href="../repositories/XtraWorkContext.html">XtraWorkContext.cs</a> - Configuration</li>
+					<li><a href="../services/EmployeeService.html">EmployeeService.cs</a> - Service</li>
+					<li><a href="../controllers/EmployeeController.html">EmployeeController.cs</a> - Controller</li>
+				</ul>
+			</div>
+			
+			<div class="card">
+				<h3>Autres Entites</h3>
+				<ul class="checklist">
+					<li><a href="User.html">User.cs</a> - Entite utilisateur</li>
+					<li><a href="Title.html">Title.cs</a> - Entite titre</li>
+				</ul>
+				<br>
+				<p><a href="../index.html">Retour a l'index</a></p>
+			</div>
+		</div>
+
+		<div class="callout tip" style="margin-top: 30px;">
+			<strong>Prochaine etape</strong> &mdash; Passez a <a href="../repositories/XtraWorkContext.html">XtraWorkContext.cs</a> pour voir comment Entity Framework configure les relations !
+		</div>
+
+		<div class="hr"><br></div>
+
+		<p class="center"><strong>Documentation XtraWork API</strong> &bull; <em>Explications detaillees pour etudiants</em></p>
+	</div>
+</section>
+</body>
+</html>
