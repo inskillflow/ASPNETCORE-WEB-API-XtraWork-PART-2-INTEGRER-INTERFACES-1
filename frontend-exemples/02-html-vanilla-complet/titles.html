@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titres - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">XtraWork</div>
+            <div class="navbar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="employees.html">Employés</a>
+                <a href="titles.html" class="active">Titres</a>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <span class="user-badge" id="user-role"></span>
+                    <button onclick="logout()" class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>›</span>
+            <span>Titres</span>
+        </div>
+
+        <div class="card">
+            <h1>Liste des Titres/Postes</h1>
+            
+            <!-- Actions -->
+            <div class="actions">
+                <div class="actions-left">
+                    <a href="title-form.html" class="btn btn-primary" id="add-btn">
+                        ➕ Ajouter un titre
+                    </a>
+                </div>
+                <div class="actions-right">
+                    <button onclick="loadTitles()" class="btn btn-secondary">
+                        🔄 Actualiser
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Message de succès -->
+            <div id="success-message" class="alert alert-success hidden"></div>
+            
+            <!-- Info permissions -->
+            <div id="permission-info" class="alert alert-info hidden">
+                Seuls les Managers et Admins peuvent modifier les titres.<br>
+                Seuls les Admins peuvent créer et supprimer des titres.
+            </div>
+            
+            <!-- Loading -->
+            <div id="loading" class="loading-container">
+                <div class="spinner"></div>
+                <p>Chargement des titres...</p>
+            </div>
+            
+            <!-- Table des titres -->
+            <div id="titles-content" class="hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description du poste</th>
+                            <th>Date de création</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="titles-tbody">
+                        <!-- Les lignes seront ajoutées dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state hidden">
+                <p>Aucun titre trouvé.</p>
+                <p>Cliquez sur "Ajouter un titre" pour créer le premier.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Protéger la page
+        requireAuth();
+        
+        // Afficher les informations utilisateur
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('user-name').textContent = `@${user.username}`;
+            document.getElementById('user-role').textContent = user.role;
+        }
+        
+        // Gérer les permissions
+        if (!isAdmin()) {
+            // Masquer le bouton d'ajout si pas Admin
+            document.getElementById('add-btn').style.display = 'none';
+            // Afficher l'info
+            toggleElement('permission-info', true);
+        }
+        
+        // Éléments du DOM
+        const loading = document.getElementById('loading');
+        const content = document.getElementById('titles-content');
+        const emptyState = document.getElementById('empty-state');
+        const tbody = document.getElementById('titles-tbody');
+        
+        /**
+         * Charge et affiche les titres
+         */
+        async function loadTitles() {
+            try {
+                // Afficher le loading
+                toggleElement('loading', true);
+                toggleElement('titles-content', false);
+                toggleElement('empty-state', false);
+                hideError('error-message');
+                hideError('success-message');
+                
+                // Récupérer les titres
+                const titles = await TitleAPI.getAll();
+                
+                // Cacher le loading
+                toggleElement('loading', false);
+                
+                // Vérifier s'il y a des titres
+                if (!titles || titles.length === 0) {
+                    toggleElement('empty-state', true);
+                    return;
+                }
+                
+                // Afficher le contenu
+                toggleElement('titles-content', true);
+                
+                // Vider le tbody
+                tbody.innerHTML = '';
+                
+                // Ajouter chaque titre
+                titles.forEach(title => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${escapeHtml(title.description)}</td>
+                        <td>${formatDate(title.createdAt)}</td>
+                        <td>
+                            ${isManagerOrAdmin() ? `
+                                <button 
+                                    onclick="editTitle('${title.id}')" 
+                                    class="btn btn-sm btn-success"
+                                    title="Modifier"
+                                >
+                                    ✏️ Modifier
+                                </button>
+                            ` : ''}
+                            ${isAdmin() ? `
+                                <button 
+                                    onclick="deleteTitle('${title.id}', '${escapeHtml(title.description)}')" 
+                                    class="btn btn-sm btn-danger"
+                                    title="Supprimer"
+                                >
+                                    🗑️ Supprimer
+                                </button>
+                            ` : ''}
+                            ${!isManagerOrAdmin() ? 
+                                '<span style="color: #999;">Aucune action disponible</span>' 
+                                : ''}
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                // Afficher l'erreur
+                toggleElement('loading', false);
+                showError('error-message', error.message);
+            }
+        }
+        
+        /**
+         * Modifier un titre
+         */
+        function editTitle(id) {
+            window.location.href = `title-form.html?id=${id}`;
+        }
+        
+        /**
+         * Supprimer un titre
+         */
+        async function deleteTitle(id, description) {
+            if (!confirmDelete(description)) {
+                return;
+            }
+            
+            try {
+                await TitleAPI.delete(id);
+                
+                // Afficher le message de succès
+                showToast(`Titre "${description}" supprimé avec succès`, 'success');
+                
+                // Recharger la liste
+                setTimeout(() => {
+                    loadTitles();
+                }, 1000);
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+        
+        // Charger les titres au chargement de la page
+        window.addEventListener('DOMContentLoaded', loadTitles);
+    </script>
+</body>
+</html>
+

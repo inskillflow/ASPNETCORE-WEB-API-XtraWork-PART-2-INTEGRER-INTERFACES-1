@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employé - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">XtraWork</div>
+            <div class="navbar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="employees.html" class="active">Employés</a>
+                <a href="titles.html">Titres</a>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <span class="user-badge" id="user-role"></span>
+                    <button onclick="logout()" class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>›</span>
+            <a href="employees.html">Employés</a>
+            <span>›</span>
+            <span id="breadcrumb-action">Nouveau</span>
+        </div>
+
+        <div class="card">
+            <h1 id="page-title">Nouvel employé</h1>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Loading initial (pour mode édition) -->
+            <div id="loading-data" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p>Chargement des données...</p>
+            </div>
+            
+            <!-- Formulaire -->
+            <form id="employee-form" class="hidden">
+                <div class="form-group">
+                    <label for="firstName">Prénom *</label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        name="firstName" 
+                        class="form-control" 
+                        required
+                        maxlength="50"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Nom *</label>
+                    <input 
+                        type="text" 
+                        id="lastName" 
+                        name="lastName" 
+                        class="form-control" 
+                        required
+                        maxlength="50"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthDate">Date de naissance *</label>
+                    <input 
+                        type="date" 
+                        id="birthDate" 
+                        name="birthDate" 
+                        class="form-control" 
+                        required
+                    >
+                    <small>L'employé doit avoir au moins 16 ans</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">Genre *</label>
+                    <select 
+                        id="gender" 
+                        name="gender" 
+                        class="form-control" 
+                        required
+                    >
+                        <option value="">Sélectionner...</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Autre">Autre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="titleId">Titre/Poste *</label>
+                    <select 
+                        id="titleId" 
+                        name="titleId" 
+                        class="form-control" 
+                        required
+                    >
+                        <option value="">Chargement...</option>
+                    </select>
+                </div>
+                
+                <div class="actions mt-30">
+                    <div class="actions-left">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            ✓ Enregistrer
+                        </button>
+                        <a href="employees.html" class="btn btn-secondary">
+                            ✕ Annuler
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Protéger la page
+        requireAuth();
+        
+        // Afficher les informations utilisateur
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('user-name').textContent = `@${user.username}`;
+            document.getElementById('user-role').textContent = user.role;
+        }
+        
+        // Récupérer l'ID depuis l'URL (mode édition)
+        const employeeId = getUrlParameter('id');
+        const isEditMode = !!employeeId;
+        
+        // Éléments du DOM
+        const form = document.getElementById('employee-form');
+        const titleSelect = document.getElementById('titleId');
+        
+        // Adapter l'interface selon le mode
+        if (isEditMode) {
+            document.getElementById('page-title').textContent = 'Modifier l\'employé';
+            document.getElementById('breadcrumb-action').textContent = 'Modifier';
+        }
+        
+        /**
+         * Charge la liste des titres pour le select
+         */
+        async function loadTitles() {
+            try {
+                const titles = await TitleAPI.getAll();
+                
+                // Vider le select
+                titleSelect.innerHTML = '<option value="">Sélectionner un titre...</option>';
+                
+                // Ajouter chaque titre
+                titles.forEach(title => {
+                    const option = document.createElement('option');
+                    option.value = title.id;
+                    option.textContent = title.description;
+                    titleSelect.appendChild(option);
+                });
+                
+            } catch (error) {
+                titleSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                showError('error-message', 'Impossible de charger les titres: ' + error.message);
+            }
+        }
+        
+        /**
+         * Charge les données de l'employé (mode édition)
+         */
+        async function loadEmployee() {
+            if (!employeeId) {
+                // Mode création : afficher le formulaire directement
+                form.classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                // Afficher le loading
+                toggleElement('loading-data', true);
+                
+                // Récupérer l'employé
+                const employee = await EmployeeAPI.getById(employeeId);
+                
+                // Cacher le loading
+                toggleElement('loading-data', false);
+                
+                // Afficher le formulaire
+                form.classList.remove('hidden');
+                
+                // Pré-remplir le formulaire
+                document.getElementById('firstName').value = employee.firstName;
+                document.getElementById('lastName').value = employee.lastName;
+                document.getElementById('birthDate').value = formatDateForInput(employee.birthDate);
+                document.getElementById('gender').value = employee.gender;
+                document.getElementById('titleId').value = employee.titleId;
+                
+            } catch (error) {
+                toggleElement('loading-data', false);
+                showError('error-message', error.message);
+            }
+        }
+        
+        /**
+         * Valide le formulaire
+         */
+        function validateForm(data) {
+            const errors = [];
+            
+            if (!data.firstName || data.firstName.trim().length === 0) {
+                errors.push('Le prénom est requis');
+            }
+            
+            if (!data.lastName || data.lastName.trim().length === 0) {
+                errors.push('Le nom est requis');
+            }
+            
+            if (!data.birthDate) {
+                errors.push('La date de naissance est requise');
+            } else {
+                // Vérifier l'âge minimum (16 ans)
+                const age = calculateAge(data.birthDate);
+                if (age < 16) {
+                    errors.push('L\'employé doit avoir au moins 16 ans');
+                }
+                if (age > 100) {
+                    errors.push('Date de naissance invalide');
+                }
+            }
+            
+            if (!data.gender) {
+                errors.push('Le genre est requis');
+            }
+            
+            if (!data.titleId) {
+                errors.push('Le titre est requis');
+            }
+            
+            return errors;
+        }
+        
+        /**
+         * Gère la soumission du formulaire
+         */
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Récupérer les données du formulaire
+            const formData = new FormData(form);
+            const data = {
+                firstName: formData.get('firstName').trim(),
+                lastName: formData.get('lastName').trim(),
+                birthDate: formData.get('birthDate'),
+                gender: formData.get('gender'),
+                titleId: formData.get('titleId')
+            };
+            
+            // Valider
+            const errors = validateForm(data);
+            if (errors.length > 0) {
+                showError('error-message', errors.join('<br>'));
+                return;
+            }
+            
+            // Cacher les messages
+            hideError('error-message');
+            
+            // Loading state
+            setButtonLoading('submit-btn', true, isEditMode ? 'Modification...' : 'Création...');
+            
+            try {
+                if (isEditMode) {
+                    // Modifier l'employé existant
+                    await EmployeeAPI.update(employeeId, data);
+                    showToast('Employé modifié avec succès', 'success');
+                } else {
+                    // Créer un nouvel employé
+                    await EmployeeAPI.create(data);
+                    showToast('Employé créé avec succès', 'success');
+                }
+                
+                // Rediriger après 1 seconde
+                setTimeout(() => {
+                    window.location.href = 'employees.html';
+                }, 1000);
+                
+            } catch (error) {
+                // Afficher l'erreur
+                showError('error-message', error.message);
+                setButtonLoading('submit-btn', false);
+            }
+        });
+        
+        // Initialisation au chargement de la page
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadTitles();
+            await loadEmployee();
+        });
+    </script>
+</body>
+</html>
+

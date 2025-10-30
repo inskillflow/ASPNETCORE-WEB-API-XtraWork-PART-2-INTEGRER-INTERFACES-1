@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employés - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">XtraWork</div>
+            <div class="navbar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="employees.html" class="active">Employés</a>
+                <a href="titles.html">Titres</a>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <span class="user-badge" id="user-role"></span>
+                    <button onclick="logout()" class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>›</span>
+            <span>Employés</span>
+        </div>
+
+        <div class="card">
+            <h1>Liste des Employés</h1>
+            
+            <!-- Actions -->
+            <div class="actions">
+                <div class="actions-left">
+                    <a href="employee-form.html" class="btn btn-primary">
+                        ➕ Ajouter un employé
+                    </a>
+                </div>
+                <div class="actions-right">
+                    <button onclick="loadEmployees()" class="btn btn-secondary">
+                        🔄 Actualiser
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Message de succès -->
+            <div id="success-message" class="alert alert-success hidden"></div>
+            
+            <!-- Loading -->
+            <div id="loading" class="loading-container">
+                <div class="spinner"></div>
+                <p>Chargement des employés...</p>
+            </div>
+            
+            <!-- Table des employés -->
+            <div id="employees-content" class="hidden">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>Date de naissance</th>
+                            <th>Âge</th>
+                            <th>Genre</th>
+                            <th>Titre/Poste</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employees-tbody">
+                        <!-- Les lignes seront ajoutées dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state hidden">
+                <p>Aucun employé trouvé.</p>
+                <p>Cliquez sur "Ajouter un employé" pour créer le premier.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Protéger la page
+        requireAuth();
+        
+        // Afficher les informations utilisateur
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('user-name').textContent = `@${user.username}`;
+            document.getElementById('user-role').textContent = user.role;
+        }
+        
+        // Éléments du DOM
+        const loading = document.getElementById('loading');
+        const content = document.getElementById('employees-content');
+        const emptyState = document.getElementById('empty-state');
+        const tbody = document.getElementById('employees-tbody');
+        
+        /**
+         * Charge et affiche les employés
+         */
+        async function loadEmployees() {
+            try {
+                // Afficher le loading
+                toggleElement('loading', true);
+                toggleElement('employees-content', false);
+                toggleElement('empty-state', false);
+                hideError('error-message');
+                hideError('success-message');
+                
+                // Récupérer les employés
+                const employees = await EmployeeAPI.getAll();
+                
+                // Cacher le loading
+                toggleElement('loading', false);
+                
+                // Vérifier s'il y a des employés
+                if (!employees || employees.length === 0) {
+                    toggleElement('empty-state', true);
+                    return;
+                }
+                
+                // Afficher le contenu
+                toggleElement('employees-content', true);
+                
+                // Vider le tbody
+                tbody.innerHTML = '';
+                
+                // Ajouter chaque employé
+                employees.forEach(employee => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${escapeHtml(employee.firstName)}</td>
+                        <td>${escapeHtml(employee.lastName)}</td>
+                        <td>${formatDate(employee.birthDate)}</td>
+                        <td>${employee.age} ans</td>
+                        <td>${escapeHtml(employee.gender)}</td>
+                        <td>${escapeHtml(employee.titleDescription)}</td>
+                        <td>
+                            <button 
+                                onclick="viewEmployee('${employee.id}')" 
+                                class="btn btn-sm btn-primary"
+                                title="Voir les détails"
+                            >
+                                👁️ Voir
+                            </button>
+                            <button 
+                                onclick="editEmployee('${employee.id}')" 
+                                class="btn btn-sm btn-success"
+                                title="Modifier"
+                            >
+                                ✏️ Modifier
+                            </button>
+                            ${isManagerOrAdmin() ? `
+                                <button 
+                                    onclick="deleteEmployee('${employee.id}', '${escapeHtml(employee.firstName)} ${escapeHtml(employee.lastName)}')" 
+                                    class="btn btn-sm btn-danger"
+                                    title="Supprimer"
+                                >
+                                    🗑️ Supprimer
+                                </button>
+                            ` : ''}
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                // Afficher l'erreur
+                toggleElement('loading', false);
+                showError('error-message', error.message);
+            }
+        }
+        
+        /**
+         * Voir le détail d'un employé
+         */
+        function viewEmployee(id) {
+            window.location.href = `employee-detail.html?id=${id}`;
+        }
+        
+        /**
+         * Modifier un employé
+         */
+        function editEmployee(id) {
+            window.location.href = `employee-form.html?id=${id}`;
+        }
+        
+        /**
+         * Supprimer un employé
+         */
+        async function deleteEmployee(id, name) {
+            if (!confirmDelete(name)) {
+                return;
+            }
+            
+            try {
+                await EmployeeAPI.delete(id);
+                
+                // Afficher le message de succès
+                showToast(`${name} supprimé avec succès`, 'success');
+                
+                // Recharger la liste
+                setTimeout(() => {
+                    loadEmployees();
+                }, 1000);
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+        
+        // Charger les employés au chargement de la page
+        window.addEventListener('DOMContentLoaded', loadEmployees);
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,72 @@
+========================================
+  DÉMARRAGE RAPIDE - HTML Vanilla Simple
+========================================
+
+ÉTAPE 1 : Démarrer le backend
+------------------------------
+cd XtraWork
+dotnet run
+
+Attendre : "Now listening on: https://localhost:7033"
+
+
+ÉTAPE 2 : Accepter le certificat SSL
+-------------------------------------
+1. Ouvrir dans le navigateur : https://localhost:7033
+2. Cliquer "Avancé"
+3. Cliquer "Continuer"
+
+
+ÉTAPE 3 : Ouvrir le frontend
+-----------------------------
+Double-cliquer sur : index.html
+
+OU
+
+Clic droit sur index.html > Open with Live Server (VS Code)
+
+
+ÉTAPE 4 : Se connecter
+----------------------
+Username : admin
+Password : Admin123!
+
+
+ÉTAPE 5 : Voir les données
+---------------------------
+Après connexion, le dashboard affiche :
+- Liste des employés
+- Liste des titres
+
+
+========================================
+  PROBLÈMES COURANTS
+========================================
+
+L'API ne répond pas ?
+→ Vérifier que "dotnet run" est actif
+
+Erreur de certificat ?
+→ Ouvrir https://localhost:7033 et accepter
+
+Page vide ?
+→ F12 > Console pour voir les erreurs
+
+Token expiré ?
+→ F12 > Console > localStorage.clear()
+
+
+========================================
+  FICHIERS IMPORTANTS
+========================================
+
+index.html       → Page de login
+dashboard.html   → Dashboard avec données
+js/auth.js       → Logique de connexion
+js/api.js        → Appels à l'API
+
+
+========================================
+  C'EST TOUT !
+========================================
+

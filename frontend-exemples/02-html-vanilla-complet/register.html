@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>Créer un compte</h1>
+            <p class="subtitle">Inscrivez-vous pour accéder à XtraWork</p>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Formulaire d'inscription -->
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur *</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-control" 
+                        required
+                        minlength="3"
+                        autocomplete="username"
+                    >
+                    <small>Minimum 3 caractères</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstName">Prénom *</label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        name="firstName" 
+                        class="form-control" 
+                        required
+                        autocomplete="given-name"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Nom *</label>
+                    <input 
+                        type="text" 
+                        id="lastName" 
+                        name="lastName" 
+                        class="form-control" 
+                        required
+                        autocomplete="family-name"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe *</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control" 
+                        required
+                        minlength="6"
+                        autocomplete="new-password"
+                    >
+                    <small>Minimum 6 caractères</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe *</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        class="form-control" 
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+                    Créer mon compte
+                </button>
+            </form>
+            
+            <!-- Lien vers connexion -->
+            <p class="text-center mt-20">
+                Déjà un compte ? 
+                <a href="login.html" style="color: #667eea; text-decoration: none;">
+                    Se connecter
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Rediriger si déjà connecté
+        redirectIfAuthenticated();
+        
+        // Éléments du DOM
+        const form = document.getElementById('register-form');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        
+        // Validation du formulaire
+        function validateForm() {
+            const formData = new FormData(form);
+            const errors = [];
+            
+            const username = formData.get('username').trim();
+            const email = formData.get('email').trim();
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+            const firstName = formData.get('firstName').trim();
+            const lastName = formData.get('lastName').trim();
+            
+            // Validation username
+            if (username.length < 3) {
+                errors.push('Le nom d\'utilisateur doit contenir au moins 3 caractères');
+            }
+            
+            // Validation email
+            if (!isValidEmail(email)) {
+                errors.push('Adresse email invalide');
+            }
+            
+            // Validation password
+            if (password.length < 6) {
+                errors.push('Le mot de passe doit contenir au moins 6 caractères');
+            }
+            
+            // Confirmation password
+            if (password !== confirmPassword) {
+                errors.push('Les mots de passe ne correspondent pas');
+            }
+            
+            // Validation noms
+            if (!firstName) {
+                errors.push('Le prénom est requis');
+            }
+            
+            if (!lastName) {
+                errors.push('Le nom est requis');
+            }
+            
+            return errors;
+        }
+        
+        // Gérer la soumission du formulaire
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Validation
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showError('error-message', errors.join('<br>'));
+                return;
+            }
+            
+            // Récupérer les données
+            const formData = new FormData(form);
+            const userData = {
+                username: formData.get('username').trim(),
+                email: formData.get('email').trim(),
+                password: formData.get('password'),
+                firstName: formData.get('firstName').trim(),
+                lastName: formData.get('lastName').trim()
+            };
+            
+            // Cacher les messages précédents
+            hideError('error-message');
+            
+            // Loading state
+            setButtonLoading('submit-btn', true, 'Création du compte...');
+            
+            try {
+                // Inscription
+                await register(userData);
+                
+                // Succès
+                showToast('Compte créé avec succès !', 'success');
+                
+                // Redirection après 1 seconde
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                // Afficher l'erreur
+                showError('error-message', error.message);
+                setButtonLoading('submit-btn', false);
+            }
+        });
+    </script>
+</body>
+</html>
+

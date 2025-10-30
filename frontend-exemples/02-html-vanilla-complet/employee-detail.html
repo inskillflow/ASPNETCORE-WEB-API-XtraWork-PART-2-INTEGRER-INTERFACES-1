@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Employé - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">XtraWork</div>
+            <div class="navbar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="employees.html" class="active">Employés</a>
+                <a href="titles.html">Titres</a>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <span class="user-badge" id="user-role"></span>
+                    <button onclick="logout()" class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>›</span>
+            <a href="employees.html">Employés</a>
+            <span>›</span>
+            <span>Détail</span>
+        </div>
+
+        <div class="card">
+            <!-- Actions -->
+            <div class="actions">
+                <div class="actions-left">
+                    <a href="employees.html" class="btn btn-secondary">
+                        ← Retour à la liste
+                    </a>
+                </div>
+                <div class="actions-right">
+                    <button onclick="editEmployee()" class="btn btn-success" id="edit-btn">
+                        ✏️ Modifier
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Loading -->
+            <div id="loading" class="loading-container">
+                <div class="spinner"></div>
+                <p>Chargement...</p>
+            </div>
+            
+            <!-- Contenu -->
+            <div id="employee-content" class="hidden">
+                <h1 id="employee-name" style="margin-bottom: 20px;"></h1>
+                
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <label>Prénom</label>
+                        <div class="value" id="firstName"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Nom</label>
+                        <div class="value" id="lastName"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Date de naissance</label>
+                        <div class="value" id="birthDate"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Âge</label>
+                        <div class="value" id="age"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Genre</label>
+                        <div class="value" id="gender"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Titre/Poste</label>
+                        <div class="value" id="titleDescription"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Date de création</label>
+                        <div class="value" id="createdAt"></div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>ID</label>
+                        <div class="value" id="employeeId" style="font-size: 12px; color: #999;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Protéger la page
+        requireAuth();
+        
+        // Afficher les informations utilisateur
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('user-name').textContent = `@${user.username}`;
+            document.getElementById('user-role').textContent = user.role;
+        }
+        
+        // Récupérer l'ID depuis l'URL
+        const employeeId = getUrlParameter('id');
+        
+        if (!employeeId) {
+            showError('error-message', 'ID d\'employé manquant');
+            toggleElement('loading', false);
+        } else {
+            loadEmployeeDetail();
+        }
+        
+        /**
+         * Charge et affiche le détail de l'employé
+         */
+        async function loadEmployeeDetail() {
+            try {
+                // Afficher le loading
+                toggleElement('loading', true);
+                toggleElement('employee-content', false);
+                
+                // Récupérer l'employé
+                const employee = await EmployeeAPI.getById(employeeId);
+                
+                // Cacher le loading
+                toggleElement('loading', false);
+                
+                // Afficher le contenu
+                toggleElement('employee-content', true);
+                
+                // Remplir les données
+                document.getElementById('employee-name').textContent = 
+                    `${employee.firstName} ${employee.lastName}`;
+                document.getElementById('firstName').textContent = employee.firstName;
+                document.getElementById('lastName').textContent = employee.lastName;
+                document.getElementById('birthDate').textContent = formatDate(employee.birthDate);
+                document.getElementById('age').textContent = `${employee.age} ans`;
+                document.getElementById('gender').textContent = employee.gender;
+                document.getElementById('titleDescription').textContent = employee.titleDescription;
+                document.getElementById('createdAt').textContent = formatDate(employee.createdAt);
+                document.getElementById('employeeId').textContent = employee.id;
+                
+            } catch (error) {
+                toggleElement('loading', false);
+                showError('error-message', error.message);
+            }
+        }
+        
+        /**
+         * Rediriger vers le formulaire d'édition
+         */
+        function editEmployee() {
+            window.location.href = `employee-form.html?id=${employeeId}`;
+        }
+    </script>
+</body>
+</html>
+

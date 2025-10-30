@@ -1,0 +1,87 @@
+========================================
+ DÉMARRAGE RAPIDE - HTML Vanilla Complet
+========================================
+
+ÉTAPE 1 : Démarrer le backend
+------------------------------
+cd XtraWork
+dotnet run
+
+Attendre : "Now listening on: https://localhost:7033"
+
+
+ÉTAPE 2 : Accepter le certificat SSL
+-------------------------------------
+1. Ouvrir : https://localhost:7033
+2. Cliquer "Avancé" > "Continuer"
+
+
+ÉTAPE 3 : Ouvrir le frontend
+-----------------------------
+Double-cliquer sur : index.html
+
+OU Live Server (VS Code)
+
+
+ÉTAPE 4 : Se connecter
+----------------------
+Username : admin
+Password : Admin123!
+
+
+ÉTAPE 5 : Explorer les fonctionnalités
+---------------------------------------
+✓ Voir la liste des employés
+✓ Créer un employé
+✓ Modifier un employé
+✓ Supprimer un employé (Admin/Manager)
+✓ Gérer les titres
+
+
+========================================
+  PAGES DISPONIBLES
+========================================
+
+index.html           → Page d'accueil
+login.html           → Connexion
+register.html        → Inscription
+dashboard.html       → Dashboard principal
+employees.html       → Liste employés
+employee-form.html   → Créer/Modifier employé
+employee-detail.html → Détail employé
+titles.html          → Liste titres
+title-form.html      → Créer/Modifier titre
+
+
+========================================
+  FONCTIONNALITÉS COMPLÈTES
+========================================
+
+✓ Authentification JWT
+✓ Inscription de nouveaux utilisateurs
+✓ CRUD Employés complet
+✓ CRUD Titres complet
+✓ Gestion des permissions (User/Manager/Admin)
+✓ Validation des formulaires
+✓ Messages de confirmation
+✓ Gestion des erreurs
+✓ Design responsive
+
+
+========================================
+  DIFFÉRENCES AVEC 01-SIMPLE
+========================================
+
+Version Simple (01)   | Version Complète (02)
+----------------------|----------------------
+Login seulement       | Login + Register
+Liste en lecture      | CRUD complet
+2 pages               | 9 pages
+Basique               | Professionnel
+Apprentissage         | Production-like
+
+
+========================================
+  C'EST TOUT !
+========================================
+

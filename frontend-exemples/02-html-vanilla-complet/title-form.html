@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titre - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">XtraWork</div>
+            <div class="navbar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="employees.html">Employés</a>
+                <a href="titles.html" class="active">Titres</a>
+                <div class="user-info">
+                    <span id="user-name"></span>
+                    <span class="user-badge" id="user-role"></span>
+                    <button onclick="logout()" class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>›</span>
+            <a href="titles.html">Titres</a>
+            <span>›</span>
+            <span id="breadcrumb-action">Nouveau</span>
+        </div>
+
+        <div class="card">
+            <h1 id="page-title">Nouveau titre</h1>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Loading initial (pour mode édition) -->
+            <div id="loading-data" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p>Chargement des données...</p>
+            </div>
+            
+            <!-- Formulaire -->
+            <form id="title-form">
+                <div class="form-group">
+                    <label for="description">Description du poste *</label>
+                    <input 
+                        type="text" 
+                        id="description" 
+                        name="description" 
+                        class="form-control" 
+                        required
+                        maxlength="100"
+                        placeholder="Ex: Développeur Senior, Manager RH, etc."
+                    >
+                    <small>Maximum 100 caractères</small>
+                </div>
+                
+                <div class="actions mt-30">
+                    <div class="actions-left">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            ✓ Enregistrer
+                        </button>
+                        <a href="titles.html" class="btn btn-secondary">
+                            ✕ Annuler
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Protéger la page
+        requireAuth();
+        
+        // Afficher les informations utilisateur
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('user-name').textContent = `@${user.username}`;
+            document.getElementById('user-role').textContent = user.role;
+        }
+        
+        // Récupérer l'ID depuis l'URL (mode édition)
+        const titleId = getUrlParameter('id');
+        const isEditMode = !!titleId;
+        
+        // Vérifier les permissions
+        if (isEditMode && !isManagerOrAdmin()) {
+            showError('error-message', 'Vous n\'avez pas les permissions pour modifier les titres');
+            document.getElementById('title-form').style.display = 'none';
+        } else if (!isEditMode && !isAdmin()) {
+            showError('error-message', 'Seuls les Admins peuvent créer des titres');
+            document.getElementById('title-form').style.display = 'none';
+        }
+        
+        // Éléments du DOM
+        const form = document.getElementById('title-form');
+        const descriptionInput = document.getElementById('description');
+        
+        // Adapter l'interface selon le mode
+        if (isEditMode) {
+            document.getElementById('page-title').textContent = 'Modifier le titre';
+            document.getElementById('breadcrumb-action').textContent = 'Modifier';
+        }
+        
+        /**
+         * Charge les données du titre (mode édition)
+         */
+        async function loadTitle() {
+            if (!titleId) {
+                return;
+            }
+            
+            try {
+                // Afficher le loading
+                toggleElement('loading-data', true);
+                
+                // Récupérer le titre
+                const title = await TitleAPI.getById(titleId);
+                
+                // Cacher le loading
+                toggleElement('loading-data', false);
+                
+                // Pré-remplir le formulaire
+                descriptionInput.value = title.description;
+                
+            } catch (error) {
+                toggleElement('loading-data', false);
+                showError('error-message', error.message);
+            }
+        }
+        
+        /**
+         * Valide le formulaire
+         */
+        function validateForm(data) {
+            const errors = [];
+            
+            if (!data.description || data.description.trim().length === 0) {
+                errors.push('La description est requise');
+            }
+            
+            if (data.description.trim().length > 100) {
+                errors.push('La description ne peut pas dépasser 100 caractères');
+            }
+            
+            return errors;
+        }
+        
+        /**
+         * Gère la soumission du formulaire
+         */
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Récupérer les données du formulaire
+            const formData = new FormData(form);
+            const data = {
+                description: formData.get('description').trim()
+            };
+            
+            // Valider
+            const errors = validateForm(data);
+            if (errors.length > 0) {
+                showError('error-message', errors.join('<br>'));
+                return;
+            }
+            
+            // Cacher les messages
+            hideError('error-message');
+            
+            // Loading state
+            setButtonLoading('submit-btn', true, isEditMode ? 'Modification...' : 'Création...');
+            
+            try {
+                if (isEditMode) {
+                    // Modifier le titre existant
+                    await TitleAPI.update(titleId, data);
+                    showToast('Titre modifié avec succès', 'success');
+                } else {
+                    // Créer un nouveau titre
+                    await TitleAPI.create(data);
+                    showToast('Titre créé avec succès', 'success');
+                }
+                
+                // Rediriger après 1 seconde
+                setTimeout(() => {
+                    window.location.href = 'titles.html';
+                }, 1000);
+                
+            } catch (error) {
+                // Afficher l'erreur
+                showError('error-message', error.message);
+                setButtonLoading('submit-btn', false);
+            }
+        });
+        
+        // Initialisation au chargement de la page
+        window.addEventListener('DOMContentLoaded', loadTitle);
+    </script>
+</body>
+</html>
+

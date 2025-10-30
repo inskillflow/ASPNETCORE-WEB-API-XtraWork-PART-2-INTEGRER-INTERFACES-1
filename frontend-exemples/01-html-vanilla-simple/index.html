@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - XtraWork</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Container de login -->
+    <div class="login-container">
+        <div class="login-card">
+            <h1>XtraWork</h1>
+            <p class="text-center" style="margin-bottom: 20px; color: #666;">
+                Connexion à l'application
+            </p>
+            
+            <!-- Message d'erreur -->
+            <div id="error-message" class="alert alert-error hidden"></div>
+            
+            <!-- Formulaire de connexion -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-control" 
+                        required
+                        autocomplete="username"
+                        placeholder="admin"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control" 
+                        required
+                        autocomplete="current-password"
+                        placeholder="••••••••"
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    Se connecter
+                </button>
+            </form>
+            
+            <!-- Info compte de démo -->
+            <div class="demo-info">
+                <strong>Compte de test :</strong><br>
+                Username : <code>admin</code><br>
+                Password : <code>Admin123!</code>
+            </div>
+            
+            <!-- Info technique -->
+            <div class="alert alert-info mt-20">
+                <strong>Note :</strong> L'API doit être démarrée.<br>
+                <code>cd XtraWork && dotnet run</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Rediriger si déjà connecté
+        redirectIfAuthenticated();
+        
+        // Récupérer les éléments du DOM
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const submitBtn = document.getElementById('submit-btn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        
+        /**
+         * Affiche un message d'erreur
+         */
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+        
+        /**
+         * Cache le message d'erreur
+         */
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+        
+        /**
+         * Gère la soumission du formulaire
+         */
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Récupérer les valeurs
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            
+            // Validation simple
+            if (!username || !password) {
+                showError('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Cacher les messages précédents
+            hideError();
+            
+            // Désactiver le bouton et afficher le loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Connexion...';
+            
+            try {
+                // Appeler la fonction de login
+                await login(username, password);
+                
+                // Rediriger vers le dashboard
+                window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                // Afficher l'erreur
+                showError(error.message);
+                
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Se connecter';
+                
+                // Logger l'erreur dans la console pour debug
+                console.error('Erreur de connexion:', error);
+            }
+        });
+        
+        // Focus automatique sur le champ username
+        usernameInput.focus();
+    </script>
+</body>
+</html>
+

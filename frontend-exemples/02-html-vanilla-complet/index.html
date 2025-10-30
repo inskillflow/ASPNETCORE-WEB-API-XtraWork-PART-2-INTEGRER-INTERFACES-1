@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XtraWork - Accueil</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="home-container">
+        <div class="home-card">
+            <h1>XtraWork</h1>
+            <p>Gestion des employés et titres</p>
+            
+            <div class="home-buttons">
+                <a href="login.html" class="btn btn-primary btn-block">
+                    Se connecter
+                </a>
+                
+                <a href="register.html" class="btn btn-secondary btn-block">
+                    Créer un compte
+                </a>
+            </div>
+            
+            <div class="demo-info">
+                <strong>Compte de test :</strong><br>
+                Username : <code>admin</code><br>
+                Password : <code>Admin123!</code>
+            </div>
+            
+            <div class="alert alert-info mt-20">
+                <strong>Prérequis :</strong> L'API backend doit être démarrée.<br>
+                <code>cd XtraWork && dotnet run</code>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Rediriger si déjà connecté
+        redirectIfAuthenticated();
+    </script>
+</body>
+</html>
+
