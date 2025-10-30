@@ -1,0 +1,50 @@
+========================================
+  DÉMARRAGE RAPIDE - Next.js 15 Simple
+========================================
+
+INSTALLATION
+------------
+cd frontend-exemples/07-nextjs-simple
+npm install
+
+DÉMARRAGE
+---------
+npm run dev
+
+URL
+---
+http://localhost:3000
+
+CREDENTIALS
+-----------
+Username : admin
+Password : Admin123!
+
+TECHNOLOGIES
+------------
+- Next.js 15 (latest)
+- React 18
+- Tailwind CSS 3 (stable)
+- TypeScript
+- App Router
+
+FONCTIONNALITÉS
+---------------
+✓ Login avec JWT
+✓ Dashboard
+✓ Liste employés
+✓ Server & Client Components
+✓ Tailwind CSS v3
+
+DIFFÉRENCE AVEC REACT VITE
+---------------------------
+React Vite         | Next.js
+-------------------|-------------------
+Port 5173          | Port 3000
+Vite               | Next.js
+CSR uniquement     | SSR + CSR
+React Router       | App Router (dossiers)
+Pas de SSR         | SSR natif
+
+========================================
+
