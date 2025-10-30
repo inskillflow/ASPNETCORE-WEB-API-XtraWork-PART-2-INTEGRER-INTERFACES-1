@@ -1,0 +1,33 @@
+========================================
+  CONFIGURATION ENVIRONNEMENT
+========================================
+
+Créer un fichier .env.local à la racine du projet :
+
+VITE_API_URL=https://localhost:7033/api
+
+
+========================================
+  COMMANDE
+========================================
+
+echo "VITE_API_URL=https://localhost:7033/api" > .env.local
+
+
+========================================
+  POURQUOI ?
+========================================
+
+Ce fichier contient l'URL de l'API backend.
+Il est ignoré par Git pour ne pas committer des secrets.
+
+
+========================================
+  SI VOUS NE LE CRÉEZ PAS
+========================================
+
+L'application utilisera l'URL par défaut :
+https://localhost:7033/api
+
+Donc ça marchera quand même !
+

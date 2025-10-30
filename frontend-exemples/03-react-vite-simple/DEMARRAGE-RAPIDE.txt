@@ -1,0 +1,98 @@
+========================================
+  DÉMARRAGE RAPIDE - React Vite Simple
+========================================
+
+ÉTAPE 1 : Démarrer le backend
+------------------------------
+cd XtraWork
+dotnet run
+
+Attendre : "Now listening on: https://localhost:7033"
+
+
+ÉTAPE 2 : Installer les dépendances
+------------------------------------
+cd frontend-exemples/03-react-vite-simple
+npm install
+
+Temps : 1-2 minutes
+
+
+ÉTAPE 3 : Lancer React
+----------------------
+npm run dev
+
+Attendre : "Local: http://localhost:5173"
+
+
+ÉTAPE 4 : Ouvrir dans le navigateur
+------------------------------------
+http://localhost:5173
+
+
+ÉTAPE 5 : Se connecter
+----------------------
+Username : admin
+Password : Admin123!
+
+
+========================================
+  COMMANDES UTILES
+========================================
+
+npm run dev          # Lancer en développement
+npm run build        # Build production
+npm run preview      # Prévisualiser build
+npm run lint         # Vérifier le code
+
+
+========================================
+  HOT RELOAD
+========================================
+
+Modifiez n'importe quel fichier .jsx
+→ Les changements apparaissent automatiquement
+→ Pas besoin de rafraîchir !
+
+
+========================================
+  STRUCTURE IMPORTANTE
+========================================
+
+src/pages/           → Pages (Login, Dashboard, etc.)
+src/components/      → Composants réutilisables
+src/services/        → Appels API
+src/context/         → State global (AuthContext)
+
+
+========================================
+  DIFFÉRENCE AVEC HTML VANILLA
+========================================
+
+HTML Vanilla         | React
+---------------------|---------------------
+2 fichiers HTML      | Plusieurs composants
+window.location      | React Router
+DOM manuel           | JSX automatique
+Pas de hot reload    | Hot reload
+Aucune dépendance    | npm install
+
+
+========================================
+  PROBLÈMES COURANTS
+========================================
+
+Port 5173 utilisé ?
+→ npm run dev -- --port 5174
+
+Module introuvable ?
+→ rm -rf node_modules && npm install
+
+API ne répond pas ?
+→ cd XtraWork && dotnet run
+
+
+========================================
+  C'EST TOUT !
+========================================
+
