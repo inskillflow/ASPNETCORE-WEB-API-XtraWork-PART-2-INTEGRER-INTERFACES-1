@@ -23,6 +23,49 @@ Chaque option est documentée avec :
 
 ---
 
+## Architecture globale
+
+```mermaid
+graph TB
+    subgraph "Choix Frontend"
+        A[HTML Vanilla]
+        B[React]
+        C[Vue.js]
+        D[Next.js]
+        E[Angular]
+        F[Autres...]
+    end
+    
+    subgraph "Communication"
+        G[fetch/axios]
+        H[JWT Token]
+    end
+    
+    subgraph "Backend"
+        I[ASP.NET Core API]
+        J[Controllers]
+        K[Services]
+        L[(SQL Server)]
+    end
+    
+    A --> G
+    B --> G
+    C --> G
+    D --> G
+    E --> G
+    
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    
+    style I fill:#667eea
+    style A fill:#48bb78
+    style B fill:#61dafb
+    style C fill:#42b883
+```
+
 ## Vue d'ensemble des options
 
 ### 1. HTML/CSS/JavaScript Vanilla

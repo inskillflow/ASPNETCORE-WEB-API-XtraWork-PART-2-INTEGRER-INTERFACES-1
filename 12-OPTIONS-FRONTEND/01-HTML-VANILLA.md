@@ -41,46 +41,34 @@ HTML/CSS/JavaScript Vanilla signifie créer un frontend **sans aucun framework n
 
 ---
 
+## Architecture
+
+```mermaid
+graph LR
+    A[HTML] --> D[Navigateur]
+    B[CSS] --> D
+    C[JavaScript<br/>Vanilla] --> D
+    D --> E[Fetch API]
+    E --> F[Backend<br/>ASP.NET Core]
+    F --> G[(Database)]
+    
+    style D fill:#48bb78
+    style F fill:#667eea
+```
+
 ## Avantages et inconvénients
 
-### Avantages
+**Avantages** : 
+- Performance maximale (pas de framework)
+- Idéal pour apprendre les fondamentaux
+- Aucune dépendance, aucune configuration
+- Contrôle total du code
 
-**Performance**
-- Aucune bibliothèque à télécharger
-- Chargement instantané
-- Pas de build process
-
-**Apprentissage**
-- Comprendre les bases du web
-- Pas de magie de framework
-- Total contrôle
-
-**Simplicité**
-- Pas de configuration
-- Pas de dépendances
-- Pas de compilation
-
-**Débogage**
-- Code direct et visible
-- Pas d'abstraction
-- DevTools natifs
-
-### Inconvénients
-
-**Productivité**
-- Plus de code à écrire
+**Inconvénients** : 
+- Beaucoup de code répétitif
 - Pas de composants réutilisables
-- Gestion manuelle du DOM
-
-**Maintenabilité**
-- Code peut devenir verbeux
-- Pas de structure imposée
-- Duplication de code
-
-**Fonctionnalités**
-- Pas de routing intégré
-- Pas de state management
-- Pas de templating avancé
+- Difficile à maintenir sur gros projets
+- Pas de routing ni state management intégré
 
 ---
 

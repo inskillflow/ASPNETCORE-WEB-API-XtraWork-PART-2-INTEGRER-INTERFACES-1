@@ -45,46 +45,45 @@
 
 ---
 
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "React Application"
+        A[App.jsx] --> B[Navbar]
+        A --> C[Routes]
+        C --> D[Login]
+        C --> E[Dashboard]
+        C --> F[Employees]
+        F --> G[EmployeeCard]
+        F --> H[EmployeeCard]
+    end
+    
+    subgraph "Services"
+        I[authService] --> K[api-client]
+        J[employeeService] --> K
+        K --> L[Axios]
+    end
+    
+    L --> M[Backend API]
+    
+    style A fill:#61dafb
+    style M fill:#667eea
+```
+
 ## Avantages et inconvénients
 
-### Avantages
+**Avantages** : 
+- Communauté énorme et écosystème riche
+- Composants réutilisables et testables
+- Très demandé sur le marché de l'emploi
+- Performance excellente (Virtual DOM)
 
-**Popularité**
-- Plus grande communauté
-- Nombreuses bibliothèques tierces
-- Beaucoup d'offres d'emploi
-
-**Composants**
-- Réutilisabilité maximale
-- Testabilité facile
-- Maintenance simplifiée
-
-**Performance**
-- Virtual DOM optimisé
-- Lazy loading natif
-- Code splitting
-
-**Flexibilité**
-- Pas d'opinions fortes
-- Liberté architecturale
-- Intégration facile
-
-### Inconvénients
-
-**Complexité**
-- Courbe d'apprentissage
-- Nombreux concepts à maîtriser
-- Écosystème fragmenté
-
-**Configuration**
-- Setup initial plus long
-- Choix de bibliothèques (routing, state, etc.)
-- Build process obligatoire
-
-**JSX**
-- Syntaxe à apprendre
-- Mélange HTML/JavaScript
-- Peut dérouter au début
+**Inconvénients** : 
+- Courbe d'apprentissage moyenne
+- Beaucoup de choix à faire (bibliothèques)
+- Configuration initiale nécessaire
+- JSX peut dérouter au début
 
 ---
 

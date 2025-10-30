@@ -11,6 +11,44 @@
 
 ---
 
+## Vue d'ensemble visuelle
+
+```mermaid
+graph TB
+    subgraph "Débutant"
+        A[HTML Vanilla]
+        B[Alpine.js]
+        C[Htmx]
+    end
+    
+    subgraph "Intermédiaire"
+        D[Vue.js]
+        E[React]
+        F[Svelte]
+    end
+    
+    subgraph "Avancé"
+        G[Next.js]
+        H[Angular]
+        I[SvelteKit]
+    end
+    
+    subgraph "Spécialisé"
+        J[Blazor WASM<br/>.NET Devs]
+        K[jQuery<br/>Legacy]
+    end
+    
+    A -.-> D
+    A -.-> E
+    D -.-> G
+    E -.-> G
+    
+    style A fill:#48bb78
+    style E fill:#61dafb
+    style G fill:#000000,color:#fff
+    style D fill:#42b883
+```
+
 ## Tableau comparatif global
 
 ### Frameworks Principaux
@@ -465,6 +503,30 @@
 ---
 
 ## Conclusion
+
+### Parcours d'apprentissage visuel
+
+```mermaid
+graph TB
+    Start[Débutant] --> HTML[HTML Vanilla<br/>4 semaines]
+    HTML --> Choice{Choix}
+    
+    Choice --> Vue[Vue.js<br/>Facile]
+    Choice --> React[React<br/>Marché]
+    
+    Vue --> Nuxt[Nuxt.js<br/>SSR]
+    React --> Next[Next.js<br/>SSR]
+    
+    Next --> Production[Production Ready]
+    Nuxt --> Production
+    
+    style Start fill:#48bb78
+    style HTML fill:#ffd700
+    style React fill:#61dafb
+    style Vue fill:#42b883
+    style Next fill:#000000,color:#fff
+    style Production fill:#667eea
+```
 
 ### Choix pour l'enseignement (par ordre)
 

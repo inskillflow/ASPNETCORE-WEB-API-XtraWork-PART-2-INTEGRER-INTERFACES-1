@@ -15,52 +15,32 @@
 
 ### Schéma de fonctionnement
 
-```
-┌─────────────────────────────────────────────────┐
-│  NAVIGATEUR (Frontend)                          │
-│  http://localhost:3000 ou 5173 ou 5500          │
-│                                                  │
-│  ┌─────────────────────────────────────┐        │
-│  │  Page HTML/React/Vue                │        │
-│  │                                      │        │
-│  │  1. Utilisateur clique "Login"      │        │
-│  │  2. JavaScript fait une requête     │        │
-│  └──────────────┬──────────────────────┘        │
-│                 │                                │
-└─────────────────┼────────────────────────────────┘
-                  │
-                  │ HTTP Request
-                  │ POST https://localhost:7033/api/auth/login
-                  │ Body: { username, password }
-                  │
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  SERVEUR (Backend)                              │
-│  https://localhost:7033                         │
-│                                                  │
-│  ┌─────────────────────────────────────┐        │
-│  │  API ASP.NET Core                   │        │
-│  │                                      │        │
-│  │  3. Reçoit la requête               │        │
-│  │  4. Valide les credentials          │        │
-│  │  5. Génère un token JWT             │        │
-│  │  6. Retourne la réponse             │        │
-│  └──────────────┬──────────────────────┘        │
-│                 │                                │
-└─────────────────┼────────────────────────────────┘
-                  │
-                  │ HTTP Response
-                  │ { token: "eyJhbG...", user: {...} }
-                  │
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  NAVIGATEUR (Frontend)                          │
-│                                                  │
-│  7. Reçoit la réponse                          │
-│  8. Stocke le token dans localStorage          │
-│  9. Redirige vers le dashboard                 │
-│                                                  │
-└─────────────────────────────────────────────────┘
+```mermaid
+sequenceDiagram
+    participant U as Utilisateur
+    participant F as Frontend<br/>(localhost:3000)
+    participant B as Backend API<br/>(localhost:7033)
+    participant DB as Database
+
+    U->>F: 1. Clique "Login"
+    F->>F: 2. Collecte username/password
+    F->>B: 3. POST /api/auth/login<br/>{username, password}
+    B->>DB: 4. Vérifier credentials
+    DB-->>B: User trouvé
+    B->>B: 5. Générer JWT token
+    B-->>F: 6. {token, user}
+    F->>F: 7. Sauvegarder token<br/>localStorage
+    F->>U: 8. Rediriger vers dashboard
+    
+    Note over F,B: Requêtes suivantes incluent le token JWT
+    
+    U->>F: 9. Voir employés
+    F->>B: 10. GET /api/employees<br/>Authorization: Bearer token
+    B->>B: 11. Valider token
+    B->>DB: 12. Récupérer employés
+    DB-->>B: Liste employés
+    B-->>F: 13. JSON employés
+    F->>U: 14. Afficher liste
 ```
 
 ### Points clés
@@ -87,20 +67,20 @@ Il existe **3 techniques principales** pour créer un frontend qui consomme l'AP
 
 **Description** : Vous écrivez tout le code HTML/CSS/JavaScript à la main.
 
-**Avantages** :
-- Contrôle total
-- Pas de dépendances
-- Comprendre les bases
+```mermaid
+graph LR
+    A[HTML] --> D[Navigateur]
+    B[CSS] --> D
+    C[JavaScript] --> D
+    D --> E[fetch API]
+    E --> F[Backend]
+```
 
-**Inconvénients** :
-- Beaucoup de code
-- Pas de réutilisation
-- Répétitif
+**Avantages** : Contrôle total, pas de dépendances, idéal pour apprendre
 
-**Quand utiliser** :
-- Apprentissage
-- Prototypes simples
-- Applications très petites
+**Inconvénients** : Beaucoup de code répétitif, pas de réutilisation
+
+**Quand utiliser** : Apprentissage, prototypes simples, applications très petites
 
 ---
 
@@ -108,45 +88,49 @@ Il existe **3 techniques principales** pour créer un frontend qui consomme l'AP
 
 **Description** : Vous créez des composants réutilisables qui sont assemblés.
 
-**Avantages** :
-- Réutilisation du code
-- Structure organisée
-- Outils puissants
+```mermaid
+graph TB
+    A[App] --> B[Navbar]
+    A --> C[Dashboard]
+    A --> D[EmployeesList]
+    D --> E[EmployeeCard]
+    D --> F[EmployeeCard]
+    D --> G[EmployeeCard]
+    
+    style A fill:#667eea
+    style D fill:#48bb78
+```
 
-**Inconvénients** :
-- Courbe d'apprentissage
-- Configuration nécessaire
+**Avantages** : Réutilisation, structure organisée, outils puissants, productif
 
-**Quand utiliser** :
-- Applications moyennes à grandes
-- Travail en équipe
-- Production
+**Inconvénients** : Courbe d'apprentissage, configuration nécessaire
+
+**Quand utiliser** : Applications moyennes à grandes, travail en équipe, production
 
 ---
 
 ### Technique 3 : Scaffolding (Génération automatique)
 
-**Description** : Des outils génèrent automatiquement le code à partir de votre API ou d'un schéma.
+**Description** : Des outils génèrent automatiquement le code à partir de votre API.
 
-**Exemples** :
-- OpenAPI Generator
-- NSwag
-- Swagger Codegen
+```mermaid
+graph LR
+    A[Swagger/OpenAPI] -->|openapi-generator| B[Code TypeScript]
+    B --> C[Types]
+    B --> D[Services API]
+    B --> E[Models]
+    
+    style A fill:#85ea2d
+    style B fill:#667eea
+```
 
-**Avantages** :
-- Gain de temps énorme
-- Synchronisation API-Frontend
-- Moins d'erreurs
+**Exemples** : OpenAPI Generator, NSwag, Swagger Codegen
 
-**Inconvénients** :
-- Code généré à personnaliser
-- Dépendance aux outils
-- Moins de contrôle
+**Avantages** : Gain de temps énorme, synchronisation API-Frontend automatique
 
-**Quand utiliser** :
-- Grandes applications
-- API stable et documentée
-- Besoin de rapidité
+**Inconvénients** : Code généré à personnaliser, dépendance aux outils
+
+**Quand utiliser** : Grandes applications, API stable, besoin de rapidité
 
 ---
 
@@ -949,31 +933,45 @@ const response = await fetch(`https://localhost:7033/api/employees/${employeeId}
 
 ## Scaffolding vs Code manuel
 
-### Option 1 : Code Manuel (Ce qu'on fait ici)
+### Comparaison visuelle
 
-**Processus** :
-1. Écrire le HTML
-2. Écrire le JavaScript pour appeler l'API
-3. Gérer les données manuellement
+```mermaid
+graph TB
+    subgraph "Option 1: Code Manuel"
+        A1[Écrire HTML] --> A2[Écrire JavaScript]
+        A2 --> A3[Écrire fetch/axios]
+        A3 --> A4[Gérer données]
+        A4 --> A5[Application]
+    end
+    
+    subgraph "Option 2: Scaffolding"
+        B1[Swagger JSON] --> B2[openapi-generator]
+        B2 --> B3[Code auto-généré]
+        B3 --> B4[Personnaliser]
+        B4 --> B5[Application]
+    end
+    
+    subgraph "Option 3: Framework CLI"
+        C1[create-react-app] --> C2[Structure générée]
+        C2 --> C3[Écrire services]
+        C3 --> C4[Créer composants]
+        C4 --> C5[Application]
+    end
+    
+    style A5 fill:#48bb78
+    style B5 fill:#667eea
+    style C5 fill:#f6ad55
+```
 
-**Avantages** :
-- Contrôle total
-- Comprendre exactement ce qui se passe
-- Personnalisation maximale
+### Option 1 : Code Manuel
 
-**Inconvénients** :
-- Plus long
-- Plus de code
-- Maintenance manuelle
+**Avantages** : Contrôle total, comprendre exactement ce qui se passe
+
+**Inconvénients** : Plus long, maintenance manuelle
 
 ---
 
 ### Option 2 : Scaffolding avec OpenAPI/Swagger
-
-**Processus** :
-1. L'API expose un fichier `swagger.json`
-2. Un outil génère automatiquement le code client
-3. Vous utilisez le code généré
 
 **Outil : OpenAPI Generator**
 
@@ -988,39 +986,29 @@ openapi-generator-cli generate \
   -o ./generated-client
 ```
 
-**Résultat** : Un dossier avec tout le code client généré automatiquement.
+**Résultat** : Dossier avec tout le code client généré automatiquement.
 
-**Avantages** :
-- Très rapide
-- Synchronisé avec l'API
-- Types TypeScript automatiques
+**Avantages** : Très rapide, synchronisé avec l'API, types TypeScript automatiques
 
-**Inconvénients** :
-- Code généré peut être complexe
-- Moins de contrôle
-- Nécessite de configurer les outils
+**Inconvénients** : Code généré peut être complexe, moins de contrôle
 
 ---
 
-### Option 3 : Framework avec CLI (React, Angular, Vue)
+### Option 3 : Framework avec CLI
 
 **Exemple avec React** :
 
 ```bash
-# Créer le projet
 npx create-react-app mon-app
 cd mon-app
-
-# Installer axios
 npm install axios
-
-# Créer les services manuellement
-# src/services/api.js
-# src/services/employeeService.js
-# etc.
 ```
 
-Pas de scaffolding complet, mais structure générée.
+Puis créer les services manuellement.
+
+**Avantages** : Structure de base générée, reste flexible
+
+**Inconvénients** : Services API à créer manuellement
 
 ---
 

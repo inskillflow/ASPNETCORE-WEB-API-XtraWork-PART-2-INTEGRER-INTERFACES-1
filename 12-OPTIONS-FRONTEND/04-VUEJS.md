@@ -22,6 +22,50 @@
 
 ---
 
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "Vue.js Application"
+        A[App.vue] --> B[Navbar.vue]
+        A --> C[Router]
+        C --> D[LoginView]
+        C --> E[DashboardView]
+        C --> F[EmployeesView]
+        F --> G[EmployeeCard]
+    end
+    
+    subgraph "Pinia Store"
+        H[authStore]
+    end
+    
+    subgraph "Services"
+        I[authService] --> K[api-client]
+        J[employeeService] --> K
+    end
+    
+    F --> H
+    K --> L[Backend API]
+    
+    style A fill:#42b883
+    style L fill:#667eea
+```
+
+## Avantages et inconvénients
+
+**Avantages** : 
+- Très facile à apprendre (plus simple que React)
+- Documentation excellente (en français aussi)
+- Syntaxe template intuitive
+- Adoption progressive possible
+
+**Inconvénients** : 
+- Communauté plus petite que React
+- Moins d'offres d'emploi que React
+- Écosystème moins vaste
+
+---
+
 ## Création du projet
 
 ### Avec Vite (Recommandé)
