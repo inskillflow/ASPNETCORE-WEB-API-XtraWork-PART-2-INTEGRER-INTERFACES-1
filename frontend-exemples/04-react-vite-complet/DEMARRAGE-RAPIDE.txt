@@ -1,0 +1,45 @@
+========================================
+ DÉMARRAGE RAPIDE - React Vite Complet
+========================================
+
+INSTALLATION
+------------
+cd frontend-exemples/04-react-vite-complet
+npm install
+
+DÉMARRAGE
+---------
+npm run dev
+
+URL
+---
+http://localhost:5173
+
+CREDENTIALS
+-----------
+Username : admin
+Password : Admin123!
+
+FONCTIONNALITÉS
+---------------
+✓ Login / Register
+✓ CRUD Employés complet
+✓ CRUD Titres complet
+✓ Recherche et filtres
+✓ Formulaires avancés (React Hook Form + Zod)
+✓ Toast notifications
+✓ Gestion des permissions
+
+DIFFÉRENCE AVEC VERSION SIMPLE
+--------------------------------
+Simple (03)          | Complet (04)
+---------------------|--------------------
+Login seulement      | Login + Register
+Liste lecture        | CRUD complet
+Formulaires basiques | React Hook Form
+Pas de recherche     | Recherche + filtres
+Pas de toast         | Toast notifications
+3 pages              | 8 pages
+
+========================================
+
