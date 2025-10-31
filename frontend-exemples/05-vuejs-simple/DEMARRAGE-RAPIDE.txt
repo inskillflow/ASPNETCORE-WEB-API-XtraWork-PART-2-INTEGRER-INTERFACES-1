@@ -1,0 +1,24 @@
+========================================
+  DEMARRAGE - Vue.js 3 Simple
+========================================
+
+INSTALLATION
+------------
+cd frontend-exemples/05-vuejs-simple
+npm install
+
+LANCEMENT
+---------
+npm run dev
+
+URL : http://localhost:5173
+Credentials : admin / Admin123!
+
+TECHNOLOGIES
+- Vue.js 3
+- Vite
+- Composition API
+- Axios
+
+========================================
+

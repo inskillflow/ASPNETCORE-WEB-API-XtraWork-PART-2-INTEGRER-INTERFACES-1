@@ -1,0 +1,39 @@
+========================================
+  DEMARRAGE RAPIDE - Next.js 15 Simple
+========================================
+
+INSTALLATION
+------------
+cd frontend-exemples/07-nextjs-15-simple
+npm install
+
+LANCEMENT
+---------
+npm run dev
+
+URL
+---
+http://localhost:3000
+
+CREDENTIALS
+-----------
+admin / Admin123!
+
+TECHNOLOGIES
+------------
+- Next.js 15
+- React 18
+- TypeScript 5
+- Tailwind CSS 3.4.1
+- Axios
+
+FONCTIONNALITES
+---------------
+- Login JWT
+- Dashboard
+- Liste employés
+- App Router
+- Server/Client Components
+
+========================================
+

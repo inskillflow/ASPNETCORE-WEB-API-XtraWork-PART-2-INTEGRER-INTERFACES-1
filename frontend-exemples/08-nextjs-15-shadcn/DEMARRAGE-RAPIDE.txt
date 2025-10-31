@@ -1,0 +1,40 @@
+========================================
+ DEMARRAGE - Next.js 15 + shadcn/ui
+========================================
+
+INSTALLATION
+------------
+cd frontend-exemples/08-nextjs-15-shadcn
+npm install
+
+LANCEMENT
+---------
+npm run dev
+
+URL
+---
+http://localhost:3000
+
+CREDENTIALS
+-----------
+admin / Admin123!
+
+TECHNOLOGIES
+------------
+- Next.js 15
+- shadcn/ui
+- Tailwind CSS 3.4.1
+- React Hook Form
+- Zod
+- TypeScript
+
+FONCTIONNALITES
+---------------
+- Login/Register shadcn
+- CRUD complet
+- Composants shadcn/ui
+- Formulaires React Hook Form
+- Validation Zod
+
+========================================
+
